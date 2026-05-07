@@ -1,0 +1,75 @@
+name: Validate
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: HTML smoke test
+        run: |
+          # Check public/index.html parses + has all required elements
+          if ! grep -q 'PORTFOLIO_CONFIG' public/index.html; then
+            echo "::error::Missing PORTFOLIO_CONFIG bootstrap in index.html"
+            exit 1
+          fi
+          if ! grep -q 'tpl-timeline' public/index.html; then
+            echo "::error::Missing tpl-timeline template"
+            exit 1
+          fi
+          echo "✓ HTML smoke test passed"
+
+      - name: JS syntax check
+        run: |
+          node -c public/assets/app.js
+          node -c public/config.js
+          node -c public/config.example.js
+          echo "✓ JS syntax check passed"
+
+      - name: Apps Script syntax check
+        run: |
+          node -c apps-script/Code.js
+          node -c apps-script/Schemas.js
+          node -c apps-script/ResumeGenerator.js
+          echo "✓ Apps Script syntax check passed"
+
+      - name: Verify build script works
+        env:
+          API_URL: "https://test.example.com/exec"
+          SITE_VERSION: "test"
+        run: |
+          chmod +x build.sh
+          ./build.sh
+          if ! grep -q 'test.example.com' public/config.js; then
+            echo "::error::build.sh did not inject API_URL"
+            exit 1
+          fi
+          echo "✓ build.sh works"
+
+      - name: Security scan — no leaked secrets
+        run: |
+          # Real Apps Script web app IDs are ~57 chars after `AKfyc`.
+          # Format placeholders in docs use short stubs (AKfycbx..., AKfycb...).
+          # This regex only matches a long alphanumeric string after AKfyc — the real shape.
+          if grep -rE 'AKfyc[A-Za-z0-9_-]{50,}' --include='*.js' --include='*.html' --include='*.md' --include='*.json' .; then
+            echo "::error::Found what looks like a real Apps Script web app URL"
+            exit 1
+          fi
+          # Real Google Drive / script IDs are 44+ chars of base64-safe characters.
+          # Allow placeholders that contain underscores like YOUR_APPS_SCRIPT_PROJECT_ID_HERE.
+          if grep -E '"scriptId"\s*:\s*"[A-Za-z0-9_-]{40,}"' .clasp.json.example | grep -v 'YOUR_'; then
+            echo "::error::.clasp.json.example contains a real-looking script ID"
+            exit 1
+          fi
+          echo "✓ No leaked secrets detected"

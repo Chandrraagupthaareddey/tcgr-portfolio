@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Chandraguptha Reddy — Senior Staff Engineer, SRE</title>
+<meta name="description" content="AI-Augmented Observability Engineer · Automation Architect · Multi-LLM Workflow Builder. 15+ years building intelligent reliability systems at enterprise scale." />
+<meta name="author" content="Chandraguptha Reddy" />
+<meta name="theme-color" content="#08080a" />
+
+<!-- Open Graph -->
+<meta property="og:title" content="Chandraguptha Reddy — Senior Staff Engineer, SRE" />
+<meta property="og:description" content="AI-Augmented Observability · Automation · Multi-LLM AIOps" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://tcgr.in" />
+<meta property="og:site_name" content="tcgr.in" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<link rel="canonical" href="https://tcgr.in" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2308080a'/%3E%3Ctext x='32' y='42' font-family='serif' font-style='italic' font-size='32' fill='%23c9b88a' text-anchor='middle'%3Et%3C/text%3E%3C/svg%3E" />
+
+<!-- ============================================
+     Runtime config — loaded from external file
+     so secrets never sit inside committed HTML.
+     config.js is gitignored. Build creates it on
+     deploy from Cloudflare Pages env vars.
+     ============================================ -->
+<script src="./config.js"></script>
+<script>
+  // Defensive defaults if config.js missing (dev / first preview)
+  window.PORTFOLIO_CONFIG = Object.assign({
+    API_URL: "",                    // empty → falls back to bundled sample data
+    CACHE_TTL_MS: 6 * 60 * 60 * 1000,
+    SITE_VERSION: "1.0.0",
+    SHOW_FALLBACK_BANNER: false
+  }, window.PORTFOLIO_CONFIG || {});
+</script>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Tailwind via Play CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          display: ['"Instrument Serif"', 'serif'],
+          sans: ['Geist', 'system-ui', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'monospace']
+        },
+        colors: {
+          ink: { 950: '#08080a', 900: '#0c0c10', 800: '#111116', 700: '#16161d', 600: '#1d1d26' },
+          fog: { 100: '#f4f4f5', 200: '#d4d4d8', 300: '#a1a1aa', 400: '#71717a', 500: '#52525b' },
+          accent: { DEFAULT: '#c9b88a', soft: '#e8dfc4', deep: '#8a7752' },
+          signal: { cyan: '#7dd3fc', green: '#86efac', amber: '#fcd34d' }
+        }
+      }
+    }
+  };
+</script>
+
+<!-- GSAP for cinematic scroll -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+
+<style>
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body {
+    background: #08080a;
+    color: #e4e4e7;
+    font-family: 'Geist', system-ui, sans-serif;
+    font-weight: 300;
+    letter-spacing: -0.005em;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+    opacity: 0.025;
+    pointer-events: none;
+    z-index: 100;
+    mix-blend-mode: overlay;
+  }
+
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    opacity: 0.4;
+    will-change: transform;
+  }
+
+  .grid-bg {
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 30%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 30%, transparent 80%);
+  }
+
+  .glass {
+    background: linear-gradient(180deg, rgba(28,28,36,0.6) 0%, rgba(16,16,22,0.4) 100%);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255,255,255,0.06);
+    transition: border-color 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
+  }
+  .glass:hover {
+    border-color: rgba(201, 184, 138, 0.25);
+    box-shadow: 0 0 60px -20px rgba(201, 184, 138, 0.15);
+  }
+
+  .hairline { background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent); height: 1px; }
+
+  .display { font-family: 'Instrument Serif', serif; font-weight: 400; letter-spacing: -0.02em; line-height: 0.95; }
+  .display-italic { font-style: italic; color: #e8dfc4; }
+
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #71717a;
+  }
+
+  .pulse-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #86efac;
+    box-shadow: 0 0 0 0 rgba(134, 239, 172, 0.7);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(134, 239, 172, 0.5); }
+    70% { box-shadow: 0 0 0 8px rgba(134, 239, 172, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(134, 239, 172, 0); }
+  }
+
+  .link-underline { position: relative; display: inline-block; }
+  .link-underline::after {
+    content: '';
+    position: absolute;
+    left: 0; bottom: -2px;
+    width: 0; height: 1px;
+    background: #c9b88a;
+    transition: width 0.4s ease;
+  }
+  .link-underline:hover::after { width: 100%; }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #e8dfc4 0%, #c9b88a 100%);
+    color: #08080a;
+    transition: all 0.3s ease;
+  }
+  .btn-primary:hover {
+    box-shadow: 0 0 40px -8px rgba(201, 184, 138, 0.6);
+    transform: translateY(-1px);
+  }
+  .btn-ghost {
+    border: 1px solid rgba(255,255,255,0.12);
+    transition: all 0.3s ease;
+  }
+  .btn-ghost:hover {
+    border-color: rgba(201, 184, 138, 0.4);
+    background: rgba(201, 184, 138, 0.05);
+  }
+
+  .timeline-line {
+    background: linear-gradient(180deg, transparent 0%, rgba(201, 184, 138, 0.3) 10%, rgba(201, 184, 138, 0.3) 90%, transparent 100%);
+    width: 1px;
+  }
+  .timeline-node {
+    width: 11px; height: 11px;
+    border-radius: 50%;
+    background: #08080a;
+    border: 1px solid #c9b88a;
+    box-shadow: 0 0 0 4px rgba(201, 184, 138, 0.08);
+    transition: all 0.3s ease;
+  }
+  .timeline-item:hover .timeline-node {
+    background: #c9b88a;
+    box-shadow: 0 0 0 6px rgba(201, 184, 138, 0.15);
+  }
+
+  .reveal { opacity: 0; transform: translateY(24px); }
+
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: #08080a; }
+  ::-webkit-scrollbar-thumb { background: #1d1d26; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #2d2d36; }
+
+  @keyframes scroll-x {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .marquee { animation: scroll-x 40s linear infinite; }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee, .pulse-dot { animation: none; }
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1; transform: none; }
+  }
+
+  .terminal {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    background: #0c0c10;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    overflow-x: auto;
+  }
+
+  .skeleton {
+    background: linear-gradient(90deg, #16161d 0%, #1d1d26 50%, #16161d 100%);
+    background-size: 200% 100%;
+    animation: skeleton 1.4s ease-in-out infinite;
+    border-radius: 6px;
+  }
+  @keyframes skeleton {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  nav.sticky-nav {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    background: rgba(8, 8, 10, 0.7);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  /* Mobile menu */
+  #mobile-menu { display: none; }
+  #mobile-menu.open { display: flex; }
+
+  /* Mobile-first typography tuning */
+  @media (max-width: 768px) {
+    .display-hero { font-size: 3.25rem !important; line-height: 1 !important; }
+    .display-h2 { font-size: 2.5rem !important; }
+    .display-h2-large { font-size: 3rem !important; }
+    section { padding-top: 5rem !important; padding-bottom: 5rem !important; }
+    .eyebrow { font-size: 0.65rem !important; }
+  }
+</style>
+</head>
+
+<body class="relative">
+
+<!-- ============================================ NAV ============================================ -->
+<nav class="sticky-nav fixed top-0 left-0 right-0 z-50">
+  <div class="max-w-7xl mx-auto px-5 md:px-12 py-4 md:py-5 flex items-center justify-between">
+    <a href="#top" class="flex items-center gap-2.5 group" aria-label="tcgr.in home">
+      <span class="font-mono text-xs text-fog-400 group-hover:text-accent transition-colors">~/</span>
+      <span class="font-display text-xl text-fog-100">tcgr<span class="display-italic">.in</span></span>
+    </a>
+
+    <div class="hidden md:flex items-center gap-8 text-sm text-fog-300">
+      <a href="#about" class="link-underline hover:text-fog-100 transition">About</a>
+      <a href="#journey" class="link-underline hover:text-fog-100 transition">Journey</a>
+      <a href="#expertise" class="link-underline hover:text-fog-100 transition">Expertise</a>
+      <a href="#projects" class="link-underline hover:text-fog-100 transition">Work</a>
+      <a href="#ai" class="link-underline hover:text-fog-100 transition">AI&nbsp;Lab</a>
+      <a href="#resume" class="link-underline hover:text-fog-100 transition">Résumé</a>
+    </div>
+
+    <a href="#contact" class="hidden md:inline-block btn-ghost px-4 py-2 rounded-full text-xs font-mono uppercase tracking-widest text-fog-200">
+      Get in touch →
+    </a>
+
+    <!-- Mobile burger -->
+    <button id="menu-toggle" aria-label="Toggle menu" class="md:hidden text-fog-200 p-2">
+      <svg id="icon-open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      <svg id="icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="display:none"><line x1="6" y1="6" x2="18" y2="18"/><line x1="6" y1="18" x2="18" y2="6"/></svg>
+    </button>
+  </div>
+
+  <!-- Mobile menu drawer -->
+  <div id="mobile-menu" class="md:hidden flex-col px-6 pb-6 pt-2 gap-4 text-fog-200 border-t border-white/5">
+    <a href="#about" class="py-2">About</a>
+    <a href="#journey" class="py-2">Journey</a>
+    <a href="#expertise" class="py-2">Expertise</a>
+    <a href="#projects" class="py-2">Work</a>
+    <a href="#ai" class="py-2">AI Lab</a>
+    <a href="#knowledge" class="py-2">Knowledge</a>
+    <a href="#resume" class="py-2">Résumé</a>
+    <a href="#contact" class="py-2 text-accent">Contact →</a>
+  </div>
+</nav>
+
+<!-- ============================================ HERO ============================================ -->
+<section id="top" class="relative min-h-screen flex items-center pt-28 md:pt-32 pb-16 px-5 md:px-12 overflow-hidden">
+  <div class="orb" style="width: 600px; height: 600px; background: #c9b88a; top: -200px; right: -100px;"></div>
+  <div class="orb" style="width: 500px; height: 500px; background: #7dd3fc; bottom: -150px; left: -100px; opacity: 0.15;"></div>
+  <div class="absolute inset-0 grid-bg" aria-hidden="true"></div>
+
+  <div class="max-w-7xl mx-auto w-full relative z-10">
+    <div class="flex items-center gap-3 mb-6 md:mb-8 reveal" data-reveal>
+      <span class="pulse-dot"></span>
+      <span class="eyebrow">Available · UAE / Remote · 60d notice</span>
+    </div>
+
+    <h1 class="display display-hero text-6xl md:text-8xl lg:text-9xl text-fog-100 mb-6 md:mb-8 reveal" data-reveal>
+      Engineering<br>
+      <span class="display-italic">reliability</span> at the<br>
+      edge of <span class="display-italic">intelligence.</span>
+    </h1>
+
+    <p class="text-base md:text-xl text-fog-300 max-w-2xl leading-relaxed mb-8 md:mb-10 reveal" data-reveal data-bind="hero.intro">
+      I'm <span class="text-fog-100">Chandraguptha Reddy</span> — a Senior Staff Engineer building AI-augmented
+      observability, automation, and self-healing operational systems for enterprise-scale platforms.
+      Currently architecting reliability for <span class="text-fog-100">Airbnb Payments</span>.
+    </p>
+
+    <div class="flex flex-wrap items-center gap-3 mb-12 md:mb-16 reveal" data-reveal>
+      <a href="#projects" class="btn-primary px-5 md:px-6 py-3 rounded-full text-sm font-medium">View selected work</a>
+      <a href="#resume" class="btn-ghost px-5 md:px-6 py-3 rounded-full text-sm text-fog-200">Download résumé</a>
+      <a href="#ai" class="px-5 md:px-6 py-3 text-sm text-fog-300 link-underline">Explore AI Lab →</a>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/5 rounded-2xl overflow-hidden glass reveal" data-reveal>
+      <div class="p-5 md:p-8">
+        <div class="font-display text-3xl md:text-5xl text-accent-soft" data-counter="15">0</div>
+        <div class="eyebrow mt-2">Years Engineering</div>
+      </div>
+      <div class="p-5 md:p-8">
+        <div class="font-display text-3xl md:text-5xl text-accent-soft"><span data-counter="55">0</span><span class="text-fog-400">%</span></div>
+        <div class="eyebrow mt-2">Alert Noise Reduced</div>
+      </div>
+      <div class="p-5 md:p-8">
+        <div class="font-display text-3xl md:text-5xl text-accent-soft"><span data-counter="40">0</span><span class="text-fog-400">%</span></div>
+        <div class="eyebrow mt-2">Manual Effort Cut</div>
+      </div>
+      <div class="p-5 md:p-8">
+        <div class="font-display text-3xl md:text-5xl text-accent-soft"><span data-counter="35">0</span><span class="text-fog-400">%</span></div>
+        <div class="eyebrow mt-2">MTTR Improvement</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ TECH MARQUEE ============================================ -->
+<section class="border-y border-white/5 py-5 md:py-6 overflow-hidden" aria-label="Technology stack">
+  <div class="flex marquee whitespace-nowrap font-mono text-xs md:text-sm text-fog-400 gap-8 md:gap-12">
+    <!-- Doubled for seamless loop -->
+    <span>Datadog</span><span class="text-accent">◆</span>
+    <span>Grafana</span><span class="text-accent">◆</span>
+    <span>Prometheus</span><span class="text-accent">◆</span>
+    <span>Splunk</span><span class="text-accent">◆</span>
+    <span>Telescope</span><span class="text-accent">◆</span>
+    <span>Claude</span><span class="text-accent">◆</span>
+    <span>GPT</span><span class="text-accent">◆</span>
+    <span>Gemini</span><span class="text-accent">◆</span>
+    <span>Google Apps Script</span><span class="text-accent">◆</span>
+    <span>Kubernetes</span><span class="text-accent">◆</span>
+    <span>OpenShift</span><span class="text-accent">◆</span>
+    <span>AWS</span><span class="text-accent">◆</span>
+    <span>GCP</span><span class="text-accent">◆</span>
+    <span>Jenkins</span><span class="text-accent">◆</span>
+    <span>ELK</span><span class="text-accent">◆</span>
+    <span>Datadog</span><span class="text-accent">◆</span>
+    <span>Grafana</span><span class="text-accent">◆</span>
+    <span>Prometheus</span><span class="text-accent">◆</span>
+    <span>Splunk</span><span class="text-accent">◆</span>
+    <span>Telescope</span><span class="text-accent">◆</span>
+    <span>Claude</span><span class="text-accent">◆</span>
+    <span>GPT</span><span class="text-accent">◆</span>
+    <span>Gemini</span><span class="text-accent">◆</span>
+    <span>Google Apps Script</span><span class="text-accent">◆</span>
+    <span>Kubernetes</span><span class="text-accent">◆</span>
+    <span>OpenShift</span><span class="text-accent">◆</span>
+    <span>AWS</span><span class="text-accent">◆</span>
+    <span>GCP</span><span class="text-accent">◆</span>
+    <span>Jenkins</span><span class="text-accent">◆</span>
+    <span>ELK</span><span class="text-accent">◆</span>
+  </div>
+</section>
+
+<!-- ============================================ ABOUT ============================================ -->
+<section id="about" class="relative py-24 md:py-32 px-5 md:px-12">
+  <div class="max-w-7xl mx-auto">
+    <div class="grid lg:grid-cols-12 gap-8 lg:gap-12">
+      <div class="lg:col-span-4 reveal" data-reveal>
+        <div class="eyebrow mb-4">— 01 / About</div>
+        <h2 class="display display-h2-large text-4xl md:text-6xl text-fog-100 mb-6">
+          From hospitality<br>
+          <span class="display-italic">to SRE</span> to<br>
+          <span class="display-italic">AI ops.</span>
+        </h2>
+      </div>
+
+      <div class="lg:col-span-7 lg:col-start-6 space-y-5 md:space-y-6 text-base md:text-lg text-fog-300 leading-relaxed reveal" data-reveal data-bind="about.body">
+        <p>
+          My career didn't start in engineering. It started in hotel revenue analysis — staring at spreadsheets,
+          spotting patterns in noise, and building automations to escape repetition. That instinct never left.
+        </p>
+        <p>
+          Over <span class="text-fog-100">15 years</span>, I've evolved from automating night audits with Google Apps Script
+          to architecting <span class="text-fog-100">multi-LLM AIOps platforms</span> for Airbnb Payments — combining classical
+          SRE practice with modern AI reasoning to detect, triage, and resolve incidents with minimal human overhead.
+        </p>
+        <p>
+          I'm fluent across <span class="text-fog-100">Datadog, Grafana, Prometheus, Splunk, ELK, Telescope</span> — and equally at home
+          orchestrating Claude, GPT, and Gemini through MCP servers and prompt chains. The interesting work today lives at
+          the intersection: <span class="display-italic text-accent-soft">observability that thinks.</span>
+        </p>
+        <p>
+          I write code to remove work, not to make more of it. I optimize for systems that explain themselves.
+          And I believe the best engineers spend more time deleting alerts than creating them.
+        </p>
+      </div>
+    </div>
+    <div class="hairline mt-20 md:mt-24"></div>
+  </div>
+</section>
+
+<!-- ============================================ JOURNEY ============================================ -->
+<section id="journey" class="relative py-24 md:py-32 px-5 md:px-12">
+  <div class="max-w-7xl mx-auto">
+    <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 mb-16 md:mb-20">
+      <div class="lg:col-span-5 reveal" data-reveal>
+        <div class="eyebrow mb-4">— 02 / Journey</div>
+        <h2 class="display display-h2-large text-4xl md:text-6xl text-fog-100">
+          A <span class="display-italic">15-year</span><br>operating timeline.
+        </h2>
+      </div>
+      <div class="lg:col-span-6 lg:col-start-7 self-end text-fog-400 reveal" data-reveal>
+        <p>From hotel reservation systems to multi-LLM incident intelligence — every role taught me how to make systems quieter and humans more leveraged.</p>
+      </div>
+    </div>
+
+    <div class="relative" id="timeline-container" data-bind-list="timeline">
+      <div class="timeline-line absolute left-4 md:left-1/2 top-0 bottom-0 -translate-x-1/2"></div>
+      <!-- Items injected by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ EXPERTISE ============================================ -->
+<section id="expertise" class="relative py-24 md:py-32 px-5 md:px-12">
+  <div class="max-w-7xl mx-auto">
+    <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 mb-16 md:mb-20">
+      <div class="lg:col-span-7 reveal" data-reveal>
+        <div class="eyebrow mb-4">— 03 / Expertise</div>
+        <h2 class="display display-h2-large text-4xl md:text-6xl text-fog-100">
+          What I'm <span class="display-italic">good at,</span><br>and how it shows up.
+        </h2>
+      </div>
+    </div>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4" id="expertise-grid"></div>
+  </div>
+</section>
+
+<!-- ============================================ PROJECTS ============================================ -->
+<section id="projects" class="relative py-24 md:py-32 px-5 md:px-12">
+  <div class="max-w-7xl mx-auto">
+    <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 mb-16 md:mb-20">
+      <div class="lg:col-span-7 reveal" data-reveal>
+        <div class="eyebrow mb-4">— 04 / Selected Work</div>
+        <h2 class="display display-h2-large text-4xl md:text-6xl text-fog-100">
+          Projects &amp; <span class="display-italic">automations.</span>
+        </h2>
+      </div>
+      <div class="lg:col-span-4 lg:col-start-9 self-end text-fog-400 reveal" data-reveal>
+        <p>Production systems, AI workflows, and the engineering decisions behind them.</p>
+      </div>
+    </div>
+    <div class="space-y-4" id="projects-list"></div>
+  </div>
+</section>
+
+<!-- ============================================ AI LAB ============================================ -->
+<section id="ai" class="relative py-24 md:py-32 px-5 md:px-12 overflow-hidden">
+  <div class="orb" style="width: 500px; height: 500px; background: #7dd3fc; top: 30%; right: -200px; opacity: 0.12;"></div>
+
+  <div class="max-w-7xl mx-auto relative z-10">
+    <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 mb-12 md:mb-16">
+      <div class="lg:col-span-7 reveal" data-reveal>
+        <div class="eyebrow mb-4">— 05 / AI Lab</div>
+        <h2 class="display display-h2-large text-4xl md:text-6xl text-fog-100">
+          Multi-LLM<br>
+          <span class="display-italic">incident intelligence.</span>
+        </h2>
+      </div>
+      <div class="lg:col-span-4 lg:col-start-9 self-end text-fog-400 reveal" data-reveal>
+        <p>How Claude, GPT, and Gemini work together to triage, summarize, and reason across distributed payment systems.</p>
+      </div>
+    </div>
+
+    <div class="glass rounded-2xl p-6 md:p-12 reveal" data-reveal>
+      <div class="grid md:grid-cols-7 gap-3 md:gap-4 items-stretch text-center text-xs md:text-sm">
+        <div class="md:col-span-1 p-4 rounded-lg bg-ink-700/50 border border-white/5">
+          <div class="font-mono text-xs text-fog-400 mb-2">SOURCE</div>
+          <div class="text-fog-100">Datadog<br>Splunk<br>Logs</div>
+        </div>
+        <div class="hidden md:flex items-center justify-center text-accent">→</div>
+        <div class="md:col-span-1 p-4 rounded-lg bg-ink-700/50 border border-accent/20">
+          <div class="font-mono text-xs text-accent mb-2">CLAUDE</div>
+          <div class="text-fog-100">Reasoning<br>Triage<br>Summarization</div>
+        </div>
+        <div class="hidden md:flex items-center justify-center text-accent">→</div>
+        <div class="md:col-span-1 p-4 rounded-lg bg-ink-700/50 border border-signal-cyan/20">
+          <div class="font-mono text-xs text-signal-cyan mb-2">GPT / GEMINI</div>
+          <div class="text-fog-100">Cross-check<br>Impact analysis<br>Alternatives</div>
+        </div>
+        <div class="hidden md:flex items-center justify-center text-accent">→</div>
+        <div class="md:col-span-1 p-4 rounded-lg bg-ink-700/50 border border-signal-green/20">
+          <div class="font-mono text-xs text-signal-green mb-2">ACTION</div>
+          <div class="text-fog-100">Slack alert<br>Runbook<br>Sheet log</div>
+        </div>
+      </div>
+
+      <div class="hairline my-6 md:my-8"></div>
+
+      <div class="grid md:grid-cols-3 gap-6 text-sm" id="ai-capabilities"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ KNOWLEDGE ============================================ -->
+<section id="knowledge" class="relative py-24 md:py-32 px-5 md:px-12">
+  <div class="max-w-7xl mx-auto">
+    <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 mb-12 md:mb-16">
+      <div class="lg:col-span-7 reveal" data-reveal>
+        <div class="eyebrow mb-4">— 06 / Knowledge</div>
+        <h2 class="display display-h2-large text-4xl md:text-6xl text-fog-100">
+          Mistakes I made,<br>
+          <span class="display-italic">and the architecture</span><br>that fixed them.
+        </h2>
+      </div>
+    </div>
+    <div class="space-y-3" id="lessons-list"></div>
+
+    <!-- Future blogs hook -->
+    <div id="blogs-section" class="mt-16 hidden">
+      <div class="hairline mb-12"></div>
+      <div class="eyebrow mb-6">— Recent writing</div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4" id="blogs-list"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ RESUME ============================================ -->
+<section id="resume" class="relative py-24 md:py-32 px-5 md:px-12">
+  <div class="max-w-7xl mx-auto">
+    <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 mb-12 md:mb-16">
+      <div class="lg:col-span-7 reveal" data-reveal>
+        <div class="eyebrow mb-4">— 07 / Résumé</div>
+        <h2 class="display display-h2-large text-4xl md:text-6xl text-fog-100">
+          One profile,<br>
+          <span class="display-italic">three formats.</span>
+        </h2>
+      </div>
+      <div class="lg:col-span-4 lg:col-start-9 self-end text-fog-400 reveal" data-reveal>
+        <p>Tailored for the role you're hiring for — generated fresh from a single source of truth.</p>
+      </div>
+    </div>
+    <div class="grid md:grid-cols-3 gap-4" id="resume-cards"></div>
+  </div>
+</section>
+
+<!-- ============================================ CONTACT ============================================ -->
+<section id="contact" class="relative py-24 md:py-32 px-5 md:px-12 overflow-hidden">
+  <div class="orb" style="width: 600px; height: 600px; background: #c9b88a; bottom: -300px; left: 50%; transform: translateX(-50%); opacity: 0.2;"></div>
+
+  <div class="max-w-5xl mx-auto relative z-10 text-center">
+    <div class="eyebrow mb-6 reveal" data-reveal>— 08 / Contact</div>
+    <h2 class="display text-5xl md:text-8xl text-fog-100 mb-6 md:mb-8 reveal" data-reveal>
+      Let's build<br>
+      <span class="display-italic">something reliable.</span>
+    </h2>
+    <p class="text-base md:text-lg text-fog-300 max-w-xl mx-auto mb-10 md:mb-12 reveal" data-reveal data-bind="contact.tagline">
+      Open to senior SRE / Observability / AI-Ops leadership roles in UAE and remote. I respond within 24 hours.
+    </p>
+
+    <div class="flex flex-wrap items-center justify-center gap-3 reveal" data-reveal>
+      <a id="cta-email" href="#" class="btn-primary px-5 md:px-6 py-3 rounded-full text-sm font-medium">Email me →</a>
+      <a id="cta-linkedin" href="#" target="_blank" rel="noopener" class="btn-ghost px-5 md:px-6 py-3 rounded-full text-sm text-fog-200">LinkedIn</a>
+      <a href="#resume" class="btn-ghost px-5 md:px-6 py-3 rounded-full text-sm text-fog-200">Résumé</a>
+    </div>
+
+    <div class="terminal text-left max-w-2xl mx-auto mt-12 md:mt-16 p-4 md:p-5 reveal" data-reveal>
+      <div class="text-fog-400">$ whois chandraguptha</div>
+      <div class="text-fog-200 mt-2 break-words" data-bind="contact.location">Location:        Bengaluru, IN · open to UAE / Remote</div>
+      <div class="text-fog-200 break-words" data-bind="contact.role">Current Role:    Senior Staff Engineer — SRE @ Airbnb (via Altimetrik)</div>
+      <div class="text-fog-200 break-words" data-bind="contact.availability">Availability:    60 days notice (negotiable)</div>
+      <div class="text-fog-200 break-words" data-bind="contact.languages">Languages:       English, Hindi, Tamil</div>
+      <div class="text-accent mt-2">$ <span class="animate-pulse">▌</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ FOOTER ============================================ -->
+<footer class="border-t border-white/5 py-8 md:py-10 px-5 md:px-12">
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 md:gap-4 text-xs md:text-sm text-fog-400">
+    <div class="font-mono text-center md:text-left">© <span id="year"></span> · tcgr.in · Built with care · <a href="https://github.com/tcgr-in/portfolio" class="link-underline" target="_blank" rel="noopener">view source</a></div>
+    <div class="flex gap-6 items-center">
+      <span class="font-mono text-xs">v<span id="site-version">1.0.0</span> · sheet-driven</span>
+      <a href="#top" class="link-underline">Back to top ↑</a>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ============================================ TEMPLATES ============================================ -->
+<template id="tpl-timeline">
+  <div class="timeline-item relative pl-12 md:pl-0 reveal mb-12 md:mb-16" data-reveal>
+    <div class="md:grid md:grid-cols-2 md:gap-16 items-start">
+      <div class="md:text-right md:pr-12 mb-2 md:mb-0">
+        <div class="md:hidden absolute left-4 top-2 -translate-x-1/2"><span class="timeline-node block"></span></div>
+        <div class="font-mono text-xs text-accent uppercase tracking-widest" data-tl="year"></div>
+        <div class="font-display text-xl md:text-2xl text-fog-100 mt-1" data-tl="role"></div>
+        <div class="text-fog-400 text-sm mt-1" data-tl="company"></div>
+      </div>
+      <div class="hidden md:block absolute left-1/2 top-2 -translate-x-1/2"><span class="timeline-node block"></span></div>
+      <div class="md:pl-12 text-fog-300 text-sm leading-relaxed" data-tl="description"></div>
+    </div>
+  </div>
+</template>
+
+<template id="tpl-expertise">
+  <div class="glass rounded-xl p-5 md:p-6 reveal" data-reveal>
+    <div class="flex items-start justify-between mb-4">
+      <div class="eyebrow" data-ex="category"></div>
+      <div class="font-mono text-xs text-fog-500" data-ex="badge"></div>
+    </div>
+    <h3 class="font-display text-xl md:text-2xl text-fog-100 mb-3" data-ex="title"></h3>
+    <p class="text-sm text-fog-300 leading-relaxed mb-4" data-ex="description"></p>
+    <div class="flex flex-wrap gap-1.5" data-ex="tools"></div>
+  </div>
+</template>
+
+<template id="tpl-project">
+  <details class="glass rounded-xl group reveal" data-reveal>
+    <summary class="flex items-center justify-between p-5 md:p-6 cursor-pointer list-none">
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-3 mb-2 flex-wrap">
+          <span class="font-mono text-xs text-fog-500" data-pr="number"></span>
+          <span class="font-mono text-[10px] md:text-xs px-2 py-0.5 rounded-full bg-accent/10 text-accent" data-pr="category"></span>
+        </div>
+        <h3 class="font-display text-xl md:text-3xl text-fog-100" data-pr="title"></h3>
+        <p class="text-xs md:text-sm text-fog-400 mt-1" data-pr="subtitle"></p>
+      </div>
+      <div class="text-fog-400 ml-4 md:ml-6 transition-transform group-open:rotate-45 text-2xl font-light flex-shrink-0">+</div>
+    </summary>
+    <div class="px-5 md:px-6 pb-5 md:pb-6 pt-0">
+      <div class="hairline mb-5 md:mb-6"></div>
+      <div class="grid md:grid-cols-3 gap-6 md:gap-8 text-sm">
+        <div class="md:col-span-2 space-y-3 text-fog-300 leading-relaxed" data-pr="description"></div>
+        <div>
+          <div class="eyebrow mb-3">Stack</div>
+          <div class="flex flex-wrap gap-1.5 mb-5 md:mb-6" data-pr="stack"></div>
+          <div class="eyebrow mb-3">Impact</div>
+          <div class="text-fog-200 text-sm" data-pr="impact"></div>
+        </div>
+      </div>
+    </div>
+  </details>
+</template>
+
+<template id="tpl-lesson">
+  <details class="glass rounded-xl group reveal" data-reveal>
+    <summary class="flex items-center justify-between p-4 md:p-5 cursor-pointer list-none">
+      <div class="flex items-center gap-3 md:gap-4 flex-1 min-w-0">
+        <span class="font-mono text-xs text-accent flex-shrink-0" data-le="number"></span>
+        <h3 class="font-display text-lg md:text-xl text-fog-100" data-le="title"></h3>
+      </div>
+      <div class="text-fog-400 transition-transform group-open:rotate-45 text-xl font-light flex-shrink-0 ml-3">+</div>
+    </summary>
+    <div class="px-4 md:px-5 pb-4 md:pb-5">
+      <div class="hairline mb-4"></div>
+      <div class="grid md:grid-cols-2 gap-5 md:gap-6 text-sm">
+        <div>
+          <div class="eyebrow mb-2 text-red-300/70">— Problem</div>
+          <p class="text-fog-300" data-le="problem"></p>
+        </div>
+        <div>
+          <div class="eyebrow mb-2 text-signal-green">— Fix</div>
+          <p class="text-fog-300" data-le="fix"></p>
+        </div>
+      </div>
+      <div class="mt-5">
+        <div class="eyebrow mb-2">— Impact</div>
+        <p class="text-fog-200 text-sm" data-le="impact"></p>
+      </div>
+    </div>
+  </details>
+</template>
+
+<template id="tpl-resume">
+  <a class="glass rounded-xl p-5 md:p-6 block group reveal" data-reveal data-rs="link">
+    <div class="flex items-start justify-between mb-5 md:mb-6">
+      <div class="font-mono text-xs text-fog-500" data-rs="format"></div>
+      <div class="font-mono text-xs text-accent">PDF</div>
+    </div>
+    <h3 class="font-display text-xl md:text-2xl text-fog-100 mb-2" data-rs="title"></h3>
+    <p class="text-sm text-fog-400 mb-6 md:mb-8" data-rs="description"></p>
+    <div class="flex items-center justify-between">
+      <span class="text-sm text-fog-300 group-hover:text-accent transition">Download →</span>
+      <span class="font-mono text-xs text-fog-500" data-rs="updated"></span>
+    </div>
+  </a>
+</template>
+
+<template id="tpl-ai-cap">
+  <div class="reveal" data-reveal>
+    <div class="eyebrow mb-2" data-ai="label"></div>
+    <h4 class="font-display text-xl text-fog-100 mb-2" data-ai="title"></h4>
+    <p class="text-fog-400 text-sm leading-relaxed" data-ai="description"></p>
+  </div>
+</template>
+
+<template id="tpl-blog">
+  <a class="glass rounded-xl p-5 block group reveal" data-reveal data-bl="link">
+    <div class="eyebrow mb-3" data-bl="category"></div>
+    <h3 class="font-display text-lg md:text-xl text-fog-100 mb-2" data-bl="title"></h3>
+    <p class="text-sm text-fog-400 mb-4" data-bl="summary"></p>
+    <div class="flex items-center justify-between text-xs text-fog-500">
+      <span data-bl="date"></span>
+      <span class="text-accent group-hover:translate-x-1 transition">→</span>
+    </div>
+  </a>
+</template>
+
+
+<!-- ============================================ APP LOGIC ============================================ -->
+<script src="./assets/app.js" defer></script>
+
+</body>
+</html>

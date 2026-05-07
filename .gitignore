@@ -1,0 +1,60 @@
+# ============================================================================
+#  tcgr.in — gitignore
+#
+#  CRITICAL: This repo is PUBLIC. Anything committed here is visible forever.
+#  Keep deployment URLs, sheet IDs, and credentials OUT of git.
+# ============================================================================
+
+# --- clasp / Apps Script ---
+# Contains your scriptId and rootDir → keep local
+.clasp.json
+.clasprc.json
+
+# --- Environment / config secrets ---
+# config.js is regenerated at Cloudflare Pages build time from env vars.
+# Local edits with real API_URL must NOT be committed.
+# (We use `git update-index --skip-worktree public/config.js` for local override
+#  while still committing the empty default — see docs/SECURITY.md.)
+.env
+.env.local
+.env.production
+.env.*.local
+*.secrets.json
+
+# --- Generated / build outputs ---
+dist/
+build/
+node_modules/
+.cache/
+.parcel-cache/
+.next/
+out/
+
+# --- OS / Editor ---
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.example.json
+
+# --- Logs ---
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.npm
+.yarn
+.pnpm-store/
+
+# --- Test coverage ---
+coverage/
+*.lcov
+
+# --- Misc ---
+*.tmp
+.netlify/
+.vercel/
+.wrangler/

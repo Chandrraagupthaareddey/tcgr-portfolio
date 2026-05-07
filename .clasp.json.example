@@ -1,0 +1,7 @@
+{
+  "_comment_1": "Copy this file to .clasp.json (which is gitignored) and replace placeholders.",
+  "_comment_2": "scriptId is found in Apps Script → Project Settings → Script ID.",
+  "_comment_3": "rootDir tells clasp which local folder to push from.",
+  "scriptId": "YOUR_APPS_SCRIPT_PROJECT_ID_HERE",
+  "rootDir": "./apps-script"
+}
