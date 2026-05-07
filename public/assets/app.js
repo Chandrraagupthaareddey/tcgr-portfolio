@@ -156,7 +156,9 @@ const App = {
 
   /* -- Rendering -- */
   _render() {
-    this._renderTextBindings();
+    this._renderHero();
+    this._renderAbout();
+    this._renderMetrics();
     this._renderTimeline();
     this._renderExpertise();
     this._renderProjects();
@@ -167,11 +169,66 @@ const App = {
     this._renderContact();
   },
 
-  _renderTextBindings() {
-    document.querySelectorAll('[data-bind]').forEach(el => {
-      const path = el.getAttribute('data-bind');
-      const val = path.split('.').reduce((acc, k) => acc?.[k], this.data);
-      if (val) el.textContent = val;
+  _renderHero() {
+    const intro = this.data.hero?.intro;
+    if (intro) {
+      const el = document.getElementById('hero-intro');
+      if (el) el.textContent = intro;
+    }
+    const notice = this.data.hero?.notice_period;
+    if (notice) {
+      document.querySelectorAll('[data-bind="hero.notice_period"]').forEach(el => {
+        el.textContent = notice;
+      });
+    }
+  },
+
+  _renderAbout() {
+    const body = this.data.about?.body;
+    if (!body) return;
+    const el = document.getElementById('about-body');
+    if (!el) return;
+    el.innerHTML = '';
+    body.split(/\n{2,}/).map(s => s.trim()).filter(Boolean).forEach(para => {
+      const p = document.createElement('p');
+      p.textContent = para;
+      el.appendChild(p);
+    });
+  },
+
+  _renderMetrics() {
+    const m = this.data.metrics || {};
+    const counters = {
+      '[data-counter="15"]': m.years,
+      '[data-counter="55"]': m.alert_noise_reduction_pct,
+      '[data-counter="40"]': m.manual_effort_reduction_pct,
+      '[data-counter="35"]': m.mttr_improvement_pct
+    };
+    Object.entries(counters).forEach(([sel, val]) => {
+      if (val == null) return;
+      const el = document.querySelector(sel);
+      if (el) {
+        el.setAttribute('data-counter', String(val));
+        el.textContent = '0';
+      }
+    });
+  },
+
+  _renderContact() {
+    const c = this.data.contact || {};
+    const email = document.getElementById('cta-email');
+    const linkedin = document.getElementById('cta-linkedin');
+    if (email && c.email) email.href = `mailto:${c.email}`;
+    if (linkedin && c.linkedin) linkedin.href = c.linkedin;
+
+    const terminalBinds = ['contact.location', 'contact.role', 'contact.availability', 'contact.languages', 'contact.tagline'];
+    terminalBinds.forEach(path => {
+      const key = path.split('.')[1];
+      const val = c[key];
+      if (!val) return;
+      document.querySelectorAll(`[data-bind="${path}"]`).forEach(el => {
+        el.textContent = val;
+      });
     });
   },
 
@@ -294,14 +351,6 @@ const App = {
       this._setText(node, '[data-bl="date"]',     item.date);
       list.appendChild(node);
     });
-  },
-
-  _renderContact() {
-    const c = this.data.contact || {};
-    const email = document.getElementById('cta-email');
-    const linkedin = document.getElementById('cta-linkedin');
-    if (email && c.email) email.href = `mailto:${c.email}`;
-    if (linkedin && c.linkedin) linkedin.href = c.linkedin;
   },
 
   /* -- Helpers -- */
