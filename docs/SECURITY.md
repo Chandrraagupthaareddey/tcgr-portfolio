@@ -7,9 +7,9 @@ This repo is **public on GitHub**. Anything committed here is visible to anyone,
 | Threat | Mitigation |
 |---|---|
 | Stolen Apps Script Web App URL → unauthorized API calls | URL is injected at build time from Cloudflare env var; never committed |
-| Stolen sheet ID → public write attempts | Sheet ID never leaves your Google account; clasp uses Script ID, not Sheet ID |
+| Stolen sheet ID → public write attempts | Sheet ID never leaves our Google account; clasp uses Script ID, not Sheet ID |
 | Credential leak in commit history | `.gitignore` covers `.env`, `.clasp.json`, `*.secrets.json` |
-| Forked repo clones running against your backend | Web App access can be tightened to `Only myself` if API_URL leaks (but then frontend stops working publicly — accept the tradeoff if needed) |
+| Forked repo clones running against our backend | Web App access can be tightened to `Only myself` if API_URL leaks (but then frontend stops working publicly — accept the tradeoff if needed) |
 | Old PDFs / drafts in Drive being publicly readable | Generated PDFs are shared `Anyone with link can view` — if you need stricter, change the share level in `ResumeGenerator.js` |
 
 ## What's safe to commit
@@ -22,7 +22,7 @@ This repo is **public on GitHub**. Anything committed here is visible to anyone,
 
 ## What is NEVER safe to commit
 
-- ❌ `.clasp.json` (contains your Apps Script project ID)
+- ❌ `.clasp.json` (contains our Apps Script project ID)
 - ❌ Real `API_URL` value in `public/config.js`
 - ❌ Sheet IDs anywhere in code
 - ❌ Slack webhooks, Datadog tokens, AI API keys, OAuth secrets
@@ -41,15 +41,15 @@ This repo is **public on GitHub**. Anything committed here is visible to anyone,
 
 ## Local development override
 
-You'll want to test the live API locally without committing your URL.
+You'll want to test the live API locally without committing our URL.
 
 ```bash
-# 1. Edit public/config.js with your real API_URL
+# 1. Edit public/config.js with our real API_URL
 # 2. Tell git to ignore future changes to this tracked file:
 git update-index --skip-worktree public/config.js
 ```
 
-After that, your local edits stay local. If you ever need git to track the file again:
+After that, our local edits stay local. If you ever need git to track the file again:
 
 ```bash
 git update-index --no-skip-worktree public/config.js
@@ -88,7 +88,7 @@ Then optionally remove the leaked value from history with `git filter-repo` (adv
 The frontend is public. The API is called from a public site. If we restrict the Web App to `Only myself`, the public site can't call it.
 
 The realistic security boundary is:
-- **The Web App is a read-only public API** that exposes only what's in your CMS Sheet (which you control)
+- **The Web App is a read-only public API** that exposes only what's in our CMS Sheet (which you control)
 - **The Sheet is private** — only you can write to it
 - **Generated PDFs** are public-link (anyone with URL can view), which is the standard for résumé sharing
 

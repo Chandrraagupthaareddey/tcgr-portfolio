@@ -17,7 +17,7 @@ End-to-end: from empty machine to live site at `tcgr.in`. Plan ~30 minutes.
 1. Go to [sheets.google.com](https://sheets.google.com) → **+ Blank**
 2. Rename: **`tcgr.in — CMS`**
 3. **Extensions → Apps Script** opens the script editor in a new tab
-4. You can either paste code manually here, OR use clasp from your machine (recommended — see Part 2)
+4. You can either paste code manually here, OR use clasp from our machine (recommended — see Part 2)
 
 > Keep this Sheet's URL handy. The script ID lives in: **Project Settings (⚙) → Script ID** in the Apps Script editor.
 
@@ -36,7 +36,7 @@ clasp login
 cp .clasp.json.example .clasp.json
 ```
 
-Edit `.clasp.json` and paste your **Script ID** from the previous step:
+Edit `.clasp.json` and paste our **Script ID** from the previous step:
 
 ```json
 {
@@ -51,7 +51,7 @@ Push the code:
 clasp push
 ```
 
-This uploads `Code.js`, `Schemas.js`, `ResumeGenerator.js`, and `appsscript.json` to your Apps Script project.
+This pushes and uploads `Code.js`, `Schemas.js`, `ResumeGenerator.js`, and `appsscript.json` to our Apps Script project.
 
 > If clasp asks you to enable the Apps Script API, do so at [script.google.com/home/usersettings](https://script.google.com/home/usersettings).
 
@@ -66,7 +66,7 @@ This uploads `Code.js`, `Schemas.js`, `ResumeGenerator.js`, and `appsscript.json
 5. Refresh the Sheet tab — you'll see all 14 sheets created with seed data
 6. The custom menu **🛠 tcgr.in CMS** appears in the Sheet menu bar
 
-> All your CV data is already pre-populated. Edit cells to customize.
+> All our CV data is already pre-populated. Edit cells to customize.
 
 ---
 
@@ -113,7 +113,7 @@ In the Apps Script editor:
 For local development:
 
 ```bash
-# Edit public/config.js with your Web App URL
+# Edit public/config.js with our Web App URL
 # (don't commit this — see Part 8)
 ```
 
@@ -133,14 +133,14 @@ The short version:
    - **Build command:** `sh build.sh`
    - **Build output directory:** `public`
 4. Environment variables:
-   - `API_URL` = your Apps Script Web App URL
+   - `API_URL` = our Apps Script Web App URL
    - `SITE_VERSION` = `1.0.0`
 5. Deploy → Cloudflare assigns `*.pages.dev` URL
 6. Add custom domain `tcgr.in` in Pages settings
 
 ---
 
-## Part 8 — Local override (don't commit your URL)
+## Part 8 — Local override (don't commit our URL)
 
 Once you have a real `API_URL`, you'll want to test the live API locally without committing the URL.
 
@@ -148,7 +148,7 @@ Once you have a real `API_URL`, you'll want to test the live API locally without
 # Tell git to ignore changes to config.js even though it's tracked:
 git update-index --skip-worktree public/config.js
 
-# Now edit public/config.js with your API_URL — git won't track it.
+# Now edit public/config.js with our API_URL — git won't track it.
 ```
 
 To undo this later:
@@ -168,7 +168,7 @@ git update-index --no-skip-worktree public/config.js
 4. Paste each ID into the matching row of the `resumes` sheet, `template_doc_id` column
 5. Test from the Sheet menu: **🛠 tcgr.in CMS → Generate Resume: International**
 
-A PDF appears in your Drive at `tcgr.in_resumes/`. The frontend will fetch it via `?action=resume&id=INT-01`.
+A PDF appears in our Drive at `tcgr.in_resumes/`. The frontend will fetch it via `?action=resume&id=INT-01`.
 
 ---
 
@@ -180,7 +180,7 @@ A PDF appears in your Drive at `tcgr.in_resumes/`. The frontend will fetch it vi
 - [ ] `?action=health` returns `{ ok: true }`
 - [ ] `?action=all` returns full payload
 - [ ] Cloudflare Pages site loads
-- [ ] Site shows your data (not fallback) — check by editing a cell and clearing cache
+- [ ] Site shows our data (not fallback) — check by editing a cell and clearing cache
 - [ ] Custom domain `tcgr.in` resolves with valid SSL
 
 When all boxes are checked, you're live. Edit the Sheet to change anything.
