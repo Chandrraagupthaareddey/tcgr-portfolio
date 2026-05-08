@@ -6,9 +6,8 @@
 <title>Chandraguptha Reddy — Senior Staff Engineer, SRE</title>
 <meta name="description" content="AI-Augmented Observability Engineer · Automation Architect · Multi-LLM Workflow Builder. 15+ years building intelligent reliability systems at enterprise scale." />
 <meta name="author" content="Chandraguptha Reddy" />
-<meta name="theme-color" content="#08080a" />
+<meta name="theme-color" content="#0a0a0c" />
 
-<!-- Open Graph -->
 <meta property="og:title" content="Chandraguptha Reddy — Senior Staff Engineer, SRE" />
 <meta property="og:description" content="AI-Augmented Observability · Automation · Multi-LLM AIOps" />
 <meta property="og:type" content="website" />
@@ -17,29 +16,23 @@
 <meta name="twitter:card" content="summary_large_image" />
 
 <link rel="canonical" href="https://tcgr.in" />
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2308080a'/%3E%3Ctext x='32' y='42' font-family='serif' font-style='italic' font-size='32' fill='%23c9b88a' text-anchor='middle'%3Et%3C/text%3E%3C/svg%3E" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a0a0c'/%3E%3Ctext x='32' y='44' font-family='monospace' font-size='30' font-weight='600' fill='%2300d4aa' text-anchor='middle'%3Et%3C/text%3E%3C/svg%3E" />
 
-<!-- ============================================
-     Runtime config — loaded from external file
-     so secrets never sit inside committed HTML.
-     config.js is gitignored. Build creates it on
-     deploy from Cloudflare Pages env vars.
-     ============================================ -->
+<!-- Runtime config — generated at build by build.sh from Cloudflare env -->
 <script src="./config.js"></script>
 <script>
-  // Defensive defaults if config.js missing (dev / first preview)
   window.PORTFOLIO_CONFIG = Object.assign({
-    API_URL: "",                    // empty → falls back to bundled sample data
+    API_URL: "",
     CACHE_TTL_MS: 6 * 60 * 60 * 1000,
-    SITE_VERSION: "1.0.0",
+    SITE_VERSION: "1.1.0",
     SHOW_FALLBACK_BANNER: false
   }, window.PORTFOLIO_CONFIG || {});
 </script>
 
-<!-- Fonts -->
+<!-- Fonts: tech/coder hybrid -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 
 <!-- Tailwind via Play CDN -->
 <script src="https://cdn.tailwindcss.com"></script>
@@ -49,203 +42,396 @@
       extend: {
         fontFamily: {
           display: ['"Instrument Serif"', 'serif'],
-          sans: ['Geist', 'system-ui', 'sans-serif'],
-          mono: ['"JetBrains Mono"', 'monospace']
+          sans: ['Inter', 'system-ui', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace']
         },
         colors: {
-          ink: { 950: '#08080a', 900: '#0c0c10', 800: '#111116', 700: '#16161d', 600: '#1d1d26' },
+          ink: { 950: '#0a0a0c', 900: '#0d0d11', 800: '#111116', 700: '#16161d', 600: '#1d1d26', 500: '#262633' },
           fog: { 100: '#f4f4f5', 200: '#d4d4d8', 300: '#a1a1aa', 400: '#71717a', 500: '#52525b' },
           accent: { DEFAULT: '#c9b88a', soft: '#e8dfc4', deep: '#8a7752' },
-          signal: { cyan: '#7dd3fc', green: '#86efac', amber: '#fcd34d' }
+          signal: { teal: '#00d4aa', cyan: '#7dd3fc', green: '#86efac', amber: '#fcd34d', red: '#fca5a5' }
         }
       }
     }
   };
 </script>
 
-<!-- GSAP for cinematic scroll -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
-
 <style>
-  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
-  body {
-    background: #08080a;
-    color: #e4e4e7;
-    font-family: 'Geist', system-ui, sans-serif;
-    font-weight: 300;
-    letter-spacing: -0.005em;
-    -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
+  :root {
+    --grid-color: rgba(255,255,255,0.035);
+    --grid-size: 56px;
   }
 
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    /* Fluid base font: 16px @ 360px → 18px @ 1440px */
+    font-size: clamp(16px, 0.9vw + 13px, 18px);
+  }
+  body {
+    background: #0a0a0c;
+    color: #e4e4e7;
+    font-family: Inter, system-ui, sans-serif;
+    font-weight: 450;
+    letter-spacing: -0.008em;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+  /* Default body text — higher contrast than text-fog-300 */
+  body, p, li, dd { color: #d4d4d8; }
+  /* Lead paragraphs (intros, descriptions) — fluid + heavier */
+  .lead {
+    font-size: clamp(17px, 0.6vw + 15px, 21px);
+    line-height: 1.6;
+    font-weight: 450;
+    color: #e4e4e7;
+  }
+  /* Card/section body text */
+  .body-text {
+    font-size: clamp(14px, 0.3vw + 13px, 16px);
+    line-height: 1.65;
+    color: #d4d4d8;
+  }
+
+  /* Subtle scanline noise — barely visible, adds film grain */
   body::before {
     content: '';
     position: fixed; inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
     opacity: 0.025;
     pointer-events: none;
     z-index: 100;
     mix-blend-mode: overlay;
   }
 
-  .orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(80px);
-    pointer-events: none;
-    opacity: 0.4;
-    will-change: transform;
-  }
-
+  /* Global grid: monitoring dashboard floor */
   .grid-bg {
     background-image:
-      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-    background-size: 64px 64px;
-    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 30%, transparent 80%);
-    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 30%, transparent 80%);
+      linear-gradient(var(--grid-color) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+    background-size: var(--grid-size) var(--grid-size);
+    mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, black 30%, transparent 85%);
+    -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, black 30%, transparent 85%);
+  }
+
+  /* Telemetry canvas sits between grid and content in hero */
+  #telemetry-canvas {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    opacity: 0.7;
+  }
+
+  .orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(90px); pointer-events: none;
+    opacity: 0.35; will-change: transform;
   }
 
   .glass {
-    background: linear-gradient(180deg, rgba(28,28,36,0.6) 0%, rgba(16,16,22,0.4) 100%);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    background: linear-gradient(180deg, rgba(22,22,29,0.55) 0%, rgba(13,13,17,0.4) 100%);
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
     border: 1px solid rgba(255,255,255,0.06);
-    transition: border-color 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
+    transition: border-color 0.4s ease, transform 0.3s ease, box-shadow 0.4s ease;
   }
   .glass:hover {
-    border-color: rgba(201, 184, 138, 0.25);
-    box-shadow: 0 0 60px -20px rgba(201, 184, 138, 0.15);
+    border-color: rgba(0, 212, 170, 0.25);
+    box-shadow: 0 0 60px -20px rgba(0, 212, 170, 0.18);
   }
 
   .hairline { background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent); height: 1px; }
 
-  .display { font-family: 'Instrument Serif', serif; font-weight: 400; letter-spacing: -0.02em; line-height: 0.95; }
+  .display { font-family: 'Instrument Serif', serif; font-weight: 400; letter-spacing: -0.022em; line-height: 0.95; }
   .display-italic { font-style: italic; color: #e8dfc4; }
 
   .eyebrow {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.2em;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: #71717a;
+    color: #a1a1aa;
+    font-weight: 500;
   }
 
+  /* Status dot with telemetry pulse */
   .pulse-dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: #86efac;
-    box-shadow: 0 0 0 0 rgba(134, 239, 172, 0.7);
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #00d4aa;
+    box-shadow: 0 0 0 0 rgba(0, 212, 170, 0.6);
     animation: pulse 2s infinite;
   }
   @keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(134, 239, 172, 0.5); }
-    70% { box-shadow: 0 0 0 8px rgba(134, 239, 172, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(134, 239, 172, 0); }
+    0% { box-shadow: 0 0 0 0 rgba(0, 212, 170, 0.55); }
+    70% { box-shadow: 0 0 0 10px rgba(0, 212, 170, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(0, 212, 170, 0); }
   }
 
+  /* Underline link */
   .link-underline { position: relative; display: inline-block; }
   .link-underline::after {
-    content: '';
-    position: absolute;
-    left: 0; bottom: -2px;
-    width: 0; height: 1px;
-    background: #c9b88a;
+    content: ''; position: absolute; left: 0; bottom: -2px;
+    width: 0; height: 1px; background: #00d4aa;
     transition: width 0.4s ease;
   }
   .link-underline:hover::after { width: 100%; }
 
+  /* Buttons */
   .btn-primary {
     background: linear-gradient(135deg, #e8dfc4 0%, #c9b88a 100%);
-    color: #08080a;
-    transition: all 0.3s ease;
+    color: #0a0a0c;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+    font-weight: 500;
   }
   .btn-primary:hover {
-    box-shadow: 0 0 40px -8px rgba(201, 184, 138, 0.6);
-    transform: translateY(-1px);
+    box-shadow: 0 0 36px -8px rgba(201, 184, 138, 0.55);
   }
   .btn-ghost {
     border: 1px solid rgba(255,255,255,0.12);
-    transition: all 0.3s ease;
+    transition: transform 0.2s ease, border-color 0.3s ease, background 0.3s ease;
+    font-weight: 500;
   }
   .btn-ghost:hover {
-    border-color: rgba(201, 184, 138, 0.4);
-    background: rgba(201, 184, 138, 0.05);
+    border-color: rgba(0, 212, 170, 0.4);
+    background: rgba(0, 212, 170, 0.05);
   }
 
+  /* Chips (tag pills under expertise / projects) */
+  .chip {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.025);
+    color: #c4c4ca;
+    font-weight: 500;
+    transition: all 0.25s ease;
+  }
+  .chip:hover {
+    border-color: rgba(0, 212, 170, 0.45);
+    color: #e4e4e7;
+    background: rgba(0, 212, 170, 0.06);
+  }
+
+  /* Timeline */
   .timeline-line {
-    background: linear-gradient(180deg, transparent 0%, rgba(201, 184, 138, 0.3) 10%, rgba(201, 184, 138, 0.3) 90%, transparent 100%);
+    background: linear-gradient(180deg, transparent 0%, rgba(0, 212, 170, 0.25) 8%, rgba(201, 184, 138, 0.25) 50%, rgba(0, 212, 170, 0.25) 92%, transparent 100%);
     width: 1px;
   }
   .timeline-node {
     width: 11px; height: 11px;
     border-radius: 50%;
-    background: #08080a;
-    border: 1px solid #c9b88a;
-    box-shadow: 0 0 0 4px rgba(201, 184, 138, 0.08);
+    background: #0a0a0c;
+    border: 1px solid #00d4aa;
+    box-shadow: 0 0 0 4px rgba(0, 212, 170, 0.08), 0 0 12px rgba(0, 212, 170, 0.3);
     transition: all 0.3s ease;
   }
   .timeline-item:hover .timeline-node {
-    background: #c9b88a;
-    box-shadow: 0 0 0 6px rgba(201, 184, 138, 0.15);
+    background: #00d4aa;
+    box-shadow: 0 0 0 6px rgba(0, 212, 170, 0.18), 0 0 16px rgba(0, 212, 170, 0.5);
   }
 
-  .reveal { opacity: 0; transform: translateY(24px); }
+  /* Reveal default state */
+  [data-reveal] { opacity: 0; transform: translateY(22px); }
 
-  ::-webkit-scrollbar { width: 8px; }
-  ::-webkit-scrollbar-track { background: #08080a; }
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: #0a0a0c; }
   ::-webkit-scrollbar-thumb { background: #1d1d26; border-radius: 4px; }
   ::-webkit-scrollbar-thumb:hover { background: #2d2d36; }
 
-  @keyframes scroll-x {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
+  /* Marquee — robust: parent clips overflow, child is flex with intrinsic width */
+  .marquee-wrap {
+    overflow: hidden;
+    position: relative;
+    /* Soft fade on edges for premium feel */
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 60px, #000 calc(100% - 60px), transparent 100%);
+            mask-image: linear-gradient(90deg, transparent 0, #000 60px, #000 calc(100% - 60px), transparent 100%);
   }
-  .marquee { animation: scroll-x 40s linear infinite; }
+  .marquee {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 2.25rem;
+    width: max-content;          /* CRITICAL: forces full content width so translateX(-50%) is meaningful */
+    white-space: nowrap;
+    animation: marquee 40s linear infinite;
+    will-change: transform;
+    transform: translate3d(0, 0, 0);  /* promote to GPU layer */
+    backface-visibility: hidden;
+  }
+  .marquee:hover { animation-play-state: paused; }
+  @keyframes marquee {
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(-50%, 0, 0); }
+  }
+  .marquee > span {
+    color: #a1a1aa;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;              /* prevent flex from squishing items */
+  }
+  .marquee > span.dot { color: #00d4aa; opacity: 0.8; }
+
   @media (prefers-reduced-motion: reduce) {
     .marquee, .pulse-dot { animation: none; }
     html { scroll-behavior: auto; }
-    .reveal { opacity: 1; transform: none; }
+    [data-reveal] { opacity: 1; transform: none; }
   }
 
+  /* Terminal block */
   .terminal {
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.78rem;
-    background: #0c0c10;
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 8px;
-    overflow-x: auto;
+    line-height: 1.7;
+    background: linear-gradient(180deg, #0d0d11 0%, #0a0a0c 100%);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 10px;
+    overflow: hidden;
   }
+  .terminal-header {
+    display: flex; align-items: center; gap: 6px;
+    padding: 9px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    background: rgba(255,255,255,0.015);
+  }
+  .terminal-header .dot-r { width: 11px; height: 11px; border-radius: 50%; background: #ff5f57; opacity: 0.7; }
+  .terminal-header .dot-y { width: 11px; height: 11px; border-radius: 50%; background: #febc2e; opacity: 0.7; }
+  .terminal-header .dot-g { width: 11px; height: 11px; border-radius: 50%; background: #28c840; opacity: 0.7; }
+  .terminal-header .label { margin-left: 10px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #52525b; }
+  .terminal-body { padding: 16px 18px; }
+  .term-prompt { color: #00d4aa; }
+  .term-key { color: #71717a; }
+  .term-val { color: #d4d4d8; }
+  .term-cursor { display: inline-block; width: 9px; height: 16px; background: #00d4aa; vertical-align: -3px; animation: blink 1.1s steps(2) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
 
-  .skeleton {
-    background: linear-gradient(90deg, #16161d 0%, #1d1d26 50%, #16161d 100%);
-    background-size: 200% 100%;
-    animation: skeleton 1.4s ease-in-out infinite;
-    border-radius: 6px;
-  }
-  @keyframes skeleton {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-  }
-
+  /* Sticky nav */
   nav.sticky-nav {
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    background: rgba(8, 8, 10, 0.7);
+    background: rgba(10,10,12,0.65);
     border-bottom: 1px solid rgba(255,255,255,0.04);
+    transition: padding 0.3s ease, background 0.3s ease;
+  }
+  nav.sticky-nav.scrolled {
+    background: rgba(10,10,12,0.88);
+    border-bottom-color: rgba(255,255,255,0.07);
   }
 
   /* Mobile menu */
   #mobile-menu { display: none; }
   #mobile-menu.open { display: flex; }
 
-  /* Mobile-first typography tuning */
+  /* Mobile typography tuning */
   @media (max-width: 768px) {
-    .display-hero { font-size: 3.25rem !important; line-height: 1 !important; }
-    .display-h2 { font-size: 2.5rem !important; }
-    .display-h2-large { font-size: 3rem !important; }
+    .display-hero { font-size: 3rem !important; line-height: 1 !important; }
+    .display-h2 { font-size: 2.25rem !important; }
+    .display-h2-large { font-size: 2.75rem !important; }
     section { padding-top: 5rem !important; padding-bottom: 5rem !important; }
     .eyebrow { font-size: 0.65rem !important; }
+  }
+
+  /* Toast */
+  #toast {
+    position: fixed; bottom: 24px; left: 50%;
+    transform: translateX(-50%) translateY(120%);
+    background: #0d0d11;
+    border: 1px solid rgba(0, 212, 170, 0.3);
+    color: #d4d4d8;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    z-index: 200;
+    transition: transform 0.4s cubic-bezier(.2,.7,.2,1);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+  }
+  #toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* Focus rings (accessibility) */
+  a:focus-visible, button:focus-visible, summary:focus-visible {
+    outline: 2px solid #00d4aa;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Project / lesson card +/- icon */
+  details summary { list-style: none; }
+  details summary::-webkit-details-marker { display: none; }
+  .toggle-icon {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.1);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 300; line-height: 1;
+    color: #a1a1aa;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+  }
+  details[open] .toggle-icon { transform: rotate(45deg); border-color: rgba(0, 212, 170, 0.4); color: #00d4aa; }
+  details summary:hover .toggle-icon { border-color: rgba(0, 212, 170, 0.4); color: #00d4aa; }
+
+  /* Section number gutters */
+  .sec-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #00d4aa;
+    letter-spacing: 0.15em;
+  }
+
+  /* Portrait card with telemetry rings */
+  .portrait-card {
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+  }
+  .portrait-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 80px -20px rgba(0, 212, 170, 0.25);
+  }
+  .portrait-frame {
+    background: linear-gradient(135deg, #16161d 0%, #0d0d11 100%);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .portrait-placeholder {
+    position: absolute; inset: 0;
+  }
+  .rings {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 120%; height: 120%;
+    transform: translate(-50%, -50%);
+    background:
+      radial-gradient(circle, transparent 30%, rgba(201,184,138,0.06) 30.5%, transparent 31%),
+      radial-gradient(circle, transparent 45%, rgba(0,212,170,0.05) 45.5%, transparent 46%),
+      radial-gradient(circle, transparent 60%, rgba(201,184,138,0.04) 60.5%, transparent 61%);
+    animation: ring-rotate 22s linear infinite;
+    opacity: 0.7;
+  }
+  @keyframes ring-rotate {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rings { animation: none; }
+  }
+
+  /* About / journey / lessons body — readable on dark */
+  #about-body p,
+  #journey p,
+  #knowledge p {
+    color: #d4d4d8;
+  }
+  /* Larger leading on long-form blocks */
+  #about-body p {
+    font-size: clamp(16px, 0.5vw + 14px, 19px);
+    line-height: 1.7;
   }
 </style>
 </head>
@@ -255,12 +441,18 @@
 <!-- ============================================ NAV ============================================ -->
 <nav class="sticky-nav fixed top-0 left-0 right-0 z-50">
   <div class="max-w-7xl mx-auto px-5 md:px-12 py-4 md:py-5 flex items-center justify-between">
-    <a href="#top" class="flex items-center gap-2.5 group" aria-label="tcgr.in home">
-      <span class="font-mono text-xs text-fog-400 group-hover:text-accent transition-colors">~/</span>
-      <span class="font-display text-xl text-fog-100">tcgr<span class="display-italic">.in</span></span>
+    <a href="#top" class="flex items-center gap-3 group" aria-label="Chandraguptha Reddy — home">
+      <span class="relative flex h-8 w-8 items-center justify-center rounded-full bg-ink-700 border border-white/10 overflow-hidden shrink-0">
+        <!-- Avatar: replace with <img src="./assets/img/avatar.jpg" alt=""> if you upload a photo -->
+        <span class="font-mono text-[11px] font-semibold text-signal-teal">CR</span>
+      </span>
+      <span class="flex flex-col leading-tight">
+        <span class="text-[15px] font-semibold text-fog-100 tracking-tight">Chandraguptha Reddy</span>
+        <span class="font-mono text-[10px] text-fog-400 tracking-widest uppercase">SRE · AI-Ops</span>
+      </span>
     </a>
 
-    <div class="hidden md:flex items-center gap-8 text-sm text-fog-300">
+    <div class="hidden md:flex items-center gap-7 text-sm text-fog-300 font-medium">
       <a href="#about" class="link-underline hover:text-fog-100 transition">About</a>
       <a href="#journey" class="link-underline hover:text-fog-100 transition">Journey</a>
       <a href="#expertise" class="link-underline hover:text-fog-100 transition">Expertise</a>
@@ -269,18 +461,16 @@
       <a href="#resume" class="link-underline hover:text-fog-100 transition">Résumé</a>
     </div>
 
-    <a href="#contact" class="hidden md:inline-block btn-ghost px-4 py-2 rounded-full text-xs font-mono uppercase tracking-widest text-fog-200">
-      Get in touch →
+    <a href="#contact" class="hidden md:inline-flex items-center gap-2 btn-ghost px-4 py-2 rounded-full text-xs font-mono uppercase tracking-widest text-fog-200">
+      <span class="pulse-dot"></span> Get in touch →
     </a>
 
-    <!-- Mobile burger -->
     <button id="menu-toggle" aria-label="Toggle menu" class="md:hidden text-fog-200 p-2">
       <svg id="icon-open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       <svg id="icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="display:none"><line x1="6" y1="6" x2="18" y2="18"/><line x1="6" y1="18" x2="18" y2="6"/></svg>
     </button>
   </div>
 
-  <!-- Mobile menu drawer -->
   <div id="mobile-menu" class="md:hidden flex-col px-6 pb-6 pt-2 gap-4 text-fog-200 border-t border-white/5">
     <a href="#about" class="py-2">About</a>
     <a href="#journey" class="py-2">Journey</a>
@@ -289,55 +479,100 @@
     <a href="#ai" class="py-2">AI Lab</a>
     <a href="#knowledge" class="py-2">Knowledge</a>
     <a href="#resume" class="py-2">Résumé</a>
-    <a href="#contact" class="py-2 text-accent">Contact →</a>
+    <a href="#contact" class="py-2 text-signal-teal">Contact →</a>
   </div>
 </nav>
 
 <!-- ============================================ HERO ============================================ -->
 <section id="top" class="relative min-h-screen flex items-center pt-28 md:pt-32 pb-16 px-5 md:px-12 overflow-hidden">
-  <div class="orb" style="width: 600px; height: 600px; background: #c9b88a; top: -200px; right: -100px;"></div>
-  <div class="orb" style="width: 500px; height: 500px; background: #7dd3fc; bottom: -150px; left: -100px; opacity: 0.15;"></div>
   <div class="absolute inset-0 grid-bg" aria-hidden="true"></div>
+  <canvas id="telemetry-canvas" aria-hidden="true"></canvas>
+  <div class="orb" style="width: 600px; height: 600px; background: #c9b88a; top: -200px; right: -100px;"></div>
+  <div class="orb" style="width: 500px; height: 500px; background: #00d4aa; bottom: -150px; left: -100px; opacity: 0.18;"></div>
 
   <div class="max-w-7xl mx-auto w-full relative z-10">
-    <div class="flex items-center gap-3 mb-6 md:mb-8 reveal" data-reveal>
-      <span class="pulse-dot"></span>
-      <span class="eyebrow">Available · UAE / Remote · 60d notice</span>
+    <div class="grid lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+
+      <!-- LEFT: Headline + intro + CTAs -->
+      <div class="lg:col-span-8">
+        <div class="flex items-center gap-3 mb-6 md:mb-8" data-reveal>
+          <span class="pulse-dot"></span>
+          <span class="eyebrow">Available · UAE / Remote · <span data-bind="hero.notice_period">60d notice</span></span>
+        </div>
+
+        <h1 class="display display-hero text-5xl md:text-7xl lg:text-8xl text-fog-100 mb-6 md:mb-8" data-reveal>
+          Engineering<br>
+          <span class="display-italic">reliability</span> at the<br>
+          edge of <span class="display-italic">intelligence.</span>
+        </h1>
+
+        <p id="hero-intro" class="lead text-fog-100 max-w-2xl mb-8 md:mb-10" data-reveal>
+          I'm <span class="text-fog-100 font-medium">Chandraguptha Reddy</span> — a Senior Staff Engineer building AI-augmented
+          observability, automation, and self-healing operational systems for enterprise-scale platforms.
+          Currently architecting reliability for <span class="text-fog-100 font-medium">Airbnb Payments</span>.
+        </p>
+
+        <div class="flex flex-wrap items-center gap-3 mb-12 md:mb-16" data-reveal>
+          <a href="#projects" class="btn-primary px-6 py-3 rounded-full text-sm">View selected work</a>
+          <a href="#resume" class="btn-ghost px-6 py-3 rounded-full text-sm text-fog-100">Download résumé</a>
+          <a href="#ai" class="px-5 md:px-6 py-3 text-sm text-fog-200 link-underline">Explore AI Lab →</a>
+        </div>
+      </div>
+
+      <!-- RIGHT: Portrait card (photo upload slot) -->
+      <div class="lg:col-span-4" data-reveal>
+        <div class="portrait-card glass rounded-2xl p-1.5 mx-auto lg:mx-0 max-w-xs lg:max-w-none">
+          <div class="portrait-frame relative rounded-xl overflow-hidden aspect-[4/5]">
+            <!-- ┌────────────────────────────────────────────────────────────┐
+                 │  PROFILE PHOTO SLOT                                        │
+                 │  Drop a square or 4:5 portrait at:                         │
+                 │     public/assets/img/avatar.jpg  (recommended ~800×1000)  │
+                 │  Then change `data-has-photo="false"` to "true" below     │
+                 │  and uncomment the <img> tag.                              │
+                 └────────────────────────────────────────────────────────────┘ -->
+            <div class="portrait-placeholder" data-has-photo="false">
+              <!-- <img src="./assets/img/avatar.jpg" alt="Chandraguptha Reddy" class="w-full h-full object-cover" /> -->
+
+              <!-- Fallback monogram visualization with telemetry rings -->
+              <div class="absolute inset-0 flex items-center justify-center">
+                <div class="rings"></div>
+                <div class="font-display italic text-7xl text-accent-soft relative z-10">CR</div>
+              </div>
+            </div>
+
+            <!-- Overlay: live status + uptime stripe -->
+            <div class="absolute top-3 left-3 right-3 flex items-center justify-between text-[10px] font-mono uppercase tracking-widest z-10">
+              <span class="flex items-center gap-1.5 text-signal-green">
+                <span class="pulse-dot" style="width:6px;height:6px"></span> ONLINE
+              </span>
+              <span class="text-fog-400">v2026.05</span>
+            </div>
+            <div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-ink-900/95 to-transparent z-10">
+              <div class="font-mono text-[10px] uppercase tracking-widest text-fog-400 mb-0.5">Currently</div>
+              <div class="text-sm text-fog-100 font-medium leading-tight">Senior Staff Engineer</div>
+              <div class="text-xs text-fog-300">Airbnb · Payments</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <h1 class="display display-hero text-6xl md:text-8xl lg:text-9xl text-fog-100 mb-6 md:mb-8 reveal" data-reveal>
-      Engineering<br>
-      <span class="display-italic">reliability</span> at the<br>
-      edge of <span class="display-italic">intelligence.</span>
-    </h1>
-
-    <p id="hero-intro" class="text-base md:text-xl text-fog-300 max-w-2xl leading-relaxed mb-8 md:mb-10 reveal" data-reveal>
-      I'm <span class="text-fog-100">Chandraguptha Reddy</span> — a Senior Staff Engineer building AI-augmented
-      observability, automation, and self-healing operational systems for enterprise-scale platforms.
-      Currently architecting reliability for <span class="text-fog-100">Airbnb Payments</span>.
-    </p>
-
-    <div class="flex flex-wrap items-center gap-3 mb-12 md:mb-16 reveal" data-reveal>
-      <a href="#projects" class="btn-primary px-5 md:px-6 py-3 rounded-full text-sm font-medium">View selected work</a>
-      <a href="#resume" class="btn-ghost px-5 md:px-6 py-3 rounded-full text-sm text-fog-200">Download résumé</a>
-      <a href="#ai" class="px-5 md:px-6 py-3 text-sm text-fog-300 link-underline">Explore AI Lab →</a>
-    </div>
-
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/5 rounded-2xl overflow-hidden glass reveal" data-reveal>
+    <!-- Stats — IDs are STABLE, app.js binds via getElementById -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/5 rounded-2xl overflow-hidden glass mt-10" data-reveal>
       <div class="p-5 md:p-8">
-        <div class="font-display text-3xl md:text-5xl text-accent-soft" data-counter="15">0</div>
+        <div class="font-display text-3xl md:text-5xl text-accent-soft" id="metric-years" data-target="15">15</div>
         <div class="eyebrow mt-2">Years Engineering</div>
       </div>
       <div class="p-5 md:p-8">
-        <div class="font-display text-3xl md:text-5xl text-accent-soft"><span data-counter="55">0</span><span class="text-fog-400">%</span></div>
+        <div class="font-display text-3xl md:text-5xl text-accent-soft"><span id="metric-alert-noise" data-target="55">55</span><span class="text-fog-400">%</span></div>
         <div class="eyebrow mt-2">Alert Noise Reduced</div>
       </div>
       <div class="p-5 md:p-8">
-        <div class="font-display text-3xl md:text-5xl text-accent-soft"><span data-counter="40">0</span><span class="text-fog-400">%</span></div>
+        <div class="font-display text-3xl md:text-5xl text-accent-soft"><span id="metric-manual-effort" data-target="40">40</span><span class="text-fog-400">%</span></div>
         <div class="eyebrow mt-2">Manual Effort Cut</div>
       </div>
       <div class="p-5 md:p-8">
-        <div class="font-display text-3xl md:text-5xl text-accent-soft"><span data-counter="35">0</span><span class="text-fog-400">%</span></div>
+        <div class="font-display text-3xl md:text-5xl text-accent-soft"><span id="metric-mttr" data-target="35">35</span><span class="text-fog-400">%</span></div>
         <div class="eyebrow mt-2">MTTR Improvement</div>
       </div>
     </div>
@@ -345,39 +580,42 @@
 </section>
 
 <!-- ============================================ TECH MARQUEE ============================================ -->
-<section class="border-y border-white/5 py-5 md:py-6 overflow-hidden" aria-label="Technology stack">
-  <div class="flex marquee whitespace-nowrap font-mono text-xs md:text-sm text-fog-400 gap-8 md:gap-12">
-    <!-- Doubled for seamless loop -->
-    <span>Datadog</span><span class="text-accent">◆</span>
-    <span>Grafana</span><span class="text-accent">◆</span>
-    <span>Prometheus</span><span class="text-accent">◆</span>
-    <span>Splunk</span><span class="text-accent">◆</span>
-    <span>Telescope</span><span class="text-accent">◆</span>
-    <span>Claude</span><span class="text-accent">◆</span>
-    <span>GPT</span><span class="text-accent">◆</span>
-    <span>Gemini</span><span class="text-accent">◆</span>
-    <span>Google Apps Script</span><span class="text-accent">◆</span>
-    <span>Kubernetes</span><span class="text-accent">◆</span>
-    <span>OpenShift</span><span class="text-accent">◆</span>
-    <span>AWS</span><span class="text-accent">◆</span>
-    <span>GCP</span><span class="text-accent">◆</span>
-    <span>Jenkins</span><span class="text-accent">◆</span>
-    <span>ELK</span><span class="text-accent">◆</span>
-    <span>Datadog</span><span class="text-accent">◆</span>
-    <span>Grafana</span><span class="text-accent">◆</span>
-    <span>Prometheus</span><span class="text-accent">◆</span>
-    <span>Splunk</span><span class="text-accent">◆</span>
-    <span>Telescope</span><span class="text-accent">◆</span>
-    <span>Claude</span><span class="text-accent">◆</span>
-    <span>GPT</span><span class="text-accent">◆</span>
-    <span>Gemini</span><span class="text-accent">◆</span>
-    <span>Google Apps Script</span><span class="text-accent">◆</span>
-    <span>Kubernetes</span><span class="text-accent">◆</span>
-    <span>OpenShift</span><span class="text-accent">◆</span>
-    <span>AWS</span><span class="text-accent">◆</span>
-    <span>GCP</span><span class="text-accent">◆</span>
-    <span>Jenkins</span><span class="text-accent">◆</span>
-    <span>ELK</span><span class="text-accent">◆</span>
+<section class="border-y border-white/5 py-5 md:py-6 marquee-wrap" aria-label="Technology stack">
+  <div class="marquee">
+    <!-- Single set; CSS translateX(-50%) requires content duplicated below -->
+    <span>Datadog</span><span class="dot">◆</span>
+    <span>Grafana</span><span class="dot">◆</span>
+    <span>Prometheus</span><span class="dot">◆</span>
+    <span>Splunk</span><span class="dot">◆</span>
+    <span>Telescope</span><span class="dot">◆</span>
+    <span>Claude</span><span class="dot">◆</span>
+    <span>GPT</span><span class="dot">◆</span>
+    <span>Gemini</span><span class="dot">◆</span>
+    <span>Apps Script</span><span class="dot">◆</span>
+    <span>Kubernetes</span><span class="dot">◆</span>
+    <span>OpenShift</span><span class="dot">◆</span>
+    <span>AWS</span><span class="dot">◆</span>
+    <span>GCP</span><span class="dot">◆</span>
+    <span>Jenkins</span><span class="dot">◆</span>
+    <span>ELK</span><span class="dot">◆</span>
+    <span>MCP</span><span class="dot">◆</span>
+    <!-- DUPLICATE -->
+    <span>Datadog</span><span class="dot">◆</span>
+    <span>Grafana</span><span class="dot">◆</span>
+    <span>Prometheus</span><span class="dot">◆</span>
+    <span>Splunk</span><span class="dot">◆</span>
+    <span>Telescope</span><span class="dot">◆</span>
+    <span>Claude</span><span class="dot">◆</span>
+    <span>GPT</span><span class="dot">◆</span>
+    <span>Gemini</span><span class="dot">◆</span>
+    <span>Apps Script</span><span class="dot">◆</span>
+    <span>Kubernetes</span><span class="dot">◆</span>
+    <span>OpenShift</span><span class="dot">◆</span>
+    <span>AWS</span><span class="dot">◆</span>
+    <span>GCP</span><span class="dot">◆</span>
+    <span>Jenkins</span><span class="dot">◆</span>
+    <span>ELK</span><span class="dot">◆</span>
+    <span>MCP</span><span class="dot">◆</span>
   </div>
 </section>
 
@@ -385,8 +623,8 @@
 <section id="about" class="relative py-24 md:py-32 px-5 md:px-12">
   <div class="max-w-7xl mx-auto">
     <div class="grid lg:grid-cols-12 gap-8 lg:gap-12">
-      <div class="lg:col-span-4 reveal" data-reveal>
-        <div class="eyebrow mb-4">— 01 / About</div>
+      <div class="lg:col-span-4" data-reveal>
+        <div class="eyebrow mb-4"><span class="sec-num">01</span> &nbsp; About</div>
         <h2 class="display display-h2-large text-4xl md:text-6xl text-fog-100 mb-6">
           From hospitality<br>
           <span class="display-italic">to SRE</span> to<br>
@@ -394,25 +632,11 @@
         </h2>
       </div>
 
-      <div id="about-body" class="lg:col-span-7 lg:col-start-6 space-y-5 md:space-y-6 text-base md:text-lg text-fog-300 leading-relaxed reveal" data-reveal>
-        <p>
-          My career didn't start in engineering. It started in hotel revenue analysis — staring at spreadsheets,
-          spotting patterns in noise, and building automations to escape repetition. That instinct never left.
-        </p>
-        <p>
-          Over <span class="text-fog-100">15 years</span>, I've evolved from automating night audits with Google Apps Script
-          to architecting <span class="text-fog-100">multi-LLM AIOps platforms</span> for Airbnb Payments — combining classical
-          SRE practice with modern AI reasoning to detect, triage, and resolve incidents with minimal human overhead.
-        </p>
-        <p>
-          I'm fluent across <span class="text-fog-100">Datadog, Grafana, Prometheus, Splunk, ELK, Telescope</span> — and equally at home
-          orchestrating Claude, GPT, and Gemini through MCP servers and prompt chains. The interesting work today lives at
-          the intersection: <span class="display-italic text-accent-soft">observability that thinks.</span>
-        </p>
-        <p>
-          I write code to remove work, not to make more of it. I optimize for systems that explain themselves.
-          And I believe the best engineers spend more time deleting alerts than creating them.
-        </p>
+      <div id="about-body" class="lg:col-span-7 lg:col-start-6 space-y-5 md:space-y-6 text-fog-100 leading-relaxed" data-reveal>
+        <p>My career didn't start in engineering. It started in hotel revenue analysis — staring at spreadsheets, spotting patterns in noise, and building automations to escape repetition. That instinct never left.</p>
+        <p>Over <span class="text-fog-100">15 years</span>, I've evolved from automating night audits with Google Apps Script to architecting <span class="text-fog-100">multi-LLM AIOps platforms</span> for Airbnb Payments — combining classical SRE practice with modern AI reasoning to detect, triage, and resolve incidents with minimal human overhead.</p>
+        <p>I'm fluent across <span class="text-fog-100">Datadog, Grafana, Prometheus, Splunk, ELK, Telescope</span> — and equally at home orchestrating Claude, GPT, and Gemini through MCP servers and prompt chains. The interesting work today lives at the intersection: <span class="display-italic text-accent-soft">observability that thinks.</span></p>
+        <p>I write code to remove work, not to make more of it. I optimize for systems that explain themselves. And I believe the best engineers spend more time deleting alerts than creating them.</p>
       </div>
     </div>
     <div class="hairline mt-20 md:mt-24"></div>
@@ -423,20 +647,19 @@
 <section id="journey" class="relative py-24 md:py-32 px-5 md:px-12">
   <div class="max-w-7xl mx-auto">
     <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 mb-16 md:mb-20">
-      <div class="lg:col-span-5 reveal" data-reveal>
-        <div class="eyebrow mb-4">— 02 / Journey</div>
+      <div class="lg:col-span-5" data-reveal>
+        <div class="eyebrow mb-4"><span class="sec-num">02</span> &nbsp; Journey</div>
         <h2 class="display display-h2-large text-4xl md:text-6xl text-fog-100">
           A <span class="display-italic">15-year</span><br>operating timeline.
         </h2>
       </div>
-      <div class="lg:col-span-6 lg:col-start-7 self-end text-fog-400 reveal" data-reveal>
+      <div class="lg:col-span-6 lg:col-start-7 self-end text-fog-200" data-reveal>
         <p>From hotel reservation systems to multi-LLM incident intelligence — every role taught me how to make systems quieter and humans more leveraged.</p>
       </div>
     </div>
 
-    <div class="relative" id="timeline-container" data-bind-list="timeline">
+    <div class="relative" id="timeline-container">
       <div class="timeline-line absolute left-4 md:left-1/2 top-0 bottom-0 -translate-x-1/2"></div>
-      <!-- Items injected by JS -->
     </div>
   </div>
 </section>
@@ -445,8 +668,8 @@
 <section id="expertise" class="relative py-24 md:py-32 px-5 md:px-12">
   <div class="max-w-7xl mx-auto">
     <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 mb-16 md:mb-20">
-      <div class="lg:col-span-7 reveal" data-reveal>
-        <div class="eyebrow mb-4">— 03 / Expertise</div>
+      <div class="lg:col-span-7" data-reveal>
+        <div class="eyebrow mb-4"><span class="sec-num">03</span> &nbsp; Expertise</div>
         <h2 class="display display-h2-large text-4xl md:text-6xl text-fog-100">
           What I'm <span class="display-italic">good at,</span><br>and how it shows up.
         </h2>
@@ -460,13 +683,13 @@
 <section id="projects" class="relative py-24 md:py-32 px-5 md:px-12">
   <div class="max-w-7xl mx-auto">
     <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 mb-16 md:mb-20">
-      <div class="lg:col-span-7 reveal" data-reveal>
-        <div class="eyebrow mb-4">— 04 / Selected Work</div>
+      <div class="lg:col-span-7" data-reveal>
+        <div class="eyebrow mb-4"><span class="sec-num">04</span> &nbsp; Selected Work</div>
         <h2 class="display display-h2-large text-4xl md:text-6xl text-fog-100">
           Projects &amp; <span class="display-italic">automations.</span>
         </h2>
       </div>
-      <div class="lg:col-span-4 lg:col-start-9 self-end text-fog-400 reveal" data-reveal>
+      <div class="lg:col-span-4 lg:col-start-9 self-end text-fog-200" data-reveal>
         <p>Production systems, AI workflows, and the engineering decisions behind them.</p>
       </div>
     </div>
@@ -476,39 +699,39 @@
 
 <!-- ============================================ AI LAB ============================================ -->
 <section id="ai" class="relative py-24 md:py-32 px-5 md:px-12 overflow-hidden">
-  <div class="orb" style="width: 500px; height: 500px; background: #7dd3fc; top: 30%; right: -200px; opacity: 0.12;"></div>
+  <div class="orb" style="width: 500px; height: 500px; background: #00d4aa; top: 30%; right: -200px; opacity: 0.14;"></div>
 
   <div class="max-w-7xl mx-auto relative z-10">
     <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 mb-12 md:mb-16">
-      <div class="lg:col-span-7 reveal" data-reveal>
-        <div class="eyebrow mb-4">— 05 / AI Lab</div>
+      <div class="lg:col-span-7" data-reveal>
+        <div class="eyebrow mb-4"><span class="sec-num">05</span> &nbsp; AI Lab</div>
         <h2 class="display display-h2-large text-4xl md:text-6xl text-fog-100">
           Multi-LLM<br>
           <span class="display-italic">incident intelligence.</span>
         </h2>
       </div>
-      <div class="lg:col-span-4 lg:col-start-9 self-end text-fog-400 reveal" data-reveal>
+      <div class="lg:col-span-4 lg:col-start-9 self-end text-fog-200" data-reveal>
         <p>How Claude, GPT, and Gemini work together to triage, summarize, and reason across distributed payment systems.</p>
       </div>
     </div>
 
-    <div class="glass rounded-2xl p-6 md:p-12 reveal" data-reveal>
+    <div class="glass rounded-2xl p-6 md:p-12" data-reveal>
       <div class="grid md:grid-cols-7 gap-3 md:gap-4 items-stretch text-center text-xs md:text-sm">
         <div class="md:col-span-1 p-4 rounded-lg bg-ink-700/50 border border-white/5">
           <div class="font-mono text-xs text-fog-400 mb-2">SOURCE</div>
           <div class="text-fog-100">Datadog<br>Splunk<br>Logs</div>
         </div>
-        <div class="hidden md:flex items-center justify-center text-accent">→</div>
+        <div class="hidden md:flex items-center justify-center text-signal-teal text-lg">→</div>
         <div class="md:col-span-1 p-4 rounded-lg bg-ink-700/50 border border-accent/20">
           <div class="font-mono text-xs text-accent mb-2">CLAUDE</div>
           <div class="text-fog-100">Reasoning<br>Triage<br>Summarization</div>
         </div>
-        <div class="hidden md:flex items-center justify-center text-accent">→</div>
+        <div class="hidden md:flex items-center justify-center text-signal-teal text-lg">→</div>
         <div class="md:col-span-1 p-4 rounded-lg bg-ink-700/50 border border-signal-cyan/20">
           <div class="font-mono text-xs text-signal-cyan mb-2">GPT / GEMINI</div>
           <div class="text-fog-100">Cross-check<br>Impact analysis<br>Alternatives</div>
         </div>
-        <div class="hidden md:flex items-center justify-center text-accent">→</div>
+        <div class="hidden md:flex items-center justify-center text-signal-teal text-lg">→</div>
         <div class="md:col-span-1 p-4 rounded-lg bg-ink-700/50 border border-signal-green/20">
           <div class="font-mono text-xs text-signal-green mb-2">ACTION</div>
           <div class="text-fog-100">Slack alert<br>Runbook<br>Sheet log</div>
@@ -526,8 +749,8 @@
 <section id="knowledge" class="relative py-24 md:py-32 px-5 md:px-12">
   <div class="max-w-7xl mx-auto">
     <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 mb-12 md:mb-16">
-      <div class="lg:col-span-7 reveal" data-reveal>
-        <div class="eyebrow mb-4">— 06 / Knowledge</div>
+      <div class="lg:col-span-7" data-reveal>
+        <div class="eyebrow mb-4"><span class="sec-num">06</span> &nbsp; Knowledge</div>
         <h2 class="display display-h2-large text-4xl md:text-6xl text-fog-100">
           Mistakes I made,<br>
           <span class="display-italic">and the architecture</span><br>that fixed them.
@@ -536,7 +759,6 @@
     </div>
     <div class="space-y-3" id="lessons-list"></div>
 
-    <!-- Future blogs hook -->
     <div id="blogs-section" class="mt-16 hidden">
       <div class="hairline mb-12"></div>
       <div class="eyebrow mb-6">— Recent writing</div>
@@ -549,14 +771,14 @@
 <section id="resume" class="relative py-24 md:py-32 px-5 md:px-12">
   <div class="max-w-7xl mx-auto">
     <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 mb-12 md:mb-16">
-      <div class="lg:col-span-7 reveal" data-reveal>
-        <div class="eyebrow mb-4">— 07 / Résumé</div>
+      <div class="lg:col-span-7" data-reveal>
+        <div class="eyebrow mb-4"><span class="sec-num">07</span> &nbsp; Résumé</div>
         <h2 class="display display-h2-large text-4xl md:text-6xl text-fog-100">
           One profile,<br>
           <span class="display-italic">three formats.</span>
         </h2>
       </div>
-      <div class="lg:col-span-4 lg:col-start-9 self-end text-fog-400 reveal" data-reveal>
+      <div class="lg:col-span-4 lg:col-start-9 self-end text-fog-200" data-reveal>
         <p>Tailored for the role you're hiring for — generated fresh from a single source of truth.</p>
       </div>
     </div>
@@ -566,31 +788,37 @@
 
 <!-- ============================================ CONTACT ============================================ -->
 <section id="contact" class="relative py-24 md:py-32 px-5 md:px-12 overflow-hidden">
-  <div class="orb" style="width: 600px; height: 600px; background: #c9b88a; bottom: -300px; left: 50%; transform: translateX(-50%); opacity: 0.2;"></div>
+  <div class="orb" style="width: 600px; height: 600px; background: #00d4aa; bottom: -300px; left: 50%; transform: translateX(-50%); opacity: 0.18;"></div>
 
   <div class="max-w-5xl mx-auto relative z-10 text-center">
-    <div class="eyebrow mb-6 reveal" data-reveal>— 08 / Contact</div>
-    <h2 class="display text-5xl md:text-8xl text-fog-100 mb-6 md:mb-8 reveal" data-reveal>
+    <div class="eyebrow mb-6" data-reveal><span class="sec-num">08</span> &nbsp; Contact</div>
+    <h2 class="display text-5xl md:text-8xl text-fog-100 mb-6 md:mb-8" data-reveal>
       Let's build<br>
       <span class="display-italic">something reliable.</span>
     </h2>
-    <p class="text-base md:text-lg text-fog-300 max-w-xl mx-auto mb-10 md:mb-12 reveal" data-reveal data-bind="contact.tagline">
+    <p class="lead text-fog-100 max-w-xl mx-auto mb-10 md:mb-12" data-reveal data-bind="contact.tagline">
       Open to senior SRE / Observability / AI-Ops leadership roles in UAE and remote. I respond within 24 hours.
     </p>
 
-    <div class="flex flex-wrap items-center justify-center gap-3 reveal" data-reveal>
-      <a id="cta-email" href="#" class="btn-primary px-5 md:px-6 py-3 rounded-full text-sm font-medium">Email me →</a>
+    <div class="flex flex-wrap items-center justify-center gap-3" data-reveal>
+      <a id="cta-email" href="#" class="btn-primary px-5 md:px-6 py-3 rounded-full text-sm">Email me →</a>
       <a id="cta-linkedin" href="#" target="_blank" rel="noopener" class="btn-ghost px-5 md:px-6 py-3 rounded-full text-sm text-fog-200">LinkedIn</a>
       <a href="#resume" class="btn-ghost px-5 md:px-6 py-3 rounded-full text-sm text-fog-200">Résumé</a>
     </div>
 
-    <div class="terminal text-left max-w-2xl mx-auto mt-12 md:mt-16 p-4 md:p-5 reveal" data-reveal>
-      <div class="text-fog-400">$ whois chandraguptha</div>
-      <div class="text-fog-200 mt-2 break-words" data-bind="contact.location">Location:        Bengaluru, IN · open to UAE / Remote</div>
-      <div class="text-fog-200 break-words" data-bind="contact.role">Current Role:    Senior Staff Engineer — SRE @ Airbnb (via Altimetrik)</div>
-      <div class="text-fog-200 break-words" data-bind="contact.availability">Availability:    60 days notice (negotiable)</div>
-      <div class="text-fog-200 break-words" data-bind="contact.languages">Languages:       English, Hindi, Tamil</div>
-      <div class="text-accent mt-2">$ <span class="animate-pulse">▌</span></div>
+    <div class="terminal text-left max-w-2xl mx-auto mt-12 md:mt-16" data-reveal>
+      <div class="terminal-header">
+        <span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span>
+        <span class="label">tcgr@reliability ~ %</span>
+      </div>
+      <div class="terminal-body space-y-1">
+        <div><span class="term-prompt">$</span> <span class="term-key">whois</span> <span class="term-val">chandraguptha</span></div>
+        <div class="pl-3"><span class="term-key">location:</span>     <span class="term-val" data-bind="contact.location">Bengaluru, IN · open to UAE / Remote</span></div>
+        <div class="pl-3"><span class="term-key">role:</span>         <span class="term-val" data-bind="contact.role">Senior Staff Engineer — SRE @ Airbnb (via Altimetrik)</span></div>
+        <div class="pl-3"><span class="term-key">availability:</span> <span class="term-val" data-bind="contact.availability">60 days notice (negotiable)</span></div>
+        <div class="pl-3"><span class="term-key">languages:</span>    <span class="term-val" data-bind="contact.languages">English, Hindi, Tamil</span></div>
+        <div class="pt-1"><span class="term-prompt">$</span> <span class="term-cursor"></span></div>
+      </div>
     </div>
   </div>
 </section>
@@ -600,58 +828,60 @@
   <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 md:gap-4 text-xs md:text-sm text-fog-400">
     <div class="font-mono text-center md:text-left">© <span id="year"></span> · tcgr.in · Built with care · <a href="https://github.com/tcgr-in/portfolio" class="link-underline" target="_blank" rel="noopener">view source</a></div>
     <div class="flex gap-6 items-center">
-      <span class="font-mono text-xs">v<span id="site-version">1.0.0</span> · sheet-driven</span>
+      <span class="font-mono text-xs">v<span id="site-version">1.1.0</span> · sheet-driven</span>
       <a href="#top" class="link-underline">Back to top ↑</a>
     </div>
   </div>
 </footer>
 
+<!-- Toast container -->
+<div id="toast" role="status" aria-live="polite"></div>
 
 <!-- ============================================ TEMPLATES ============================================ -->
 <template id="tpl-timeline">
-  <div class="timeline-item relative pl-12 md:pl-0 reveal mb-12 md:mb-16" data-reveal>
+  <div class="timeline-item relative pl-12 md:pl-0 mb-12 md:mb-16" data-reveal>
     <div class="md:grid md:grid-cols-2 md:gap-16 items-start">
       <div class="md:text-right md:pr-12 mb-2 md:mb-0">
         <div class="md:hidden absolute left-4 top-2 -translate-x-1/2"><span class="timeline-node block"></span></div>
-        <div class="font-mono text-xs text-accent uppercase tracking-widest" data-tl="year"></div>
+        <div class="font-mono text-xs text-signal-teal uppercase tracking-widest" data-tl="year"></div>
         <div class="font-display text-xl md:text-2xl text-fog-100 mt-1" data-tl="role"></div>
-        <div class="text-fog-400 text-sm mt-1" data-tl="company"></div>
+        <div class="text-fog-300 mt-1" data-tl="company"></div>
       </div>
       <div class="hidden md:block absolute left-1/2 top-2 -translate-x-1/2"><span class="timeline-node block"></span></div>
-      <div class="md:pl-12 text-fog-300 text-sm leading-relaxed" data-tl="description"></div>
+      <div class="md:pl-12 text-fog-200 leading-relaxed" data-tl="description"></div>
     </div>
   </div>
 </template>
 
 <template id="tpl-expertise">
-  <div class="glass rounded-xl p-5 md:p-6 reveal" data-reveal>
+  <div class="glass rounded-xl p-5 md:p-6" data-reveal>
     <div class="flex items-start justify-between mb-4">
       <div class="eyebrow" data-ex="category"></div>
-      <div class="font-mono text-xs text-fog-500" data-ex="badge"></div>
+      <div class="font-mono text-xs text-signal-teal" data-ex="badge"></div>
     </div>
     <h3 class="font-display text-xl md:text-2xl text-fog-100 mb-3" data-ex="title"></h3>
-    <p class="text-sm text-fog-300 leading-relaxed mb-4" data-ex="description"></p>
+    <p class="text-fog-200 leading-relaxed mb-4" data-ex="description"></p>
     <div class="flex flex-wrap gap-1.5" data-ex="tools"></div>
   </div>
 </template>
 
 <template id="tpl-project">
-  <details class="glass rounded-xl group reveal" data-reveal>
-    <summary class="flex items-center justify-between p-5 md:p-6 cursor-pointer list-none">
+  <details class="glass rounded-xl group" data-reveal>
+    <summary class="flex items-center justify-between p-5 md:p-6 cursor-pointer">
       <div class="flex-1 min-w-0">
         <div class="flex items-center gap-3 mb-2 flex-wrap">
           <span class="font-mono text-xs text-fog-500" data-pr="number"></span>
-          <span class="font-mono text-[10px] md:text-xs px-2 py-0.5 rounded-full bg-accent/10 text-accent" data-pr="category"></span>
+          <span class="font-mono text-[10px] md:text-xs px-2 py-0.5 rounded-full bg-signal-teal/10 text-signal-teal" data-pr="category"></span>
         </div>
         <h3 class="font-display text-xl md:text-3xl text-fog-100" data-pr="title"></h3>
-        <p class="text-xs md:text-sm text-fog-400 mt-1" data-pr="subtitle"></p>
+        <p class="text-sm text-fog-300 mt-1" data-pr="subtitle"></p>
       </div>
-      <div class="text-fog-400 ml-4 md:ml-6 transition-transform group-open:rotate-45 text-2xl font-light flex-shrink-0">+</div>
+      <span class="toggle-icon ml-4">+</span>
     </summary>
     <div class="px-5 md:px-6 pb-5 md:pb-6 pt-0">
       <div class="hairline mb-5 md:mb-6"></div>
       <div class="grid md:grid-cols-3 gap-6 md:gap-8 text-sm">
-        <div class="md:col-span-2 space-y-3 text-fog-300 leading-relaxed" data-pr="description"></div>
+        <div class="md:col-span-2 space-y-3 text-fog-200 leading-relaxed" data-pr="description"></div>
         <div>
           <div class="eyebrow mb-3">Stack</div>
           <div class="flex flex-wrap gap-1.5 mb-5 md:mb-6" data-pr="stack"></div>
@@ -664,24 +894,24 @@
 </template>
 
 <template id="tpl-lesson">
-  <details class="glass rounded-xl group reveal" data-reveal>
-    <summary class="flex items-center justify-between p-4 md:p-5 cursor-pointer list-none">
+  <details class="glass rounded-xl group" data-reveal>
+    <summary class="flex items-center justify-between p-4 md:p-5 cursor-pointer">
       <div class="flex items-center gap-3 md:gap-4 flex-1 min-w-0">
-        <span class="font-mono text-xs text-accent flex-shrink-0" data-le="number"></span>
+        <span class="font-mono text-xs text-signal-teal flex-shrink-0" data-le="number"></span>
         <h3 class="font-display text-lg md:text-xl text-fog-100" data-le="title"></h3>
       </div>
-      <div class="text-fog-400 transition-transform group-open:rotate-45 text-xl font-light flex-shrink-0 ml-3">+</div>
+      <span class="toggle-icon ml-3">+</span>
     </summary>
     <div class="px-4 md:px-5 pb-4 md:pb-5">
       <div class="hairline mb-4"></div>
       <div class="grid md:grid-cols-2 gap-5 md:gap-6 text-sm">
         <div>
-          <div class="eyebrow mb-2 text-red-300/70">— Problem</div>
-          <p class="text-fog-300" data-le="problem"></p>
+          <div class="eyebrow mb-2 text-signal-red">— Problem</div>
+          <p class="text-fog-100" data-le="problem"></p>
         </div>
         <div>
           <div class="eyebrow mb-2 text-signal-green">— Fix</div>
-          <p class="text-fog-300" data-le="fix"></p>
+          <p class="text-fog-100" data-le="fix"></p>
         </div>
       </div>
       <div class="mt-5">
@@ -693,42 +923,40 @@
 </template>
 
 <template id="tpl-resume">
-  <a class="glass rounded-xl p-5 md:p-6 block group reveal" data-reveal data-rs="link">
+  <a class="glass rounded-xl p-5 md:p-6 block group" data-reveal>
     <div class="flex items-start justify-between mb-5 md:mb-6">
       <div class="font-mono text-xs text-fog-500" data-rs="format"></div>
-      <div class="font-mono text-xs text-accent">PDF</div>
+      <div class="font-mono text-xs text-signal-teal">PDF</div>
     </div>
     <h3 class="font-display text-xl md:text-2xl text-fog-100 mb-2" data-rs="title"></h3>
-    <p class="text-sm text-fog-400 mb-6 md:mb-8" data-rs="description"></p>
+    <p class="text-fog-200 mb-6 md:mb-8" data-rs="description"></p>
     <div class="flex items-center justify-between">
-      <span class="text-sm text-fog-300 group-hover:text-accent transition">Download →</span>
+      <span class="text-fog-100 group-hover:text-signal-teal transition font-medium">Download →</span>
       <span class="font-mono text-xs text-fog-500" data-rs="updated"></span>
     </div>
   </a>
 </template>
 
 <template id="tpl-ai-cap">
-  <div class="reveal" data-reveal>
-    <div class="eyebrow mb-2" data-ai="label"></div>
+  <div data-reveal>
+    <div class="eyebrow mb-2 text-signal-teal" data-ai="label"></div>
     <h4 class="font-display text-xl text-fog-100 mb-2" data-ai="title"></h4>
-    <p class="text-fog-400 text-sm leading-relaxed" data-ai="description"></p>
+    <p class="text-fog-200 leading-relaxed" data-ai="description"></p>
   </div>
 </template>
 
 <template id="tpl-blog">
-  <a class="glass rounded-xl p-5 block group reveal" data-reveal data-bl="link">
+  <a class="glass rounded-xl p-5 block group" data-reveal>
     <div class="eyebrow mb-3" data-bl="category"></div>
     <h3 class="font-display text-lg md:text-xl text-fog-100 mb-2" data-bl="title"></h3>
-    <p class="text-sm text-fog-400 mb-4" data-bl="summary"></p>
+    <p class="text-fog-200 mb-4" data-bl="summary"></p>
     <div class="flex items-center justify-between text-xs text-fog-500">
       <span data-bl="date"></span>
-      <span class="text-accent group-hover:translate-x-1 transition">→</span>
+      <span class="text-signal-teal group-hover:translate-x-1 transition">→</span>
     </div>
   </a>
 </template>
 
-
-<!-- ============================================ APP LOGIC ============================================ -->
 <script src="./assets/app.js" defer></script>
 
 </body>

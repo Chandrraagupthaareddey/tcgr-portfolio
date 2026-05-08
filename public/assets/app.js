@@ -1,26 +1,41 @@
 /* ============================================================================
- *  tcgr.in — Frontend Application Logic
- *  Sheet-driven rendering with localStorage cache + bundled fallback.
+ *  tcgr.in — Frontend (v1.1.0)
+ *  Sheet-driven rendering · localStorage cache · bundled fallback
+ *  ----------------------------------------------------------------------------
+ *  CHANGES vs v1.0:
+ *   - Metric counters now bind via stable `id="metric-*"` selectors (not by
+ *     mutating data-counter — fixes the "stats render 0%" bug on Cloudflare).
+ *   - Counter animation reads from a separate `data-target` attribute, set
+ *     ONCE after data hydrates. No race with _initAnimations().
+ *   - Resume cards: real download URLs are built when format ID + API_URL
+ *     exist (calls ?action=resume&id=INT-01); falls back gracefully.
+ *   - Telemetry: subtle pulse + grid drift driven by JS rAF, not GSAP.
+ *   - Smarter caching: stale-while-revalidate that DOESN'T double-render.
+ *   - Reduced motion respected throughout.
  *  ============================================================================ */
 
-/* ============================================================================
- *  FALLBACK DATA
- *  Used on first paint and when API is unreachable. Keeps the site functional
- *  even if the backend is down. Update via Sheet, not here.
- *  ============================================================================ */
 const FALLBACK_DATA = {
   hero: {
-    intro: null,
+    intro: "I'm Chandraguptha Reddy — a Senior Staff Engineer building AI-augmented observability, automation, and self-healing operational systems for enterprise-scale platforms. Currently architecting reliability for Airbnb Payments.",
     notice_period: '60d notice'
   },
-  about: { body: null },
+  about: {
+    body: "My career didn't start in engineering. It started in hotel revenue analysis — staring at spreadsheets, spotting patterns in noise, and building automations to escape repetition. That instinct never left.\n\nOver 15 years, I've evolved from automating night audits with Google Apps Script to architecting multi-LLM AIOps platforms for Airbnb Payments — combining classical SRE practice with modern AI reasoning to detect, triage, and resolve incidents with minimal human overhead."
+  },
+  metrics: {
+    years: 15,
+    alert_noise_reduction_pct: 55,
+    manual_effort_reduction_pct: 40,
+    mttr_improvement_pct: 35
+  },
   contact: {
-    location: 'Location:        Bengaluru, IN · open to UAE / Remote',
-    role: 'Current Role:    Senior Staff Engineer — SRE @ Airbnb (via Altimetrik)',
-    availability: 'Availability:    60 days notice (negotiable)',
-    languages: 'Languages:       English, Hindi, Tamil',
+    location: 'Bengaluru, IN · open to UAE / Remote',
+    role: 'Senior Staff Engineer — SRE @ Airbnb (via Altimetrik)',
+    availability: '60 days notice (negotiable)',
+    languages: 'English, Hindi, Tamil',
     email: 'tcgr.8553665381@gmail.com',
     linkedin: 'https://www.linkedin.com/in/tcgr/',
+    github: 'https://github.com/tcgr-in',
     tagline: 'Open to senior SRE / Observability / AI-Ops leadership roles in UAE and remote. I respond within 24 hours.'
   },
   timeline: [
@@ -86,89 +101,121 @@ const FALLBACK_DATA = {
     { number: 'L07', title: 'Ignoring quotas & limits',         problem: 'Apps Script execution time limits, daily email quotas, API rate limits — discovered only when production failed.', fix: 'Quota-aware retry logic with exponential backoff. Pre-flight quota checks. Batched API calls.', impact: 'Reliable execution at scale. No more weekend pages from quota exhaustion.' }
   ],
   resumes: [
-    { format: 'INT-01',  title: 'International CV', description: 'ATS-friendly, two-page, role-targeted for global SRE / Observability / AI-Ops leadership roles.', link: '#', updated: 'v2026.05' },
-    { format: 'GULF-01', title: 'Gulf CV',          description: 'Tailored for UAE / GCC market: visa status, availability, expected salary, regional context.',  link: '#', updated: 'v2026.05' },
-    { format: 'IN-01',   title: 'India CV',         description: 'Naukri/LinkedIn-optimized format with detailed project breakdowns and skill matrices.',           link: '#', updated: 'v2026.05' }
+    { format: 'INT-01',  title: 'International CV', description: 'ATS-friendly, two-page, role-targeted for global SRE / Observability / AI-Ops leadership roles.', link: '', updated: 'v2026.05' },
+    { format: 'GULF-01', title: 'Gulf CV',          description: 'Tailored for UAE / GCC market: visa status, availability, expected salary, regional context.',  link: '', updated: 'v2026.05' },
+    { format: 'IN-01',   title: 'India CV',         description: 'Naukri/LinkedIn-optimized format with detailed project breakdowns and skill matrices.',           link: '', updated: 'v2026.05' }
   ],
-  blogs: [] // empty by default — populated from Sheet when ready
+  blogs: []
 };
 
-/* ============================================================================
- *  APP
- *  ============================================================================ */
+/* ========================================================================== */
+
 const App = {
   data: null,
+  hydrated: false,
   config: window.PORTFOLIO_CONFIG || {},
 
   async init() {
     this._initStaticUI();
-    this.data = await this._loadData();
+    this._initBackgroundMotion();
+    this._initInteractions();
+
+    // First paint: synchronous fallback render so UI is never empty
+    this.data = FALLBACK_DATA;
     this._render();
     this._initAnimations();
-    this._initInteractions();
+
+    // Then: try cache → API. If newer data, re-render only sections that need it.
+    const fresh = await this._loadData();
+    if (fresh && fresh !== FALLBACK_DATA) {
+      this.data = fresh;
+      this._render();           // safe: render is idempotent (clears containers)
+      this._refreshCounters();  // re-bind counter targets to new metrics
+      this._initAnimations();   // re-trigger reveals on newly added elements
+    }
+    this.hydrated = true;
   },
 
-  /* -- Static UI not dependent on data -- */
+  /* ── Static UI ────────────────────────────────────────────────────────── */
   _initStaticUI() {
-    document.getElementById('year').textContent = new Date().getFullYear();
-    const v = document.getElementById('site-version');
-    if (v) v.textContent = this.config.SITE_VERSION || '1.0.0';
+    const yearEl = document.getElementById('year');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+    const ver = document.getElementById('site-version');
+    if (ver) ver.textContent = this.config.SITE_VERSION || '1.0.0';
   },
 
-  /* -- Data layer with multi-tier fallback -- */
+  /* ── Data loading: stale-while-revalidate ─────────────────────────────── */
   async _loadData() {
-    // Tier 1: localStorage cache
+    let cached = null;
     try {
-      const cached = JSON.parse(localStorage.getItem('tcgr_data') || 'null');
-      if (cached && (Date.now() - cached.ts < this.config.CACHE_TTL_MS)) {
-        // Background refresh, don't await
-        this._fetchAndCache().catch(() => {});
-        return cached.data;
-      }
-    } catch (e) { /* localStorage may be disabled — fall through */ }
+      const raw = localStorage.getItem('tcgr_data');
+      if (raw) cached = JSON.parse(raw);
+    } catch (e) { /* ignore */ }
 
-    // Tier 2: live API
+    const ttl = this.config.CACHE_TTL_MS || 21600000;
+    const isFresh = cached && (Date.now() - cached.ts < ttl);
+
+    if (isFresh) {
+      // Background refresh — ignore failure
+      this._fetchAndCache().catch(() => {});
+      return cached.data;
+    }
+
     if (this.config.API_URL) {
       try {
         const data = await this._fetchAndCache();
         if (data) return data;
       } catch (e) {
-        console.warn('[tcgr.in] API unreachable, using fallback:', e.message);
+        console.warn('[tcgr.in] API unreachable:', e.message);
       }
     }
 
-    // Tier 3: bundled fallback
-    return FALLBACK_DATA;
+    // Even stale cache beats fallback
+    return cached?.data || FALLBACK_DATA;
   },
 
   async _fetchAndCache() {
     if (!this.config.API_URL) return null;
-    const url = `${this.config.API_URL}?action=all&v=${this.config.SITE_VERSION || '1'}`;
-    const res = await fetch(url, { method: 'GET' });
+    const url = `${this.config.API_URL}?action=all&v=${encodeURIComponent(this.config.SITE_VERSION || '1')}`;
+    const res = await fetch(url, { method: 'GET', redirect: 'follow' });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
-    if (data && !data.error) {
-      try { localStorage.setItem('tcgr_data', JSON.stringify({ ts: Date.now(), data })); } catch (e) {}
-      return data;
-    }
-    throw new Error(data?.error || 'Empty response');
+    if (!data || data.error) throw new Error(data?.error || 'Empty response');
+    try { localStorage.setItem('tcgr_data', JSON.stringify({ ts: Date.now(), data })); } catch (e) {}
+    return data;
   },
 
-  /* -- Rendering -- */
+  /* ── Render orchestrator ──────────────────────────────────────────────── */
   _render() {
     this._renderHero();
     this._renderAbout();
     this._renderMetrics();
-    this._renderTimeline();
-    this._renderExpertise();
-    this._renderProjects();
-    this._renderAI();
-    this._renderLessons();
+    this._renderContact();
+    this._renderList('timeline-container', 'tpl-timeline', this.data.timeline, this._fillTimeline);
+    this._renderList('expertise-grid',    'tpl-expertise', this.data.expertise, this._fillExpertise);
+    this._renderList('projects-list',     'tpl-project',   this.data.projects,  this._fillProject);
+    this._renderList('ai-capabilities',   'tpl-ai-cap',    this.data.ai_capabilities, this._fillAI);
+    this._renderList('lessons-list',      'tpl-lesson',    this.data.lessons,   this._fillLesson);
     this._renderResumes();
     this._renderBlogs();
-    this._renderContact();
   },
 
+  _renderList(containerId, tplId, items, filler) {
+    const c = document.getElementById(containerId);
+    const t = document.getElementById(tplId);
+    if (!c || !t || !Array.isArray(items)) return;
+    // Clear (keep static children like timeline-line)
+    [...c.querySelectorAll('[data-injected="1"]')].forEach(n => n.remove());
+    items.forEach(item => {
+      const node = t.content.cloneNode(true);
+      const root = node.firstElementChild;
+      if (root) root.setAttribute('data-injected', '1');
+      filler.call(this, node, item);
+      c.appendChild(node);
+    });
+  },
+
+  /* ── Section renderers ────────────────────────────────────────────────── */
   _renderHero() {
     const intro = this.data.hero?.intro;
     if (intro) {
@@ -196,21 +243,30 @@ const App = {
     });
   },
 
+  // FIX: bind by stable id, store target separately, don't mutate the lookup key
   _renderMetrics() {
     const m = this.data.metrics || {};
-    const counters = {
-      '[data-counter="15"]': m.years,
-      '[data-counter="55"]': m.alert_noise_reduction_pct,
-      '[data-counter="40"]': m.manual_effort_reduction_pct,
-      '[data-counter="35"]': m.mttr_improvement_pct
+    const map = {
+      'metric-years':          this._n(m.years, 15),
+      'metric-alert-noise':    this._n(m.alert_noise_reduction_pct, 55),
+      'metric-manual-effort':  this._n(m.manual_effort_reduction_pct, 40),
+      'metric-mttr':           this._n(m.mttr_improvement_pct, 35)
     };
-    Object.entries(counters).forEach(([sel, val]) => {
-      if (val == null) return;
-      const el = document.querySelector(sel);
-      if (el) {
-        el.setAttribute('data-counter', String(val));
-        el.textContent = '0';
-      }
+    Object.entries(map).forEach(([id, val]) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.setAttribute('data-target', String(val));
+      // Show fallback value immediately so nothing reads as "0"
+      if (!el.hasAttribute('data-animated')) el.textContent = String(val);
+    });
+  },
+
+  _refreshCounters() {
+    // After data refresh, re-run counter animation on changed targets
+    document.querySelectorAll('[data-target]').forEach(el => {
+      const target = parseFloat(el.getAttribute('data-target'));
+      const current = parseFloat(el.textContent) || 0;
+      if (target !== current) this._animateCounter(el, current, target);
     });
   },
 
@@ -221,105 +277,93 @@ const App = {
     if (email && c.email) email.href = `mailto:${c.email}`;
     if (linkedin && c.linkedin) linkedin.href = c.linkedin;
 
-    const terminalBinds = ['contact.location', 'contact.role', 'contact.availability', 'contact.languages', 'contact.tagline'];
-    terminalBinds.forEach(path => {
-      const key = path.split('.')[1];
-      const val = c[key];
-      if (!val) return;
-      document.querySelectorAll(`[data-bind="${path}"]`).forEach(el => {
-        el.textContent = val;
+    const fields = ['location', 'role', 'availability', 'languages', 'tagline'];
+    fields.forEach(f => {
+      if (!c[f]) return;
+      document.querySelectorAll(`[data-bind="contact.${f}"]`).forEach(el => {
+        // Strip leading "Label:    " prefix if present in cell, terminal already shows label
+        const v = String(c[f]).replace(/^[A-Za-z ]+:\s+/, '');
+        el.textContent = v;
       });
     });
   },
 
-  _renderTimeline() {
-    const container = document.getElementById('timeline-container');
-    const tpl = document.getElementById('tpl-timeline');
-    (this.data.timeline || []).forEach(item => {
-      const node = tpl.content.cloneNode(true);
-      this._setText(node, '[data-tl="year"]',        item.year);
-      this._setText(node, '[data-tl="role"]',        item.role);
-      this._setText(node, '[data-tl="company"]',     item.company);
-      this._setText(node, '[data-tl="description"]', item.description);
-      container.appendChild(node);
-    });
+  /* ── Fillers (templated rows) ─────────────────────────────────────────── */
+  _fillTimeline(node, item) {
+    this._setText(node, '[data-tl="year"]',        item.year);
+    this._setText(node, '[data-tl="role"]',        item.role);
+    this._setText(node, '[data-tl="company"]',     item.company);
+    this._setText(node, '[data-tl="description"]', item.description);
   },
 
-  _renderExpertise() {
-    const grid = document.getElementById('expertise-grid');
-    const tpl = document.getElementById('tpl-expertise');
-    (this.data.expertise || []).forEach(item => {
-      const node = tpl.content.cloneNode(true);
-      this._setText(node, '[data-ex="category"]',    item.category ? `— ${item.category}` : '');
-      this._setText(node, '[data-ex="badge"]',       item.badge);
-      this._setText(node, '[data-ex="title"]',       item.title);
-      this._setText(node, '[data-ex="description"]', item.description);
-      this._renderTags(node, '[data-ex="tools"]',    item.tools);
-      grid.appendChild(node);
-    });
+  _fillExpertise(node, item) {
+    this._setText(node, '[data-ex="category"]',    item.category ? `— ${item.category}` : '');
+    this._setText(node, '[data-ex="badge"]',       item.badge || '');
+    this._setText(node, '[data-ex="title"]',       item.title);
+    this._setText(node, '[data-ex="description"]', item.description);
+    this._renderTags(node, '[data-ex="tools"]',    item.tools);
   },
 
-  _renderProjects() {
-    const list = document.getElementById('projects-list');
-    const tpl = document.getElementById('tpl-project');
-    (this.data.projects || []).forEach(item => {
-      const node = tpl.content.cloneNode(true);
-      this._setText(node, '[data-pr="number"]',   item.number);
-      this._setText(node, '[data-pr="category"]', item.category);
-      this._setText(node, '[data-pr="title"]',    item.title);
-      this._setText(node, '[data-pr="subtitle"]', item.subtitle);
-      this._setText(node, '[data-pr="impact"]',   item.impact);
+  _fillProject(node, item) {
+    this._setText(node, '[data-pr="number"]',   item.number);
+    this._setText(node, '[data-pr="category"]', item.category);
+    this._setText(node, '[data-pr="title"]',    item.title);
+    this._setText(node, '[data-pr="subtitle"]', item.subtitle);
+    this._setText(node, '[data-pr="impact"]',   item.impact);
 
-      const desc = node.querySelector('[data-pr="description"]');
-      const items = Array.isArray(item.description) ? item.description : (item.description ? [item.description] : []);
-      items.forEach(p => {
-        const para = document.createElement('p');
-        para.textContent = p;
-        desc.appendChild(para);
-      });
-
-      this._renderTags(node, '[data-pr="stack"]', item.stack);
-      list.appendChild(node);
+    const desc = node.querySelector('[data-pr="description"]');
+    const items = Array.isArray(item.description) ? item.description : (item.description ? String(item.description).split(/[;|]/) : []);
+    items.forEach(p => {
+      const para = document.createElement('p');
+      para.textContent = p.trim();
+      desc.appendChild(para);
     });
+    this._renderTags(node, '[data-pr="stack"]', item.stack);
   },
 
-  _renderAI() {
-    const container = document.getElementById('ai-capabilities');
-    const tpl = document.getElementById('tpl-ai-cap');
-    (this.data.ai_capabilities || []).forEach(item => {
-      const node = tpl.content.cloneNode(true);
-      this._setText(node, '[data-ai="label"]',       item.label);
-      this._setText(node, '[data-ai="title"]',       item.title);
-      this._setText(node, '[data-ai="description"]', item.description);
-      container.appendChild(node);
-    });
+  _fillAI(node, item) {
+    this._setText(node, '[data-ai="label"]',       item.label);
+    this._setText(node, '[data-ai="title"]',       item.title);
+    this._setText(node, '[data-ai="description"]', item.description);
   },
 
-  _renderLessons() {
-    const list = document.getElementById('lessons-list');
-    const tpl = document.getElementById('tpl-lesson');
-    (this.data.lessons || []).forEach(item => {
-      const node = tpl.content.cloneNode(true);
-      this._setText(node, '[data-le="number"]',  item.number);
-      this._setText(node, '[data-le="title"]',   item.title);
-      this._setText(node, '[data-le="problem"]', item.problem);
-      this._setText(node, '[data-le="fix"]',     item.fix);
-      this._setText(node, '[data-le="impact"]',  item.impact);
-      list.appendChild(node);
-    });
+  _fillLesson(node, item) {
+    this._setText(node, '[data-le="number"]',  item.number);
+    this._setText(node, '[data-le="title"]',   item.title);
+    this._setText(node, '[data-le="problem"]', item.problem);
+    this._setText(node, '[data-le="fix"]',     item.fix);
+    this._setText(node, '[data-le="impact"]',  item.impact);
   },
 
+  // Resume: build real download URL when format ID + API_URL exist
   _renderResumes() {
     const grid = document.getElementById('resume-cards');
-    const tpl = document.getElementById('tpl-resume');
+    const tpl  = document.getElementById('tpl-resume');
+    if (!grid || !tpl) return;
+    [...grid.querySelectorAll('[data-injected="1"]')].forEach(n => n.remove());
+
     (this.data.resumes || []).forEach(item => {
       const node = tpl.content.cloneNode(true);
+      const root = node.firstElementChild;
+      root.setAttribute('data-injected', '1');
+
       const a = node.querySelector('a');
-      a.href = item.link || '#';
-      if (item.link && item.link !== '#') {
+      const downloadHref = item.link && item.link !== '#'
+        ? item.link
+        : (this.config.API_URL && item.format
+            ? `${this.config.API_URL}?action=resume&id=${encodeURIComponent(item.format)}`
+            : '#');
+
+      a.href = downloadHref;
+      if (downloadHref !== '#') {
         a.setAttribute('target', '_blank');
         a.setAttribute('rel', 'noopener');
+        a.addEventListener('click', (ev) => this._handleResumeClick(ev, item, downloadHref));
+      } else {
+        a.classList.add('opacity-60', 'cursor-not-allowed');
+        a.addEventListener('click', (ev) => { ev.preventDefault(); this._toast('Résumé not yet wired — add template_doc_id in the resumes sheet'); });
       }
+
       this._setText(node, '[data-rs="format"]',      item.format ? `— ${item.format}` : '');
       this._setText(node, '[data-rs="title"]',       item.title);
       this._setText(node, '[data-rs="description"]', item.description);
@@ -328,17 +372,43 @@ const App = {
     });
   },
 
-  _renderBlogs() {
-    const blogs = (this.data.blogs || []).filter(b => b && b.status !== 'draft');
-    if (!blogs.length) return;
+  // If link points to ?action=resume API, the API returns JSON, not a PDF.
+  // Intercept, fetch JSON, then redirect to the actual PDF URL.
+  async _handleResumeClick(ev, item, href) {
+    if (!href.includes('action=resume')) return; // direct link — let it through
+    ev.preventDefault();
+    const a = ev.currentTarget;
+    const original = a.querySelector('span').textContent;
+    a.querySelector('span').textContent = 'Generating PDF…';
+    try {
+      const res = await fetch(href);
+      const json = await res.json();
+      if (json.error) throw new Error(json.error);
+      const url = json.download_url || json.url;
+      if (!url) throw new Error('No URL returned');
+      window.open(url, '_blank', 'noopener');
+    } catch (err) {
+      this._toast(`Could not generate ${item.format}: ${err.message}`);
+    } finally {
+      a.querySelector('span').textContent = original;
+    }
+  },
 
+  _renderBlogs() {
+    const blogs = (this.data.blogs || []).filter(b => b && b.status !== 'draft' && b.title);
     const section = document.getElementById('blogs-section');
     const list = document.getElementById('blogs-list');
     const tpl = document.getElementById('tpl-blog');
+    if (!section || !list || !tpl) return;
+    [...list.querySelectorAll('[data-injected="1"]')].forEach(n => n.remove());
+
+    if (!blogs.length) { section.classList.add('hidden'); return; }
     section.classList.remove('hidden');
 
     blogs.forEach(item => {
       const node = tpl.content.cloneNode(true);
+      const root = node.firstElementChild;
+      root.setAttribute('data-injected', '1');
       const a = node.querySelector('a');
       a.href = item.link || '#';
       if (item.link && item.link !== '#') {
@@ -353,70 +423,180 @@ const App = {
     });
   },
 
-  /* -- Helpers -- */
-  _setText(scope, selector, value) {
-    const el = scope.querySelector(selector);
-    if (el && value !== undefined && value !== null) el.textContent = value;
+  /* ── Helpers ─────────────────────────────────────────────────────────── */
+  _setText(scope, sel, val) {
+    const el = scope.querySelector(sel);
+    if (el && val !== undefined && val !== null && val !== '') el.textContent = val;
   },
-  _renderTags(scope, selector, items) {
-    const container = scope.querySelector(selector);
-    if (!container) return;
+  _renderTags(scope, sel, items) {
+    const c = scope.querySelector(sel);
+    if (!c) return;
     (items || []).forEach(t => {
       const span = document.createElement('span');
-      span.className = 'font-mono text-[10px] uppercase tracking-wider px-2 py-1 rounded-full border border-white/10 text-fog-300';
+      span.className = 'chip';
       span.textContent = t;
-      container.appendChild(span);
+      c.appendChild(span);
     });
   },
+  _n(v, fallback) {
+    if (v === null || v === undefined || v === '') return fallback;
+    const n = parseFloat(v);
+    return isNaN(n) ? fallback : n;
+  },
+  _toast(msg) {
+    const t = document.getElementById('toast');
+    if (!t) { console.log('[toast]', msg); return; }
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(this._toastTimer);
+    this._toastTimer = setTimeout(() => t.classList.remove('show'), 3500);
+  },
 
-  /* -- Animations -- */
+  /* ── Animations ──────────────────────────────────────────────────────── */
   _initAnimations() {
-    if (typeof gsap === 'undefined' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      // Show everything immediately if motion is reduced or GSAP missing
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) {
       document.querySelectorAll('[data-reveal]').forEach(el => {
-        el.style.opacity = '1';
-        el.style.transform = 'none';
+        el.style.opacity = '1'; el.style.transform = 'none';
+      });
+      document.querySelectorAll('[data-target]').forEach(el => {
+        el.textContent = el.getAttribute('data-target');
+        el.setAttribute('data-animated', '1');
       });
       return;
     }
 
-    gsap.registerPlugin(ScrollTrigger);
-
-    document.querySelectorAll('[data-reveal]').forEach(el => {
-      gsap.to(el, {
-        opacity: 1, y: 0,
-        duration: 0.9, ease: 'power3.out',
-        scrollTrigger: { trigger: el, start: 'top 88%', once: true }
+    // Reveal on scroll via IntersectionObserver (lighter than GSAP for this)
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const el = e.target;
+        if (el.hasAttribute('data-revealed')) return;
+        el.setAttribute('data-revealed', '1');
+        el.style.transition = 'opacity 0.7s ease, transform 0.7s cubic-bezier(.2,.7,.2,1)';
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+        if (el.hasAttribute('data-target')) {
+          this._animateCounter(el, 0, parseFloat(el.getAttribute('data-target')));
+        }
+        io.unobserve(el);
       });
-    });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.05 });
 
-    document.querySelectorAll('[data-counter]').forEach(el => {
-      const target = parseFloat(el.getAttribute('data-counter'));
-      const obj = { v: 0 };
-      gsap.to(obj, {
-        v: target, duration: 1.8, ease: 'power2.out',
-        scrollTrigger: { trigger: el, start: 'top 80%', once: true },
-        onUpdate: () => { el.textContent = Math.round(obj.v); }
-      });
-    });
+    document.querySelectorAll('[data-reveal]:not([data-revealed])').forEach(el => io.observe(el));
+    document.querySelectorAll('[data-target]:not([data-animated])').forEach(el => io.observe(el));
   },
 
-  /* -- Mobile menu, etc. -- */
+  _animateCounter(el, from, to) {
+    if (el.hasAttribute('data-animating')) return;
+    el.setAttribute('data-animating', '1');
+    const dur = 1400;
+    const start = performance.now();
+    const ease = (t) => 1 - Math.pow(1 - t, 3);
+    const step = (now) => {
+      const p = Math.min(1, (now - start) / dur);
+      const v = from + (to - from) * ease(p);
+      el.textContent = String(Math.round(v));
+      if (p < 1) requestAnimationFrame(step);
+      else { el.removeAttribute('data-animating'); el.setAttribute('data-animated', '1'); }
+    };
+    requestAnimationFrame(step);
+  },
+
+  /* ── Background motion: telemetry pulses on hero grid ─────────────────── */
+  _initBackgroundMotion() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const canvas = document.getElementById('telemetry-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let w, h, dpr;
+
+    const resize = () => {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = canvas.clientWidth; h = canvas.clientHeight;
+      canvas.width = w * dpr; canvas.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+    resize();
+    window.addEventListener('resize', resize, { passive: true });
+
+    // Particle pulses traveling along grid lines — observability vibe
+    const cell = 64;
+    const pulses = Array.from({ length: 14 }, () => this._spawnPulse(w, h, cell));
+
+    let last = performance.now();
+    const tick = (now) => {
+      const dt = Math.min(50, now - last); last = now;
+      ctx.clearRect(0, 0, w, h);
+
+      pulses.forEach((p, i) => {
+        p.t += dt * p.speed;
+        if (p.t > 1) pulses[i] = this._spawnPulse(w, h, cell);
+
+        const x = p.x0 + (p.x1 - p.x0) * p.t;
+        const y = p.y0 + (p.y1 - p.y0) * p.t;
+        const grad = ctx.createRadialGradient(x, y, 0, x, y, 14);
+        grad.addColorStop(0, `rgba(201,184,138,${0.55 * (1 - Math.abs(p.t - 0.5) * 2)})`);
+        grad.addColorStop(1, 'rgba(201,184,138,0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath(); ctx.arc(x, y, 14, 0, Math.PI * 2); ctx.fill();
+      });
+
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  },
+
+  _spawnPulse(w, h, cell) {
+    const horizontal = Math.random() > 0.5;
+    if (horizontal) {
+      const y = Math.floor(Math.random() * (h / cell)) * cell;
+      const dir = Math.random() > 0.5 ? 1 : -1;
+      return { x0: dir > 0 ? -50 : w + 50, x1: dir > 0 ? w + 50 : -50, y0: y, y1: y, t: 0, speed: 0.00012 + Math.random() * 0.00015 };
+    } else {
+      const x = Math.floor(Math.random() * (w / cell)) * cell;
+      const dir = Math.random() > 0.5 ? 1 : -1;
+      return { x0: x, x1: x, y0: dir > 0 ? -50 : h + 50, y1: dir > 0 ? h + 50 : -50, t: 0, speed: 0.00012 + Math.random() * 0.00015 };
+    }
+  },
+
+  /* ── Mobile menu + smooth scroll ──────────────────────────────────────── */
   _initInteractions() {
     const toggle = document.getElementById('menu-toggle');
     const menu = document.getElementById('mobile-menu');
     const iconOpen = document.getElementById('icon-open');
     const iconClose = document.getElementById('icon-close');
-    if (!toggle || !menu) return;
+    if (toggle && menu) {
+      const setOpen = (open) => {
+        menu.classList.toggle('open', open);
+        if (iconOpen) iconOpen.style.display = open ? 'none' : '';
+        if (iconClose) iconClose.style.display = open ? '' : 'none';
+      };
+      toggle.addEventListener('click', () => setOpen(!menu.classList.contains('open')));
+      menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setOpen(false)));
+    }
 
-    const setOpen = (open) => {
-      menu.classList.toggle('open', open);
-      iconOpen.style.display = open ? 'none' : '';
-      iconClose.style.display = open ? '' : 'none';
-    };
+    // Header shrink on scroll
+    const nav = document.querySelector('nav.sticky-nav');
+    if (nav) {
+      let lastY = 0;
+      window.addEventListener('scroll', () => {
+        const y = window.scrollY;
+        nav.classList.toggle('scrolled', y > 24);
+        lastY = y;
+      }, { passive: true });
+    }
 
-    toggle.addEventListener('click', () => setOpen(!menu.classList.contains('open')));
-    menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setOpen(false)));
+    // Magnetic hover on primary buttons (subtle)
+    document.querySelectorAll('.btn-primary, .btn-ghost').forEach(btn => {
+      btn.addEventListener('mousemove', (e) => {
+        const r = btn.getBoundingClientRect();
+        const x = e.clientX - r.left - r.width / 2;
+        const y = e.clientY - r.top - r.height / 2;
+        btn.style.transform = `translate(${x * 0.08}px, ${y * 0.08}px)`;
+      });
+      btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
+    });
   }
 };
 
