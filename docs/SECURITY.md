@@ -14,20 +14,20 @@ This repo is **public on GitHub**. Anything committed here is visible to anyone,
 
 ## What's safe to commit
 
-✅ All code in `apps-script/` — uses `_prop()` to read secrets at runtime, never hardcoded
-✅ `public/config.js` with **empty** `API_URL` — overridden at build time
-✅ `public/config.example.js` — pure template
-✅ `.clasp.json.example` — template, no real script ID
-✅ Schema definitions, fallback data, design assets
+- ✅ All code in `apps-script/` — uses `_prop()` to read secrets at runtime, never hardcoded
+- ✅ `public/config.js` with **empty** `API_URL` — overridden at build time
+- ✅ `public/config.example.js` — pure template
+- ✅ `.clasp.json.example` — template, no real script ID
+- ✅ Schema definitions, fallback data, design assets
 
 ## What is NEVER safe to commit
 
-❌ `.clasp.json` (contains your Apps Script project ID)
-❌ Real `API_URL` value in `public/config.js`
-❌ Sheet IDs anywhere in code
-❌ Slack webhooks, Datadog tokens, AI API keys, OAuth secrets
-❌ Drive file IDs of internal documents
-❌ Personal email accounts in code (use the Sheet `contact` row instead)
+- ❌ `.clasp.json` (contains your Apps Script project ID)
+- ❌ Real `API_URL` value in `public/config.js`
+- ❌ Sheet IDs anywhere in code
+- ❌ Slack webhooks, Datadog tokens, AI API keys, OAuth secrets
+- ❌ Drive file IDs of internal documents
+- ❌ Personal email accounts in code (use the Sheet `contact` row instead)
 
 ## Where secrets live
 
