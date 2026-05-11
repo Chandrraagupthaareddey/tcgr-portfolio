@@ -288,18 +288,18 @@ This is why the site renders correct stats (`15 / 55% / 40% / 35%`) even before 
 
 ---
 
-## Résumé generation
+## Resume generation
 
 `ResumeGenerator.js` produces tailored PDFs on demand:
 
 1. Author creates 3 Google Docs (International, Gulf, India formats) with placeholders: `{{name}}`, `{{role}}`, `{{intro}}`, `{{experience_block}}`, `{{skills_block}}`, `{{contact_block}}`
 2. Doc IDs go into the `resumes` sheet's `template_doc_id` column
-3. Frontend résumé buttons call `?action=resume&id=INT-01` → backend copies the template, replaces placeholders with current sheet data, exports as PDF, returns a public-link URL
+3. Frontend resume buttons call `?action=resume&id=INT-01` → backend copies the template, replaces placeholders with current sheet data, exports as PDF, returns a public-link URL
 4. Frontend opens the URL in a new tab — visitor never sees the round-trip
 
 If `template_doc_id` is empty, the button shows a toast warning instead of failing silently.
 
-Generated PDFs accumulate in a Drive folder (`tcgr.in_resumes/`) shared as "anyone with link can view" — the standard for résumé sharing.
+Generated PDFs accumulate in a Drive folder (`tcgr.in_resumes/`) shared as "anyone with link can view" — the standard for resume sharing.
 
 ---
 
@@ -394,7 +394,7 @@ clasp push                           # uploads changes
 
 Code changes require a new deployment version. **Sheet edits do not** — they go live within the cache TTL (6h) or immediately on `🛠 → Clear Cache`.
 
-The Apps Script project includes a custom menu (`onOpen()` in `Code.js`) for common admin tasks: clear cache, preview API output, generate résumé PDFs.
+The Apps Script project includes a custom menu (`onOpen()` in `Code.js`) for common admin tasks: clear cache, preview API output, generate resume PDFs.
 
 ---
 
@@ -410,7 +410,7 @@ This repo is **public on GitHub**. Anything committed lives in commit history fo
 | Stolen sheet ID → public write attempts | Sheet ID never leaves Google account; clasp uses Script ID, not Sheet ID |
 | Credential leak in commit history | `.gitignore` covers `.env`, `.clasp.json`, `*.secrets.json` |
 | Forked repos pointing at your backend | Web App access can be tightened to `Only myself` (frontend stops working publicly — accept tradeoff if needed) |
-| Public PDF accumulation | Generated résumé PDFs are share-by-link; periodically clean `tcgr.in_resumes/` |
+| Public PDF accumulation | Generated resume PDFs are share-by-link; periodically clean `tcgr.in_resumes/` |
 
 ### What's safe to commit
 
@@ -483,7 +483,7 @@ The aesthetic borrows from monitoring dashboards and observability platforms (Li
 
 ### Near-term
 
-- Wire `template_doc_id` for all three résumé formats (template Docs are ready, IDs need to be pasted into the `resumes` sheet)
+- Wire `template_doc_id` for all three resume formats (template Docs are ready, IDs need to be pasted into the `resumes` sheet)
 - Replace monogram in the hero portrait card with a real photo (drop file at `public/assets/img/avatar.jpg`)
 - Publish the three blog drafts currently in the `blogs` sheet (`status: draft` → `published`):
   - "Why Alert Quality Beats Alert Quantity"
@@ -507,7 +507,7 @@ The aesthetic borrows from monitoring dashboards and observability platforms (Li
 
 ## License
 
-MIT — see `LICENSE`. The content (résumé text, descriptions, lessons) is © Chandraguptha Reddy. The architecture, code, and design system are free to fork for your own portfolio.
+MIT — see `LICENSE`. The content (resume text, descriptions, lessons) is © Chandraguptha Reddy. The architecture, code, and design system are free to fork for your own portfolio.
 
 ---
 
