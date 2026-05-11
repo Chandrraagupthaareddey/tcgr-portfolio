@@ -361,7 +361,7 @@ const App = {
         a.addEventListener('click', (ev) => this._handleResumeClick(ev, item, downloadHref));
       } else {
         a.classList.add('opacity-60', 'cursor-not-allowed');
-        a.addEventListener('click', (ev) => { ev.preventDefault(); this._toast('Résumé not yet wired — add template_doc_id in the resumes sheet'); });
+        a.addEventListener('click', (ev) => { ev.preventDefault(); this._toast('Resume not yet wired — add template_doc_id in the resumes sheet'); });
       }
 
       this._setText(node, '[data-rs="format"]',      item.format ? `— ${item.format}` : '');

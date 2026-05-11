@@ -1,9 +1,9 @@
 /**
  * ============================================================================
- *  ResumeGenerator.js — On-demand PDF résumé generation
+ *  ResumeGenerator.js — On-demand PDF resume generation
  *  ============================================================================
  *  Workflow:
- *    1. Create a Google Doc résumé template with placeholders: {{name}}, {{role}},
+ *    1. Create a Google Doc resume template with placeholders: {{name}}, {{role}},
  *       {{intro}}, {{experience_block}}, {{skills_block}}, {{contact_block}}.
  *    2. Copy the Doc ID from its URL.
  *    3. Paste it into the `template_doc_id` column of the `resumes` sheet for
@@ -81,7 +81,7 @@ function generateResumePDF(formatId) {
 }
 
 // ============================================================================
-//  FORMATTERS — adjust these to match your résumé template style
+//  FORMATTERS — adjust these to match your resume template style
 // ============================================================================
 
 function _formatExperience(timeline) {
