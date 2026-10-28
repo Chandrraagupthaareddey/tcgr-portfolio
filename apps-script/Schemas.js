@@ -364,6 +364,8 @@ function _SCHEMAS() {
         ["availability","60 days notice (negotiable)"],
         ["languages","English, Hindi, Tamil, Telugu, Kannada"],
         ["timezone","IST (UTC+5:30) · overlaps GST, CET, US-East mornings"],
+        ["nationality",""],
+        ["visa_status",""],
         ["headline","Let's build something<br><em>reliable.</em>"],
         ["tagline","Open to Senior Staff SRE, AI-operations, Forward Deployed Engineer and platform roles: remote for teams anywhere in the world, with relocation considered for the right role. Also open to advisory work. I reply within 24 hours."]
       ]

@@ -34,7 +34,7 @@
   --radius: 14px;
   --radius-sm: 8px;
 
-  --maxw: 1180px;
+  --maxw: 1320px;
   --gutter: clamp(20px, 4vw, 56px);
 
   color-scheme: dark;
@@ -238,7 +238,9 @@ a:focus-visible, button:focus-visible, summary:focus-visible, [tabindex]:focus-v
 }
 .brand-mark img { width: 100%; height: 100%; object-fit: cover; }
 .brand-text { display: flex; flex-direction: column; line-height: 1.15; }
-.brand-text b { font-weight: 600; font-size: 0.93rem; letter-spacing: -0.01em; }
+.brand-text b { font-weight: 600; font-size: 0.95rem; letter-spacing: -0.01em; }
+.brand-short { display: none; }
+@media (max-width: 640px) { .brand-full { display: none; } .brand-short { display: inline; } }
 .brand-text span { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
 
 .nav-links { display: none; gap: 4px; }
@@ -267,12 +269,12 @@ html[data-theme="light"] #theme-toggle .moon { display: none; }
 #nav-cta { display: none; }
 @media (max-width: 420px) { .brand-text span { display: none; } .brand-text b { font-size: 0.88rem; } }
 @media (min-width: 640px) { #nav-cta { display: inline-flex; } }
-@media (min-width: 1024px) {
+@media (min-width: 1100px) {
   .nav-links { display: flex; }
   .nav-links a { white-space: nowrap; }
   #menu-toggle { display: none; }
 }
-@media (min-width: 1024px) and (max-width: 1180px) { .nav-links a { padding-inline: 9px; font-size: 0.84rem; } }
+@media (min-width: 1100px) and (max-width: 1280px) { .nav-links a { padding-inline: 9px; font-size: 0.84rem; } }
 
 .mobile-menu {
   display: none;
@@ -283,7 +285,7 @@ html[data-theme="light"] #theme-toggle .moon { display: none; }
 .mobile-menu.open { display: flex; }
 .mobile-menu a { padding: 11px 4px; border-bottom: 1px solid var(--line); font-size: 1rem; }
 .mobile-menu a:last-child { border-bottom: 0; color: var(--accent); }
-@media (min-width: 1024px) { .mobile-menu { display: none !important; } }
+@media (min-width: 1100px) { .mobile-menu { display: none !important; } }
 
 /* ── Hero ───────────────────────────────────────────────────────────────── */
 .hero {
@@ -668,9 +670,80 @@ footer .mono { font-size: 0.72rem; }
   * { scroll-behavior: auto !important; }
 }
 
-/* Print: resume-ish */
+/* ── Print / Save as PDF ─────────────────────────────────────────────────
+ *  Goal: a clean, readable A4 portrait document of the whole site. Light
+ *  palette, no chrome, every section visible, every accordion open, grids
+ *  collapsed to one or two columns, nothing split across pages mid-card.
+ * ────────────────────────────────────────────────────────────────────────── */
+@page { size: A4 portrait; margin: 14mm 14mm 16mm; }
 @media print {
-  .nav, .hero-bg, #telemetry, .glow, .marquee-wrap, .palette, .toast, footer .mono, .ops-panel { display: none !important; }
-  body { background: #fff; color: #000; }
-  .section { padding-block: 24px; break-inside: avoid; }
+  :root, html[data-theme="dark"], html[data-theme="light"] {
+    --bg: #fff; --bg-2: #fff; --surface: #fff; --surface-2: #f4f4f2;
+    --line: #d9d9d4; --line-strong: #bdbdb6;
+    --text: #111; --text-2: #333; --muted: #666; --faint: #888;
+    --accent: #8a5a0e; --signal: #0b6e64; --ok: #15803d; --info: #0369a1;
+    --shadow: none; color-scheme: light;
+  }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; text-shadow: none !important; box-shadow: none !important; }
+  html { font-size: 10.5pt; scroll-behavior: auto; }
+  body { background: #fff !important; color: #111; }
+  body::before { display: none; }
+
+  /* Chrome that has no meaning on paper */
+  .nav, .mobile-menu, .hero-bg, #telemetry, .glow, .marquee-wrap, .palette, .toast,
+  .ops-panel, .hero-ctas, .contact-ctas, .toggle, .verify, .stats-note, .ops-spark,
+  .resume .foot .dl, footer .mono a[href="#top"], #blogs-section[hidden] { display: none !important; }
+
+  /* Everything visible, regardless of scroll position */
+  [data-reveal] { opacity: 1 !important; transform: none !important; transition: none !important; }
+  [data-w] { width: attr(data-w %) !important; }
+  .bar-fill, .skill .meter i { transition: none !important; }
+
+  /* Layout: single/double column, generous but compact */
+  .wrap { width: 100%; max-width: none; }
+  .section, .hero { padding-block: 10mm 6mm; break-inside: auto; }
+  .hero { padding-top: 0; }
+  .section + .section { border-top: 1px solid var(--line); }
+  .section-head, .hero-grid, .about-grid, .case-hero, .bench, .proj-body, .lesson-body { display: block !important; }
+  .section-head .lead { margin-top: 4mm; }
+  .grid, .value-grid, .skills, .certs, .ladder, .engage, .how-i-build { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 4mm !important; }
+  .cols-3, .cols-4 { grid-template-columns: 1fr 1fr !important; }
+  .ladder { grid-template-columns: 1fr 1fr 1fr 1fr 1fr !important; gap: 2mm !important; }
+  .rung::after { display: none !important; }
+  .stats { grid-template-columns: repeat(4, 1fr) !important; margin-top: 6mm; }
+  .stat { border-bottom: 0 !important; }
+  .timeline::before { display: none; }
+  .tl { grid-template-columns: 1fr !important; padding-left: 0 !important; padding-bottom: 5mm !important; gap: 1mm !important; }
+  .tl::before { display: none; }
+  .tl .left { text-align: left !important; }
+  .diagram { overflow: visible; padding: 2mm; }
+  .diagram svg { min-width: 0 !important; }
+  .profile { display: block !important; }
+
+  /* Typography */
+  .h-hero { font-size: 26pt; }
+  .h-section { font-size: 18pt; }
+  .display em { color: var(--accent); }
+  .lead { font-size: 11pt; max-width: none; }
+  .card, details.acc, .principle, .rung, .cert-group, .component, .value, .profile { break-inside: avoid; page-break-inside: avoid; border: 1px solid var(--line) !important; background: #fff !important; }
+  .card.lift:hover { transform: none; }
+  h1, h2, h3, .section-head, .eyebrow { break-after: avoid; page-break-after: avoid; }
+
+  /* Accordions: body visible even if the browser ignores the before-print hook */
+  details.acc { border-radius: 4px; }
+  details.acc summary { padding: 4mm 5mm 2mm; }
+  details.acc summary::-webkit-details-marker { display: none; }
+  details.acc .acc-body { padding: 0 5mm 4mm; }
+  details.acc:not([open]) .acc-body { display: block; }
+
+  /* Links: show the destination for the few that matter */
+  .contact .terminal { max-width: none; margin-top: 4mm; border: 1px solid var(--line); }
+  .terminal .thead { display: none; }
+  .cert-link::after { content: " (" attr(href) ")"; font-family: var(--font-mono); font-size: 7.5pt; color: var(--faint); }
+  footer { padding: 6mm 0 0; font-size: 8pt; }
+  footer a[href^="http"]::after { content: " " attr(href); color: var(--faint); }
+
+  /* Page breaks between the big chapters */
+  #work, #ai, #value, #skills, #knowledge, #resume { break-before: page; page-break-before: always; }
+  #journey, #contact { break-before: auto; }
 }

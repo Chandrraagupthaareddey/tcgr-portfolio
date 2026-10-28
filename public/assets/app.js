@@ -290,6 +290,8 @@ const FALLBACK_DATA = {
     availability: '60 days notice (negotiable)',
     languages: 'English, Hindi, Tamil, Telugu, Kannada',
     timezone: 'IST (UTC+5:30) · overlaps GST, CET, US-East mornings',
+    nationality: '',
+    visa_status: '',
     headline: 'Let\'s build something<br><em>reliable.</em>',
     tagline: 'Open to Senior Staff SRE, AI-operations, Forward Deployed Engineer and platform roles: remote for teams anywhere in the world, with relocation considered for the right role. Also open to advisory work. I reply within 24 hours.'
   },
@@ -358,6 +360,7 @@ const App = {
     this._initPalette();
     this._initBackgroundMotion();
     this._initClock();
+    this._initPrint();
 
     // 1. Instant paint from bundled data — the page is never empty.
     this.data = FALLBACK_DATA;
@@ -375,6 +378,20 @@ const App = {
   },
 
   /* ── Data ───────────────────────────────────────────────────────────── */
+  // Live payload wins, but any section the Sheet lacks (new tab not yet created,
+  // emptied by mistake, missing key in a key/value tab) falls back to the bundled
+  // content. The page never renders a hole because the CMS lags the code.
+  _mergeWithFallback(live) {
+    const out = Object.assign({}, live);
+    Object.keys(FALLBACK_DATA).forEach(k => {
+      const fb = FALLBACK_DATA[k], lv = live[k];
+      if (Array.isArray(fb)) { if (!Array.isArray(lv) || !lv.length) out[k] = fb; }
+      else if (fb && typeof fb === 'object') { out[k] = Object.assign({}, fb, (lv && typeof lv === 'object') ? Object.fromEntries(Object.entries(lv).filter(([, v]) => v !== null && v !== '')) : {}); }
+      else if (lv == null || lv === '') out[k] = fb;
+    });
+    return out;
+  },
+
   _rev(d) {
     // A stable-ish content revision: meta.generated_at if the API provides it, else a hash of the JSON.
     if (d && d.meta && d.meta.generated_at) return d.meta.generated_at;
@@ -388,7 +405,7 @@ const App = {
     const ttl = Number(this.config.CACHE_TTL_MS) || 1800000;
 
     let cached = null;
-    try { const raw = localStorage.getItem('tcgr_data_v2'); if (raw) cached = JSON.parse(raw); } catch (e) {}
+    try { const raw = localStorage.getItem('tcgr_data_v2'); if (raw) { cached = JSON.parse(raw); if (cached && cached.data) cached.data = this._mergeWithFallback(cached.data); } } catch (e) {}
     const age = cached ? Date.now() - cached.ts : null;
     const fresh = cached && !bypass && age < ttl;
 
@@ -426,8 +443,9 @@ const App = {
     const res = await fetch(url, { method: 'GET', redirect: 'follow', cache: 'no-store' });
     const ms = Math.round(performance.now() - t0);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-    if (!data || data.error) throw new Error((data && data.error) || 'Empty response');
+    const raw = await res.json();
+    if (!raw || raw.error) throw new Error((raw && raw.error) || 'Empty response');
+    const data = this._mergeWithFallback(raw);
     this.telemetry.latency = ms;
     this.telemetry.samples.push(ms);
     this.telemetry.source = 'live CMS';
@@ -672,7 +690,7 @@ const App = {
       if (win) win.location.href = url; else location.href = url;
     } catch (err) {
       if (win) win.close();
-      this._toast(`Could not generate ${r.format}: ${err.message}`);
+      this._toast(`Could not generate ${r.title} right now (${err.message}). Email me and I will send it directly.`);
     } finally { dl.textContent = original; dl.classList.remove('busy'); }
   },
 
@@ -761,6 +779,7 @@ const App = {
       { label: 'Copy email address', hint: 'clipboard', run: () => document.getElementById('cta-copy')?.click() },
       { label: 'Toggle light / dark theme', hint: 'theme', run: () => this.toggleTheme() },
       { label: 'Download resume', hint: '#resume', run: () => location.hash = '#resume' },
+      { label: 'Print / save this page as PDF', hint: '⌘P', run: () => this.print() },
       { label: 'Refresh content from CMS', hint: '?refresh=1', run: () => { location.search = '?refresh=1'; } },
       { label: 'Open LinkedIn', hint: 'external', run: () => window.open((this.data.contact || {}).linkedin, '_blank', 'noopener') },
       { label: 'Open GitHub', hint: 'external', run: () => window.open((this.data.contact || {}).github, '_blank', 'noopener') }
@@ -789,6 +808,20 @@ const App = {
       if (stack.dataset.wired) return; stack.dataset.wired = '1';
       stack.addEventListener('toggle', e => { if (e.target.open) stack.querySelectorAll('details[open]').forEach(d => { if (d !== e.target) d.open = false; }); }, true);
     });
+  },
+
+  /* Print / Save as PDF: open every accordion, reveal everything, restore afterwards. */
+  _initPrint() {
+    let opened = [];
+    const before = () => {
+      opened = [...document.querySelectorAll('details.acc:not([open])')]; opened.forEach(d => d.open = true);
+      document.querySelectorAll('[data-reveal]').forEach(el => el.classList.add('in'));
+      document.querySelectorAll('[data-w]').forEach(el => { el.style.width = el.dataset.w + '%'; });
+    };
+    const after = () => { opened.forEach(d => d.open = false); opened = []; };
+    window.addEventListener('beforeprint', before); window.addEventListener('afterprint', after);
+    if (window.matchMedia) { const mq = window.matchMedia('print'); (mq.addEventListener ? mq.addEventListener('change', e => e.matches ? before() : after()) : mq.addListener(e => e.matches ? before() : after())); }
+    this.print = () => { before(); setTimeout(() => window.print(), 50); };
   },
 
   _initClock() {
