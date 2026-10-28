@@ -18,11 +18,11 @@
   (function () { try { var t = localStorage.getItem('tcgr_theme') || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'); document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
 </script>
 <script src="./config.js"></script>
-<script>window.PORTFOLIO_CONFIG = Object.assign({ API_URL: "", CACHE_TTL_MS: 30 * 60 * 1000, SITE_VERSION: "2.0.0" }, window.PORTFOLIO_CONFIG || {});</script>
+<script>window.PORTFOLIO_CONFIG = Object.assign({ API_URL: "", CACHE_TTL_MS: 30 * 60 * 1000, SITE_VERSION: "2.0.3" }, window.PORTFOLIO_CONFIG || {});</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..600,0..100,0..1;1,9..144,300..600,0..100,0..1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./assets/styles.css">
+<link rel="stylesheet" href="./assets/styles.css?v=__SITE_VERSION__">
 <style>
   .profile { padding: clamp(24px, 3.5vw, 40px); display: grid; gap: 22px; scroll-margin-top: 90px; }
   @media (min-width: 960px) { .profile { grid-template-columns: 5fr 7fr; gap: 48px; } }
@@ -137,6 +137,6 @@
   </article>
 </template>
 
-<script src="./assets/app.js" defer></script>
+<script src="./assets/app.js?v=__SITE_VERSION__" defer></script>
 </body>
 </html>

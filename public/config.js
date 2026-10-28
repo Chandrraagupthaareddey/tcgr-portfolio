@@ -15,6 +15,6 @@
 window.PORTFOLIO_CONFIG = {
   API_URL: "",
   CACHE_TTL_MS: 30 * 60 * 1000,
-  SITE_VERSION: "2.0.0",
+  SITE_VERSION: "2.0.3",
   SHOW_FALLBACK_BANNER: false
 };

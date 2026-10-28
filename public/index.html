@@ -35,7 +35,7 @@
   window.PORTFOLIO_CONFIG = Object.assign({
     API_URL: "",
     CACHE_TTL_MS: 30 * 60 * 1000,
-    SITE_VERSION: "2.0.0",
+    SITE_VERSION: "2.0.3",
     SHOW_FALLBACK_BANNER: false
   }, window.PORTFOLIO_CONFIG || {});
 </script>
@@ -43,7 +43,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..600,0..100,0..1;1,9..144,300..600,0..100,0..1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./assets/styles.css">
+<link rel="stylesheet" href="./assets/styles.css?v=__SITE_VERSION__">
 
 <script type="application/ld+json">
 {
@@ -638,6 +638,6 @@
   </a>
 </template>
 
-<script src="./assets/app.js" defer></script>
+<script src="./assets/app.js?v=__SITE_VERSION__" defer></script>
 </body>
 </html>

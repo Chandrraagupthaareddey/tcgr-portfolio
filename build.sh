@@ -7,7 +7,7 @@
 set -euo pipefail
 
 API_URL="${API_URL:-}"
-SITE_VERSION="${SITE_VERSION:-2.0.0}"
+SITE_VERSION="${SITE_VERSION:-2.0.3}"
 CACHE_TTL_MS="${CACHE_TTL_MS:-1800000}"
 
 cat > public/config.js <<EOF
@@ -19,6 +19,11 @@ window.PORTFOLIO_CONFIG = {
   SHOW_FALLBACK_BANNER: false
 };
 EOF
+
+# Cache-bust assets: stamp the version into asset URLs so a new deploy is never served old CSS/JS.
+for f in public/index.html public/profiles.html; do
+  sed -i.bak "s/__SITE_VERSION__/${SITE_VERSION}/g" "$f" && rm -f "$f.bak"
+done
 
 if [ -z "$API_URL" ]; then
   echo "⚠ WARN: API_URL is empty — site will render fallback data."
