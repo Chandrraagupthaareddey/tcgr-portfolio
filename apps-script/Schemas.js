@@ -348,8 +348,8 @@ function _SCHEMAS() {
     resumes: {
       headers: ["format","title","description","link","updated"],
       rows: [
-        ["INT-01","International CV","ATS-friendly, two pages, targeted at global SRE / observability / AI-operations leadership roles.","","v2026.10"],
-        ["GULF-01","Gulf CV","Tailored for the UAE / GCC market: visa status, availability, regional context.","","v2026.10"],
+        ["INT-01","International CV","ATS-friendly, two pages, for SRE, AI-operations, Forward Deployed Engineer and platform roles anywhere in the world.","","v2026.10"],
+        ["GCC-01","GCC CV","Tailored for hiring in the Gulf Cooperation Council region: availability, relocation readiness, regional context.","","v2026.10"],
         ["IN-01","India CV","Naukri / LinkedIn-optimised format with detailed project breakdowns and a skills matrix.","","v2026.10"]
       ]
     },
@@ -394,7 +394,7 @@ function _SCHEMAS() {
         ["skills.lede","Years are hands-on production years, not \"familiar with\". Levels are self-assessed and honest: I design systems and direct AI agents to write the code, then read and review every line. Certificates link to their verification pages."],
         ["knowledge.headline","Mistakes I made,<br>and the <em>architecture</em> that fixed them."],
         ["resume.headline","One profile,<br><em>three</em> formats."],
-        ["resume.lede","Tailored to the market you're hiring in, generated fresh from the same source of truth that renders this page."],
+        ["resume.lede","International, GCC and India formats, generated fresh from the same source of truth that renders this page."],
         ["profiles.headline","One career,<br><em>five</em> ways to hire it."],
         ["profiles.lede","Hiring managers search by title. This page maps my experience onto the roles I fit, with the evidence and the resume format for each. I build with AI agents under governance rather than by hand-typing code, and I say so up front."]
       ]

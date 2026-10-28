@@ -276,8 +276,8 @@ const FALLBACK_DATA = {
   blogs: [],
 
   resumes: [
-    { format: 'INT-01', title: 'International CV', description: 'ATS-friendly, two pages, targeted at global SRE / observability / AI-operations leadership roles.', link: '', updated: 'v2026.10' },
-    { format: 'GULF-01', title: 'Gulf CV', description: 'Tailored for the UAE / GCC market: visa status, availability, regional context.', link: '', updated: 'v2026.10' },
+    { format: 'INT-01', title: 'International CV', description: 'ATS-friendly, two pages, for SRE, AI-operations, Forward Deployed Engineer and platform roles anywhere in the world.', link: '', updated: 'v2026.10' },
+    { format: 'GCC-01', title: 'GCC CV', description: 'Tailored for hiring in the Gulf Cooperation Council region: availability, relocation readiness, regional context.', link: '', updated: 'v2026.10' },
     { format: 'IN-01', title: 'India CV', description: 'Naukri / LinkedIn-optimised format with detailed project breakdowns and a skills matrix.', link: '', updated: 'v2026.10' }
   ],
 
@@ -337,7 +337,7 @@ const FALLBACK_DATA = {
     'skills.lede': 'Years are hands-on production years, not "familiar with". Levels are self-assessed and honest: I design systems and direct AI agents to write the code, then read and review every line. Certificates link to their verification pages.',
     'knowledge.headline': 'Mistakes I made,<br>and the <em>architecture</em> that fixed them.',
     'resume.headline': 'One profile,<br><em>three</em> formats.',
-    'resume.lede': 'Tailored to the market you\'re hiring in, generated fresh from the same source of truth that renders this page.',
+    'resume.lede': 'International, GCC and India formats, generated fresh from the same source of truth that renders this page.',
     'profiles.headline': 'One career,<br><em>five</em> ways to hire it.',
     'profiles.lede': 'Hiring managers search by title. This page maps my experience onto the roles I fit, with the evidence and the resume format for each. I build with AI agents under governance rather than by hand-typing code, and I say so up front.'
   },

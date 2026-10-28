@@ -259,7 +259,7 @@ function onOpen() {
     .addItem('Test API: Preview Payload', 'adminPreviewPayload')
     .addSeparator()
     .addItem('Generate Resume: International', 'adminGenerateResumeINT')
-    .addItem('Generate Resume: Gulf', 'adminGenerateResumeGULF')
+    .addItem('Generate Resume: GCC', 'adminGenerateResumeGCC')
     .addItem('Generate Resume: India', 'adminGenerateResumeIN')
     .addToUi();
 }
@@ -322,7 +322,7 @@ function adminScanPrivateTerms() {
 }
 
 function adminGenerateResumeINT()  { _adminGenResume('INT-01');  }
-function adminGenerateResumeGULF() { _adminGenResume('GULF-01'); }
+function adminGenerateResumeGCC()  { _adminGenResume('GCC-01');  }
 function adminGenerateResumeIN()   { _adminGenResume('IN-01');   }
 
 function _adminGenResume(id) {

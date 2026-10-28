@@ -14,7 +14,7 @@
  *       skills, certifications). One PDF per format per day is reused.
  *    2. Copy the Doc ID from its URL.
  *    3. Paste it into the `template_doc_id` column of the `resumes` sheet for
- *       the matching format (INT-01, GULF-01, IN-01).
+ *       the matching format (INT-01, GCC-01, IN-01).
  *    4. Frontend calls ?action=resume&id=INT-01 → returns { url } to PDF.
  *
  *  Generated PDFs are stored in a Drive folder (auto-created) and shared as
@@ -108,7 +108,7 @@ function generateResumePDF(formatId, opts) {
 
 // ============================================================================
 //  ZERO-CONFIG PATH — HTML resume rendered from Sheet data → PDF
-//  Formats: INT-01 (ATS, two pages), GULF-01 (adds nationality / visa /
+//  Formats: INT-01 (ATS, two pages), GCC-01 (adds nationality / visa /
 //  availability block), IN-01 (adds full project breakdowns + skills matrix).
 //  No salary information is ever included.
 // ============================================================================
@@ -147,7 +147,7 @@ function _strip(v) { return _safeStr(v).replace(/^[A-Za-z ]+:\s+/, '').replace(/
 
 function _resumeHtml(format, d) {
   const p = d.profile, c = d.contact;
-  const isGulf = format.indexOf('GULF') === 0, isIndia = format.indexOf('IN-') === 0;
+  const isGulf = format.indexOf('GCC') === 0 || format.indexOf('GULF') === 0, isIndia = format.indexOf('IN-') === 0;
   const name = _esc(p.full_name || p.name || 'Chandraguptha Reddy');
   const role = _esc(_strip(p.role || p.role_short || ''));
   const contactBits = [c.email, c.phone_in, isGulf && c.phone_uae ? c.phone_uae : null, _strip(c.location), c.linkedin, 'tcgr.in'].filter(Boolean).map(_esc).join(' · ');
