@@ -7,7 +7,7 @@
 set -euo pipefail
 
 API_URL="${API_URL:-}"
-SITE_VERSION="${SITE_VERSION:-2.0.4}"
+SITE_VERSION="${SITE_VERSION:-2.0.5}"
 CACHE_TTL_MS="${CACHE_TTL_MS:-1800000}"
 
 cat > public/config.js <<EOF
