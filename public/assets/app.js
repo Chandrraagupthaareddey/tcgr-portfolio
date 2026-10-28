@@ -848,7 +848,7 @@ const App = {
     const canvas = document.getElementById('telemetry'); if (!canvas) return;
     const ctx = canvas.getContext && canvas.getContext('2d'); if (!ctx) return; let w = 0, h = 0, dpr = 1;
     const resize = () => { dpr = Math.min(window.devicePixelRatio || 1, 2); w = canvas.clientWidth; h = canvas.clientHeight; canvas.width = w * dpr; canvas.height = h * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); };
-    resize(); window.addEventListener('resize', resize, { passive: true });
+    requestAnimationFrame(resize); window.addEventListener('resize', () => requestAnimationFrame(resize), { passive: true });
     const cell = 48; const spawn = () => { const horiz = Math.random() > 0.5, dir = Math.random() > 0.5 ? 1 : -1, sp = 0.00009 + Math.random() * 0.00012;
       if (horiz) { const y = Math.floor(Math.random() * (h / cell)) * cell; return { x0: dir > 0 ? -40 : w + 40, x1: dir > 0 ? w + 40 : -40, y0: y, y1: y, t: 0, sp }; }
       const x = Math.floor(Math.random() * (w / cell)) * cell; return { x0: x, x1: x, y0: dir > 0 ? -40 : h + 40, y1: dir > 0 ? h + 40 : -40, t: 0, sp }; };

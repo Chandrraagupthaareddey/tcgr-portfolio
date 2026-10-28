@@ -18,8 +18,8 @@
   --line-strong: rgba(255, 255, 255, 0.16);
   --text: #e7eaf0;
   --text-2: #b4bccb;
-  --muted: #8a94a6;
-  --faint: #5d6778;
+  --muted: #a3acbb;
+  --faint: #8a94a6;
 
   --accent: #f2b84b;          /* amber — attention, primary action */
   --accent-ink: #1a1203;
@@ -49,12 +49,12 @@ html[data-theme="light"] {
   --line-strong: rgba(20, 24, 34, 0.22);
   --text: #141822;
   --text-2: #3a4252;
-  --muted: #6b7484;
-  --faint: #9aa3b2;
+  --muted: #5b6474;
+  --faint: #646e7d;
 
-  --accent: #b7791f;
+  --accent: #8a5a0e;
   --accent-ink: #ffffff;
-  --signal: #0f9b8e;
+  --signal: #0b6e64;
   --ok: #15803d;
   --warn: #b45309;
   --danger: #b91c1c;

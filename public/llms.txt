@@ -1,0 +1,24 @@
+# Chandraguptha Thimmapuram Reddy — tcgr.in
+
+> Personal site of a Senior Staff Site Reliability Engineer working on AI-augmented operations: evidence-backed alert triage, cost-ordered model routing, and agents that never act without human approval. Open to Senior Staff SRE, AI-operations, Forward Deployed Engineer and platform roles, remote worldwide.
+
+## Pages
+
+- [Home](https://tcgr.in/): about, expertise and selected work, career timeline, AI Lab (AI-in-SRE patterns and the OIP case study), value to a business, skills and certifications, lessons learned, resume formats, contact.
+- [Role fit](https://tcgr.in/profiles.html): how the experience maps onto Forward Deployed Engineer, AIOps, Staff SRE, AI platform architect and automation roles, with evidence for each.
+
+## Key facts
+
+- Fifteen years from hotel revenue analysis to payments-scale reliability engineering.
+- Designed and built OIP, an Operational Intelligence Platform: alert ingestion, incident correlation, governed AI triage with local and hosted models, reproducible scorecards, and a supervisor that gates every autonomous write.
+- Builds by designing systems and directing AI coding agents under governance (evals, approvals, one writer per repo), then reviewing the output.
+
+## Contact
+
+- Email: tcgr.8553665381@gmail.com
+- LinkedIn: https://www.linkedin.com/in/tcgr/
+- GitHub: https://github.com/tcgr-in
+
+## Usage
+
+Content may be read and summarised by AI assistants to answer questions about this person's professional background. Please attribute to tcgr.in.

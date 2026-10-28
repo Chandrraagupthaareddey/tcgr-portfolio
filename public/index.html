@@ -30,19 +30,20 @@
 </script>
 
 <!-- Runtime config — regenerated at build by build.sh from Cloudflare env -->
-<script src="./config.js"></script>
 <script>
   window.PORTFOLIO_CONFIG = Object.assign({
     API_URL: "",
     CACHE_TTL_MS: 30 * 60 * 1000,
-    SITE_VERSION: "2.0.5",
+    SITE_VERSION: "2.0.6",
     SHOW_FALLBACK_BANNER: false
   }, window.PORTFOLIO_CONFIG || {});
 </script>
+<script src="./config.js" defer></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..600,0..100,0..1;1,9..144,300..600,0..100,0..1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..600,0..100,0..1;1,9..144,300..600,0..100,0..1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..600,0..100,0..1;1,9..144,300..600,0..100,0..1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="./assets/styles.css?v=__SITE_VERSION__">
 
 <script type="application/ld+json">
@@ -112,6 +113,7 @@
 </nav>
 
 <!-- ============================================ HERO ============================================ -->
+<a class="sr-only" href="#main">Skip to content</a>
 <header id="top" class="hero">
   <div class="hero-bg" aria-hidden="true"></div>
   <canvas id="telemetry" aria-hidden="true"></canvas>
@@ -180,6 +182,7 @@
   <div class="marquee" id="marquee"></div>
 </section>
 
+<main id="main">
 <!-- ============================================ ABOUT ============================================ -->
 <section id="about" class="section">
   <div class="wrap about-grid">
@@ -443,6 +446,8 @@
     </div>
   </div>
 </section>
+
+</main>
 
 <footer>
   <div class="wrap foot-inner">

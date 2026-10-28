@@ -1,0 +1,37 @@
+{
+  "specVersion": "1.0",
+  "host": {
+    "displayName": "tcgr.in \u2014 Chandraguptha Thimmapuram Reddy",
+    "identifier": "tcgr.in"
+  },
+  "entries": [
+    {
+      "identifier": "urn:ai:tcgr.in:knowledge:llms-txt",
+      "displayName": "tcgr.in knowledge index (llms.txt)",
+      "type": "text/plain",
+      "url": "https://tcgr.in/llms.txt",
+      "description": "Curated, AI-readable summary of Chandraguptha Thimmapuram Reddy's professional profile: SRE and AI-operations experience, the OIP platform case study, skills, certifications and contact details."
+    },
+    {
+      "identifier": "urn:ai:tcgr.in:page:home",
+      "displayName": "Portfolio home page",
+      "type": "text/html",
+      "url": "https://tcgr.in/",
+      "description": "Full portfolio: about, expertise and selected work, career timeline, AI Lab, value to a business, skills, lessons learned, resume formats and contact."
+    },
+    {
+      "identifier": "urn:ai:tcgr.in:page:role-fit",
+      "displayName": "Role fit page",
+      "type": "text/html",
+      "url": "https://tcgr.in/profiles.html",
+      "description": "Maps experience onto Forward Deployed Engineer, AIOps, Staff SRE, AI platform architect and automation roles, with evidence for each."
+    },
+    {
+      "identifier": "urn:ai:tcgr.in:data:sitemap",
+      "displayName": "Sitemap",
+      "type": "application/xml",
+      "url": "https://tcgr.in/sitemap.xml",
+      "description": "XML sitemap of public pages."
+    }
+  ]
+}

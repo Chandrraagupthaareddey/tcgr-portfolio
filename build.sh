@@ -7,7 +7,7 @@
 set -euo pipefail
 
 API_URL="${API_URL:-}"
-SITE_VERSION="${SITE_VERSION:-2.0.5}"
+SITE_VERSION="${SITE_VERSION:-2.0.6}"
 CACHE_TTL_MS="${CACHE_TTL_MS:-1800000}"
 
 cat > public/config.js <<EOF
@@ -19,6 +19,13 @@ window.PORTFOLIO_CONFIG = {
   SHOW_FALLBACK_BANNER: false
 };
 EOF
+
+# Minify CSS/JS in place (Cloudflare build has Node + npx). Non-fatal if npx is unavailable.
+if command -v npx >/dev/null 2>&1; then
+  npx --yes esbuild@0.24.2 public/assets/app.js --minify --target=es2020 --legal-comments=none --allow-overwrite --outfile=public/assets/app.js \
+    && npx --yes esbuild@0.24.2 public/assets/styles.css --minify --allow-overwrite --outfile=public/assets/styles.css \
+    && echo "✓ assets minified" || echo "⚠ minify skipped"
+fi
 
 # Cache-bust assets: stamp the version into asset URLs so a new deploy is never served old CSS/JS.
 for f in public/index.html public/profiles.html; do
