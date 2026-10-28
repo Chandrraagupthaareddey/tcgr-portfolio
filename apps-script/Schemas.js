@@ -49,7 +49,7 @@ function _SCHEMAS() {
         ["role_short","Senior Staff Engineer · SRE & AI Ops"],
         ["headline","Operations intelligence<br>that <em>shows its work.</em>"],
         ["intro","I'm Chandraguptha Reddy — a Senior Staff SRE who designs AI-augmented operations platforms: alert triage that cites its evidence, routing that spends the cheapest capable model first, and agents that never act without a human's yes. Fifteen years from hotel revenue desks to payments-scale reliability."],
-        ["availability_line","Open to any location · relocation or remote · 60 days notice"],
+        ["availability_line","Remote, worldwide · relocation considered · 60 days notice"],
         ["stats_note","Counts, not percentages. Every number here is a thing you can check in a repository, a timeline or a reference call."],
         ["avatar_url",""]
       ]
@@ -73,7 +73,7 @@ function _SCHEMAS() {
     about_facts: {
       headers: ["key","value"],
       rows: [
-        ["Based in","Bengaluru, India · open to relocation anywhere, or remote"],
+        ["Based in","Bengaluru, India · remote for teams anywhere in the world · relocation considered for the right role"],
         ["Current","Senior Staff Engineer, SRE — Airbnb (via Altimetrik)"],
         ["Focus","AI-augmented operations, alert intelligence, governed agents"],
         ["Working style","Evidence over opinion. Proposals over surprises. Delete before you add."],
@@ -257,7 +257,7 @@ function _SCHEMAS() {
     engagements: {
       headers: ["kind","title","body"],
       rows: [
-        ["Full-time","Senior Staff / Principal SRE · Head of AI Operations","Lead reliability and AI-operations for a platform that cannot afford to be wrong. Any location, relocation or remote."],
+        ["Full-time","Senior Staff / Principal SRE · Head of AI Operations","Lead reliability and AI-operations for a platform that cannot afford to be wrong. Remote worldwide; relocation considered for the right role."],
         ["Forward deployed","Forward Deployed Engineer · AI / Ops","Embed with the team that owns the pain, wire the product into their alerts, data and workflow, and ship a working pilot in weeks. See the role-fit page."],
         ["Advisory","AI governance for operations teams","Routing, qualification gates, evals and approval flows for teams putting models near production."],
         ["Build","A pilot in 6–8 weeks","Evidence-backed triage on your alert channels, in shadow mode, with a scorecard you can trust."]
@@ -359,13 +359,13 @@ function _SCHEMAS() {
         ["email","tcgr.8553665381@gmail.com"],
         ["linkedin","https://www.linkedin.com/in/tcgr/"],
         ["github","https://github.com/tcgr-in"],
-        ["location","Bengaluru, IN · open to any location, relocation or remote"],
+        ["location","Bengaluru, IN · remote worldwide · relocation considered"],
         ["role","Senior Staff Engineer — SRE @ Airbnb (via Altimetrik)"],
         ["availability","60 days notice (negotiable)"],
         ["languages","English, Hindi, Tamil, Telugu, Kannada"],
         ["timezone","IST (UTC+5:30) · overlaps GST, CET, US-East mornings"],
         ["headline","Let's build something<br><em>reliable.</em>"],
-        ["tagline","Open to Senior Staff SRE, AI-operations, Forward Deployed Engineer and platform roles anywhere in the world, on-site or remote, and to advisory work. I reply within 24 hours."]
+        ["tagline","Open to Senior Staff SRE, AI-operations, Forward Deployed Engineer and platform roles: remote for teams anywhere in the world, with relocation considered for the right role. Also open to advisory work. I reply within 24 hours."]
       ]
     },
     profiles: {
