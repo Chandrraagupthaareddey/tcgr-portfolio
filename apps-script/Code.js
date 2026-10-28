@@ -265,7 +265,7 @@ function onOpen() {
 }
 
 function adminClearCache() {
-  CacheService.getScriptCache().removeAll(SHEET_NAMES.concat(['all']));
+  clearCache();
   SpreadsheetApp.getActiveSpreadsheet().toast('Cache cleared ✓', 'tcgr.in CMS', 3);
 }
 
@@ -277,6 +277,35 @@ function adminPreviewPayload() {
     '</pre>'
   ).setWidth(900).setHeight(700);
   SpreadsheetApp.getUi().showModalDialog(html, 'API Output Preview');
+}
+
+// ----------------------------------------------------------------------------
+//  EDITOR-RUNNABLE (no dialogs). Pick the function in the toolbar dropdown → ▶ Run.
+// ----------------------------------------------------------------------------
+
+/** Overwrites EVERY sheet with the seed data in Schemas.js, then clears the cache. */
+function reseedAll() {
+  SHEET_NAMES.forEach(reseedSheet);
+  clearCache();
+  console.log('Reseeded ' + SHEET_NAMES.length + ' sheets and cleared cache ✓');
+}
+
+/** Adds any missing sheets (keeps existing content), then clears the cache. */
+function setupAndClear() {
+  setupSheets();
+  clearCache();
+  console.log('Schema initialised and cache cleared ✓');
+}
+
+/** Clears the server-side cache so the next API call reads the Sheet. */
+function clearCache() {
+  CacheService.getScriptCache().removeAll(SHEET_NAMES.concat(['all']));
+  console.log('Cache cleared ✓');
+}
+
+/** Logs a quick health summary: row counts per sheet. */
+function checkSheets() {
+  SHEET_NAMES.forEach(n => { const sh = _activeSheet(n); console.log((sh ? String(Math.max(0, sh.getLastRow() - 1)).padStart(4) + ' rows' : ' MISSING') + '  ' + n); });
 }
 
 /** Overwrites one sheet with its seed rows from Schemas.js (prompts for the name). */

@@ -70,7 +70,7 @@ function setupSheets() {
   });
   const def = ss.getSheetByName('Sheet1');
   if (def && !schemas.Sheet1 && ss.getSheets().length > 1) ss.deleteSheet(def);
-  ss.toast('Schema initialized · ' + created + ' sheet(s) created ✓', 'tcgr.in CMS', 5);
+  try { ss.toast('Schema initialized · ' + created + ' sheet(s) created ✓', 'tcgr.in CMS', 5); } catch (e) {}
 }
 
 function reseedSheet(name) {
