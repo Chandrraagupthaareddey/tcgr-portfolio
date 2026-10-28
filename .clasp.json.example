@@ -1,0 +1,5 @@
+{
+  "_comment": "Copy to .clasp.json (gitignored). scriptId: Apps Script → Project Settings → Script ID.",
+  "scriptId": "YOUR_APPS_SCRIPT_PROJECT_ID_HERE",
+  "rootDir": "./apps-script"
+}

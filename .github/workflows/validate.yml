@@ -24,9 +24,16 @@ jobs:
             echo "::error::Missing PORTFOLIO_CONFIG bootstrap in index.html"
             exit 1
           fi
-          if ! grep -q 'tpl-timeline' public/index.html; then
-            echo "::error::Missing tpl-timeline template"
-            exit 1
+          for tpl in tpl-timeline tpl-expertise tpl-project tpl-cap tpl-component tpl-resume; do
+            if ! grep -q "id=\"$tpl\"" public/index.html; then
+              echo "::error::Missing $tpl template"; exit 1
+            fi
+          done
+          if ! grep -q 'tpl-profile' public/profiles.html; then
+            echo "::error::Missing tpl-profile template in profiles.html"; exit 1
+          fi
+          if grep -n 'é' public/index.html public/profiles.html public/assets/app.js; then
+            echo "::error::Accented characters are not allowed in site copy (use plain 'Resume')"; exit 1
           fi
           echo "✓ HTML smoke test passed"
 
@@ -43,6 +50,18 @@ jobs:
           node -c apps-script/Schemas.js
           node -c apps-script/ResumeGenerator.js
           echo "✓ Apps Script syntax check passed"
+
+      - name: Schemas.js is in sync with FALLBACK_DATA
+        run: |
+          cp apps-script/Schemas.js /tmp/Schemas.before.js
+          node tools/gen-schemas.js
+          if ! diff -q /tmp/Schemas.before.js apps-script/Schemas.js; then
+            echo "::error::apps-script/Schemas.js is out of date — run: node tools/gen-schemas.js"; exit 1
+          fi
+          echo "✓ Schemas in sync"
+
+      - name: Private-terms scan (public site must stay generic)
+        run: bash tools/scan-private.sh
 
       - name: Verify build script works
         env:

@@ -18,7 +18,7 @@ How the pieces fit together. Read this if you're forking, debugging, or extendin
 │  GOOGLE WORKSPACE (private)                                      │
 │  ┌─────────────────────┐    ┌─────────────────────────────────┐  │
 │  │  Sheet (CMS)         │←──│  Apps Script (backend)          │  │
-│  │  14 sheets, plain   │    │  - Code.js (router + readers)   │  │
+│  │  27 sheets, plain   │    │  - Code.js (router + readers)   │  │
 │  │  rows               │    │  - Schemas.js (bootstrap)       │  │
 │  │                     │    │  - ResumeGenerator.js (PDFs)    │  │
 │  └─────────────────────┘    └─────────────────────────────────┘  │
@@ -57,14 +57,14 @@ How the pieces fit together. Read this if you're forking, debugging, or extendin
 1. Visitor hits `tcgr.in`
 2. Cloudflare CDN serves `index.html` + `assets/app.js` + `config.js` (cached at edge)
 3. `app.js` runs `App.init()`:
-   - Tier 1: checks `localStorage` for cached payload (≤6h old) — if hit, render immediately, kick off background refresh
+   - Tier 1: checks `localStorage` for cached payload (≤30 min old) — if hit, render immediately, kick off background refresh
    - Tier 2: if no cache, calls `${API_URL}?action=all` → Apps Script Web App
    - Tier 3: if API fails or `API_URL` empty, render bundled `FALLBACK_DATA`
 4. Apps Script:
-   - Checks server-side `CacheService` for the `all` payload (≤6h)
-   - If miss: reads all 14 sheets, transforms into the JSON shape the frontend expects, caches result
+   - Checks server-side `CacheService` for the `all` payload (≤30 min)
+   - If miss: reads all 27 sheets, transforms into the JSON shape the frontend expects, caches result
    - Returns JSON
-5. Frontend renders templates, runs GSAP animations, attaches interactions
+5. Frontend renders templates, runs IntersectionObserver reveals, attaches interactions
 
 > **Cold start latency**: ~1.5–3s for first uncached fetch from Apps Script. After that, browser cache + edge cache make it instant.
 
@@ -72,8 +72,8 @@ How the pieces fit together. Read this if you're forking, debugging, or extendin
 
 | Tier | Lives in | TTL | Purpose |
 |---|---|---|---|
-| Browser localStorage | Visitor's browser | 6h | Repeat visits feel instant |
-| Apps Script CacheService | Google's edge | 6h | One sheet read per 6h regardless of traffic |
+| Browser localStorage | Visitor's browser | 30 min | Repeat visits feel instant |
+| Apps Script CacheService | Google's edge | 30 min | One sheet read per 30 min regardless of traffic |
 | Bundled FALLBACK_DATA | Static asset | forever | Site never breaks if backend is down |
 
 This is over-engineered for a personal portfolio — but it costs nothing and prevents quota issues if the site ever goes viral.
@@ -156,7 +156,7 @@ That's it. Repeat for any future section.
 | Astro / Next.js | Sheet-driven CMS doesn't benefit from SSG; we want runtime sheet pulls |
 | 11ty / Hugo | Would require committing data files; defeats the "edit sheet, no commit" model |
 
-Plain HTML + Tailwind + ~400 lines of vanilla JS does everything we need, loads faster than any framework, and will still work in 10 years.
+Plain HTML + hand-written CSS + ~900 lines of vanilla JS does everything we need, loads faster than any framework, and will still work in 10 years.
 
 ## Why Apps Script (and not, say, Cloudflare Workers)
 

@@ -1,0 +1,22 @@
+# One term per line (case-insensitive). The CI scan fails if any appears in
+# public/, apps-script/, docs/ or README.md. Keep this list private-ish: it
+# names what must never be public, so it is deliberately generic where it can be.
+airbnb
+musta.ch
+airlab
+sandcastle
+onetouch
+onebrain
+airchat
+datako
+telescope
+caws
+watchpoint
+minerva
+glean
+pmg
+payins
+quickpay
+fci
+altimetrik-internal
+369

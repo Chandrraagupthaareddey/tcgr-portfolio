@@ -63,7 +63,7 @@ This pushes and uploads `Code.js`, `Schemas.js`, `ResumeGenerator.js`, and `apps
 2. In the function dropdown at the top, select **`setupSheets`**
 3. Click **Run**
 4. Authorize when prompted (Google warns "unverified app" — choose Advanced → Go to project)
-5. Refresh the Sheet tab — you'll see all 14 sheets created with seed data
+5. Refresh the Sheet tab — you'll see all 27 sheets created with seed data
 6. The custom menu **🛠 tcgr.in CMS** appears in the Sheet menu bar
 
 > All our CV data is already pre-populated. Edit cells to customize.
@@ -104,7 +104,7 @@ In the Apps Script editor:
    → { "ok": true, "ts": "..." }
    ```
 
-> ⚠️ **Every code change requires a new deployment version.** Sheet edits do NOT — they go live within 6 hours (or immediately on cache clear).
+> ⚠️ **Every code change requires a new deployment version.** Sheet edits do NOT — they go live within 30 minutes (or immediately on cache clear).
 
 ---
 
@@ -160,7 +160,7 @@ git update-index --no-skip-worktree public/config.js
 
 ---
 
-## Part 9 — (Optional) Wire up résumé PDF generation
+## Part 9 — (Optional) Wire up resume PDF generation
 
 1. Create three Google Docs — one per format (International, Gulf, India)
 2. Use placeholders in each: `{{name}}`, `{{role}}`, `{{intro}}`, `{{experience_block}}`, `{{skills_block}}`, `{{contact_block}}`
@@ -174,7 +174,7 @@ A PDF appears in our Drive at `tcgr.in_resumes/`. The frontend will fetch it via
 
 ## Verification checklist
 
-- [ ] Sheet has all 14 tabs with data
+- [ ] Sheet has all 27 tabs with data
 - [ ] `clasp push` works without errors
 - [ ] Apps Script deployed as Web App (Anyone access)
 - [ ] `?action=health` returns `{ ok: true }`
@@ -184,3 +184,11 @@ A PDF appears in our Drive at `tcgr.in_resumes/`. The frontend will fetch it via
 - [ ] Custom domain `tcgr.in` resolves with valid SSL
 
 When all boxes are checked, you're live. Edit the Sheet to change anything.
+
+## v2 additions
+
+- **Reseed from code** — `🛠 tcgr.in CMS → Reseed ONE sheet…` overwrites a single tab with the seed rows in `Schemas.js`; `Reseed ALL` does every tab (destructive, confirms first). The seed rows are generated from `FALLBACK_DATA` in `public/assets/app.js` by `node tools/gen-schemas.js`, so the bundled fallback and the Sheet never drift.
+- **Private-terms scan** — set Script Property `PRIVATE_TERMS` to a comma-separated list, then `🛠 → Scan content for private terms` reports every cell that contains one. The same list lives in `tools/private-terms.txt` for the CI scan of the code and docs.
+- **Static resume links** — paste a public PDF URL into the `link` column of `resumes` and the frontend opens it directly, no Apps Script round-trip. Leave it empty to generate from `template_doc_id` (one PDF per format per day is reused; `&fresh=1` forces regeneration).
+- **Role-fit page** — `public/profiles.html` is driven by the `profiles` sheet (`evidence` and `skills` are `;`-separated lists).
+- **Force-refresh a browser** — open `https://tcgr.in/?refresh=1` to bypass the local cache; the ops panel in the hero shows which data source rendered the page and its content revision.

@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -c /Users/chandragupthathimmapuram/Downloads/CG/cg-portfolio/tcgr-portfolio/apps-script/Schemas.js)"
+    ]
+  }
+}

@@ -4,7 +4,11 @@
  *  ============================================================================
  *  Workflow:
  *    1. Create a Google Doc resume template with placeholders: {{name}}, {{role}},
- *       {{intro}}, {{experience_block}}, {{skills_block}}, {{contact_block}}.
+ *       {{intro}}, {{experience_block}}, {{skills_block}}, {{projects_block}},
+ *       {{certifications_block}}, {{generated_date}} plus any key from the
+ *       `profile` / `contact` sheets (e.g. {{email}}, {{linkedin}}).
+ *    1b. OR skip generation entirely: paste a public PDF URL in the `link`
+ *       column of the `resumes` sheet. The frontend opens it directly.
  *    2. Copy the Doc ID from its URL.
  *    3. Paste it into the `template_doc_id` column of the `resumes` sheet for
  *       the matching format (INT-01, GULF-01, IN-01).
@@ -17,15 +21,32 @@
 
 const RESUME_FOLDER_NAME = 'tcgr.in_resumes';
 
-function generateResumePDF(formatId) {
+function generateResumePDF(formatId, opts) {
+  opts = opts || {};
   if (!formatId) return { error: 'Missing format id' };
 
   // 1. Find the format in `resumes` sheet
   const resumes = _rowsFromSheet('resumes');
   const meta = resumes.find(r => String(r.format).toUpperCase() === String(formatId).toUpperCase());
   if (!meta) return { error: `Unknown resume format: ${formatId}` };
+
+  // 1a. A static `link` wins — no generation needed (fastest, most reliable path).
+  if (meta.link && String(meta.link).trim() && String(meta.link).trim() !== '#') {
+    return { ok: true, format: meta.format, title: meta.title, url: String(meta.link).trim(), download_url: String(meta.link).trim(), cached: true };
+  }
   if (!meta.template_doc_id) {
-    return { error: `No template_doc_id configured for ${formatId}. Add it in the resumes sheet.` };
+    return { error: `No template_doc_id configured for ${formatId}. Add it (or a static link) in the resumes sheet.` };
+  }
+
+  // 1b. Reuse today's PDF if one exists — one Drive copy per format per day, unless opts.fresh.
+  const stamp = new Date().toISOString().slice(0, 10);
+  const pdfName = `Resume_${meta.format}_${stamp}.pdf`;
+  if (!opts.fresh) {
+    const existing = _getOrCreateFolder(RESUME_FOLDER_NAME).getFilesByName(pdfName);
+    if (existing.hasNext()) {
+      const f = existing.next();
+      return { ok: true, format: meta.format, title: meta.title, url: 'https://drive.google.com/file/d/' + f.getId() + '/view', download_url: 'https://drive.google.com/uc?export=download&id=' + f.getId(), cached: true };
+    }
   }
 
   // 2. Gather data
@@ -34,11 +55,11 @@ function generateResumePDF(formatId) {
   const timeline = _rowsFromSheet('timeline');
   const skills   = _rowsFromSheet('skills');
   const certs    = _rowsFromSheet('certifications');
+  const projects = _rowsWithArrays('projects', ['stack', 'description']);
 
   let copy, doc;
   try {
     // 3. Copy template
-    const stamp = new Date().toISOString().slice(0, 10);
     copy = DriveApp.getFileById(meta.template_doc_id).makeCopy(
       `Resume_${meta.format}_${stamp}`
     );
@@ -53,6 +74,7 @@ function generateResumePDF(formatId) {
     body.replaceText('{{experience_block}}', _formatExperience(timeline));
     body.replaceText('{{skills_block}}',     _formatSkills(skills));
     body.replaceText('{{certifications_block}}', _formatCerts(certs));
+    body.replaceText('{{projects_block}}',       _formatProjects(projects));
     body.replaceText('{{generated_date}}',   new Date().toISOString().slice(0, 10));
 
     doc.saveAndClose();
@@ -60,7 +82,7 @@ function generateResumePDF(formatId) {
     // 6. Convert to PDF and place in shared folder
     const pdfBlob = copy.getAs('application/pdf');
     const folder = _getOrCreateFolder(RESUME_FOLDER_NAME);
-    const pdfFile = folder.createFile(pdfBlob).setName(copy.getName() + '.pdf');
+    const pdfFile = folder.createFile(pdfBlob).setName(pdfName);
     pdfFile.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
 
     // 7. Cleanup the temporary doc copy
@@ -102,6 +124,15 @@ function _formatSkills(skills) {
     grouped[d].push(`${s.skill} (${s.level || ''})`);
   });
   return Object.keys(grouped).map(d => `${d}: ${grouped[d].join(', ')}`).join('\n');
+}
+
+function _formatProjects(projects) {
+  return projects.map(p => {
+    const head = [p.title, p.subtitle].filter(Boolean).join(' — ');
+    const desc = (p.description || []).map(d => '  • ' + d).join('\n');
+    const impact = p.impact ? '\n  Impact: ' + p.impact : '';
+    return head + (desc ? '\n' + desc : '') + impact;
+  }).join('\n\n');
 }
 
 function _formatCerts(certs) {

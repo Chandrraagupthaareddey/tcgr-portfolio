@@ -21,13 +21,40 @@
 //  CONFIG (read from Script Properties at runtime — see docs/SETUP.md)
 // ============================================================================
 
-const SHEET_NAMES = [
-  'profile', 'about', 'timeline', 'expertise', 'projects',
-  'ai_capabilities', 'lessons', 'resumes', 'contact', 'metrics',
-  'skills', 'certifications', 'blogs', 'meta'
-];
+// Sheet name → shape. 'kv' = key/value sheet; 'rows' = tabular;
+// arrays = columns whose cells hold `;`-separated lists.
+const SHEET_SPEC = {
+  profile:        { kind: 'kv' },
+  stats:          { kind: 'rows' },
+  about:          { kind: 'kv' },
+  about_facts:    { kind: 'rows' },
+  marquee:        { kind: 'rows' },
+  expertise:      { kind: 'rows', arrays: ['tools'] },
+  projects:       { kind: 'rows', arrays: ['stack', 'description'] },
+  timeline:       { kind: 'rows' },
+  ai_patterns:    { kind: 'rows' },
+  case:           { kind: 'kv' },
+  case_meta:      { kind: 'rows' },
+  principles:     { kind: 'rows' },
+  ladder:         { kind: 'rows' },
+  bench:          { kind: 'rows' },
+  bench_facts:    { kind: 'rows' },
+  components:     { kind: 'rows', arrays: ['stack', 'meta'] },
+  value_props:    { kind: 'rows' },
+  engagements:    { kind: 'rows' },
+  skills:         { kind: 'rows' },
+  certifications: { kind: 'rows' },
+  lessons:        { kind: 'rows' },
+  blogs:          { kind: 'rows' },
+  profiles:       { kind: 'rows', arrays: ['evidence', 'skills'] },
+  resumes:        { kind: 'rows' },
+  contact:        { kind: 'kv' },
+  copy:           { kind: 'kv' },
+  meta:           { kind: 'kv' }
+};
+const SHEET_NAMES = Object.keys(SHEET_SPEC);
 
-const CACHE_TTL_SECONDS = 21600; // 6 hours
+const CACHE_TTL_SECONDS = 1800; // 30 minutes — sheet edits go live within this window (or Clear Cache)
 
 /**
  * Reads a property from Script Properties, with optional default.
@@ -75,7 +102,7 @@ function doGet(e) {
         break;
 
       case 'resume':
-        payload = generateResumePDF(params.id || 'INT-01'); // defined in ResumeGenerator.js
+        payload = generateResumePDF(params.id || 'INT-01', { fresh: params.fresh === '1' }); // ResumeGenerator.js
         break;
 
       case 'all':
@@ -112,26 +139,17 @@ function _getAllData() {
   const cached = cache.get('all');
   if (cached) return JSON.parse(cached);
 
-  const data = {
-    hero:            _kvFromSheet('profile'),
-    about:           _kvFromSheet('about'),
-    contact:         _kvFromSheet('contact'),
-    metrics:         _kvFromSheet('metrics'),
-    timeline:        _rowsFromSheet('timeline'),
-    expertise:       _rowsWithArrays('expertise', ['tools']),
-    projects:        _rowsWithArrays('projects', ['stack', 'description']),
-    ai_capabilities: _rowsFromSheet('ai_capabilities'),
-    lessons:         _rowsFromSheet('lessons'),
-    resumes:         _rowsFromSheet('resumes'),
-    skills:          _rowsFromSheet('skills'),
-    certifications:  _rowsFromSheet('certifications'),
-    blogs:           _rowsFromSheet('blogs'),
-    meta: {
-      generated_at: new Date().toISOString(),
-      source: 'apps-script-cms',
-      version: _prop('SITE_VERSION', '1.0.0')
-    }
-  };
+  const data = {};
+  SHEET_NAMES.forEach(name => { data[name] = _readSheet(name); });
+
+  // `marquee` is a one-column list → flatten to array of strings for the frontend.
+  if (Array.isArray(data.marquee)) data.marquee = data.marquee.map(r => r.item).filter(Boolean);
+
+  data.meta = Object.assign({}, data.meta || {}, {
+    generated_at: new Date().toISOString(),
+    source: 'apps-script-cms',
+    version: _prop('SITE_VERSION', '2.0.0')
+  });
 
   try {
     cache.put('all', JSON.stringify(data), CACHE_TTL_SECONDS);
@@ -141,22 +159,18 @@ function _getAllData() {
   return data;
 }
 
+/** Reads one sheet according to SHEET_SPEC. */
+function _readSheet(name) {
+  const spec = SHEET_SPEC[name] || { kind: 'rows' };
+  if (spec.kind === 'kv') return _kvFromSheet(name);
+  return spec.arrays ? _rowsWithArrays(name, spec.arrays) : _rowsFromSheet(name);
+}
+
 function _getSheetData(name) {
   const cache = CacheService.getScriptCache();
   const cached = cache.get(name);
   if (cached) return JSON.parse(cached);
-
-  let data;
-  if (['profile', 'about', 'contact', 'metrics'].indexOf(name) !== -1) {
-    data = _kvFromSheet(name);
-  } else if (name === 'projects') {
-    data = _rowsWithArrays('projects', ['stack', 'description']);
-  } else if (name === 'expertise') {
-    data = _rowsWithArrays('expertise', ['tools']);
-  } else {
-    data = _rowsFromSheet(name);
-  }
-
+  const data = _readSheet(name);
   try { cache.put(name, JSON.stringify(data), CACHE_TTL_SECONDS); } catch (e) {}
   return data;
 }
@@ -235,7 +249,11 @@ function _activeSheet(name) {
 function onOpen() {
   SpreadsheetApp.getUi()
     .createMenu('🛠 tcgr.in CMS')
-    .addItem('Initialize / Update Schema', 'setupSheets')
+    .addItem('Initialize / Update Schema (adds missing sheets)', 'setupSheets')
+    .addItem('Reseed ONE sheet from Schemas (overwrite)…', 'adminReseedOne')
+    .addItem('Reseed ALL sheets from Schemas (overwrite!)', 'adminReseedAll')
+    .addSeparator()
+    .addItem('Scan content for private terms', 'adminScanPrivateTerms')
     .addSeparator()
     .addItem('Clear Cache (force fresh fetch)', 'adminClearCache')
     .addItem('Test API: Preview Payload', 'adminPreviewPayload')
@@ -261,12 +279,54 @@ function adminPreviewPayload() {
   SpreadsheetApp.getUi().showModalDialog(html, 'API Output Preview');
 }
 
+/** Overwrites one sheet with its seed rows from Schemas.js (prompts for the name). */
+function adminReseedOne() {
+  const ui = SpreadsheetApp.getUi();
+  const r = ui.prompt('Reseed sheet', 'Sheet name to overwrite from Schemas.js:\n' + SHEET_NAMES.join(', '), ui.ButtonSet.OK_CANCEL);
+  if (r.getSelectedButton() !== ui.Button.OK) return;
+  const name = r.getResponseText().trim();
+  if (SHEET_NAMES.indexOf(name) === -1) { ui.alert('Unknown sheet: ' + name); return; }
+  reseedSheet(name);
+  adminClearCache();
+  ui.alert('Reseeded "' + name + '" ✓');
+}
+
+/** Overwrites EVERY sheet with seed data. Destructive — confirms first. */
+function adminReseedAll() {
+  const ui = SpreadsheetApp.getUi();
+  const r = ui.alert('Reseed ALL sheets?', 'This overwrites every tab with the seed data in Schemas.js. Your edits will be lost. Continue?', ui.ButtonSet.YES_NO);
+  if (r !== ui.Button.YES) return;
+  SHEET_NAMES.forEach(reseedSheet);
+  adminClearCache();
+  ui.alert('All sheets reseeded ✓');
+}
+
+/**
+ * Scans every cell for terms that must never appear on the public site
+ * (configure as a comma-separated list in Script Property PRIVATE_TERMS).
+ * Reports sheet!cell for each hit so you can fix it before clearing cache.
+ */
+function adminScanPrivateTerms() {
+  const ui = SpreadsheetApp.getUi();
+  const terms = _prop('PRIVATE_TERMS', '').split(',').map(t => t.trim().toLowerCase()).filter(Boolean);
+  if (!terms.length) { ui.alert('Set Script Property PRIVATE_TERMS (comma-separated) first.'); return; }
+  const hits = [];
+  SpreadsheetApp.getActiveSpreadsheet().getSheets().forEach(sh => {
+    const vals = sh.getDataRange().getValues();
+    vals.forEach((row, i) => row.forEach((cell, j) => {
+      const txt = String(cell || '').toLowerCase();
+      terms.forEach(t => { if (txt.indexOf(t) !== -1) hits.push(sh.getName() + '!' + sh.getRange(i + 1, j + 1).getA1Notation() + ' → "' + t + '"'); });
+    }));
+  });
+  ui.alert(hits.length ? 'Private terms found:\n\n' + hits.join('\n') : 'Clean — no private terms found ✓');
+}
+
 function adminGenerateResumeINT()  { _adminGenResume('INT-01');  }
 function adminGenerateResumeGULF() { _adminGenResume('GULF-01'); }
 function adminGenerateResumeIN()   { _adminGenResume('IN-01');   }
 
 function _adminGenResume(id) {
-  const result = generateResumePDF(id);
+  const result = generateResumePDF(id, { fresh: true });
   const ui = SpreadsheetApp.getUi();
   if (result.error) {
     ui.alert('Error', result.error, ui.ButtonSet.OK);

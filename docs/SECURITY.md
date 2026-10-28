@@ -81,7 +81,7 @@ Then optionally remove the leaked value from history with `git filter-repo` (adv
 - [ ] Apps Script Web App is deployed with **Execute as: Me** (not the user) so visitors don't trigger their own auth
 - [ ] Apps Script `oauthScopes` in `appsscript.json` are minimal — start with what's listed and only add more as needed
 - [ ] `ADMIN_KEY` is set in Script Properties for cache-clear endpoint
-- [ ] Generated résumé PDFs aren't accumulating indefinitely — periodically clean `tcgr.in_resumes/` folder
+- [ ] Generated resume PDFs aren't accumulating indefinitely — periodically clean `tcgr.in_resumes/` folder
 
 ## Why not stricter access control on the Web App?
 
@@ -90,7 +90,7 @@ The frontend is public. The API is called from a public site. If we restrict the
 The realistic security boundary is:
 - **The Web App is a read-only public API** that exposes only what's in our CMS Sheet (which you control)
 - **The Sheet is private** — only you can write to it
-- **Generated PDFs** are public-link (anyone with URL can view), which is the standard for résumé sharing
+- **Generated PDFs** are public-link (anyone with URL can view), which is the standard for resume sharing
 
 If you ever expose a write endpoint (e.g. contact form), gate it with a turnstile/captcha + an `ADMIN_KEY`-style server-side check, not by restricting Web App access.
 
@@ -99,7 +99,7 @@ If you ever expose a write endpoint (e.g. contact form), gate it with a turnstil
 | Source | Trust level | Why we accept it |
 |---|---|---|
 | `cdnjs.cloudflare.com/ajax/libs/gsap/...` | high | Cloudflare-served, content-hash addressed by version |
-| `cdn.tailwindcss.com` | medium | First-party Tailwind CDN; consider self-hosting for prod |
+| `fonts.googleapis.com` / `fonts.gstatic.com` | low | Web fonts only; the site renders correctly on system fonts if blocked |
 | `fonts.googleapis.com` | high | Google's font service; tracked but no PII leakage |
 
 **Hardening option**: download these locally to `public/assets/vendor/` for full offline / supply-chain control. Not done here for simplicity.
