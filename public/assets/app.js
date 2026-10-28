@@ -44,12 +44,12 @@ const FALLBACK_DATA = {
 
   about: {
     headline: 'From hospitality<br>to <em>SRE</em>, to operations<br>that <em>reason.</em>',
-    body: "My career didn't start in engineering. It started in hotel revenue analysis — staring at spreadsheets, spotting patterns in noise, and building automations to escape repetition. That instinct never left.\n\nOver fifteen years I went from automating night audits with Google Apps Script to running reliability for payment systems at a global travel marketplace, and most recently to designing an **operational intelligence platform** where language models sit inside the on-call loop — grounded in evidence, cheap by default, and never allowed to act without a human's approval.\n\nI'm fluent across Datadog, Grafana, Prometheus, Splunk and ELK, and equally at home routing work between local and hosted models through MCP servers and governed tool loops. The interesting problems today live at the intersection: **observability that reasons, and AI that fails closed.**\n\nI write code to remove work, not to make more of it. I optimise for systems that explain themselves. And I believe the best SREs spend more time deleting alerts than creating them."
+    body: "My career didn't start in engineering. It started in hotel revenue analysis — staring at spreadsheets, spotting patterns in noise, and building automations to escape repetition. That instinct never left.\n\nOver fifteen years I went from automating night audits with Google Apps Script to running reliability for payment systems at Airbnb, and most recently to designing an **operational intelligence platform** where language models sit inside the on-call loop — grounded in evidence, cheap by default, and never allowed to act without a human's approval.\n\nI'm fluent across Datadog, Grafana, Prometheus, Splunk and ELK, and equally at home routing work between local and hosted models through MCP servers and governed tool loops. The interesting problems today live at the intersection: **observability that reasons, and AI that fails closed.**\n\nI write code to remove work, not to make more of it. I optimise for systems that explain themselves. And I believe the best SREs spend more time deleting alerts than creating them."
   },
 
   about_facts: [
     { key: 'Based in', value: 'Bengaluru, India · open to relocation anywhere, or remote' },
-    { key: 'Current', value: 'Senior Staff Engineer, SRE — global travel & payments marketplace (via Altimetrik)' },
+    { key: 'Current', value: 'Senior Staff Engineer, SRE — Airbnb (via Altimetrik)' },
     { key: 'Focus', value: 'AI-augmented operations, alert intelligence, governed agents' },
     { key: 'Working style', value: 'Evidence over opinion. Proposals over surprises. Delete before you add.' },
     { key: 'How I build', value: 'I design the system and direct AI coding agents under governance (evals, approvals, one writer per repo). The platform below was built that way.' }
@@ -75,7 +75,7 @@ const FALLBACK_DATA = {
     { number: '01', category: 'AI / Operations', title: 'OIP — Operational Intelligence Platform', subtitle: 'Local-first AIOps for a payments on-call team · solo build, 6 months',
       description: ['Ingests alerts from Slack, Alertmanager and trackers; links them to incidents and the on-call rota; runs governed AI triage; posts an evidence-backed decision card back to Slack.', 'Cost-ordered routing (reuse → rules → local model → paid model → human), shadow-mode model qualification, deterministic evals, supervisor-gated writes.', 'About two dozen repositories, ~250K lines, 860+ test files. Full case study in the AI Lab below.'],
       stack: ['Node.js', 'Python', 'SQLite', 'MySQL', 'Ollama', 'MCP', 'Slack', 'incident.io', 'SwiftUI', 'Kotlin'],
-      impact: 'Local 30B model reached 75% triage accuracy vs 33% for the paid remote agent on the same held-out rows. One alert class backtested to 100% noise suppression with both real incidents retained.' },
+      impact: 'Self-hosted triage went from ~30% to 75% agreement with human triage (342 alerts) in a 3-month pilot, closing on the hosted AI agent\'s 80-93% at a fraction of the cost. One noisy alert class was backtested to zero false pages while both real incidents were still caught.' },
     { number: '02', category: 'Alerting', title: 'Flow-level monitoring framework', subtitle: 'Business-flow-aware alerting for payment journeys',
       description: ['Monitors aligned to actual payment flows (authorise, capture, refund) rather than service-level signals alone.', 'Composite alerts correlating dimensions across services with dynamic anomaly thresholds.', 'Config-as-code with peer-reviewed alert logic and parallel-run validation before cut-over.'],
       stack: ['Datadog', 'PromQL', 'Git', 'Jenkins'],
@@ -99,8 +99,8 @@ const FALLBACK_DATA = {
   ],
 
   timeline: [
-    { year: '2025 — Now', role: 'Senior Staff Engineer, SRE', company: 'Global travel & payments marketplace (via Altimetrik)', description: 'Designed and built an operational intelligence platform from zero: alert ingestion, incident correlation, governed AI triage with local and hosted models, reproducible scorecards, and a supervisor that gates every autonomous write.', impact: 'Local-model triage benchmarked at 75% vs 33% for the paid agent' },
-    { year: '2024 — 2025', role: 'Technical Lead, SRE', company: 'Same marketplace · payments monitoring', description: 'Flow-level monitors aligned to payment journeys. Composite anomaly detection. Automated alert triage via monitoring APIs, Slack and Apps Script. Platform migration with parallel-run validation.', impact: 'Flow-level coverage across critical payment paths' },
+    { year: '2025 — Now', role: 'Senior Staff Engineer, SRE', company: 'Airbnb (via Altimetrik)', description: 'Designed and built an operational intelligence platform from zero: alert ingestion, incident correlation, governed AI triage with local and hosted models, reproducible scorecards, and a supervisor that gates every autonomous write.', impact: 'Self-hosted AI triage improved from ~30% to 75% agreement with human triage over a 3-month pilot, approaching the hosted agent (80-93%) at near-zero marginal cost' },
+    { year: '2024 — 2025', role: 'Technical Lead, SRE', company: 'Airbnb · Payments (via Altimetrik)', description: 'Flow-level monitors aligned to payment journeys. Composite anomaly detection. Automated alert triage via monitoring APIs, Slack and Apps Script. Platform migration with parallel-run validation.', impact: 'Flow-level coverage across critical payment paths' },
     { year: '2021 — 2024', role: 'Senior SRE', company: 'Citi (via Altimetrik)', description: 'Self-managed Grafana Enterprise across NAM / APAC / EMEA. Migrated POCs to production with Jenkins + Ansible CI/CD.', impact: '−60% rollout effort' },
     { year: '2021', role: 'Senior SRE', company: 'PayPal', description: 'Application gap and tooling assessment across Splunk, Kibana and internal observability tools. Vulnerability management and security observability.', impact: '' },
     { year: '2020 — 2021', role: 'DevOps & Infrastructure', company: 'Happymonk.ai', description: 'Infrastructure for self-hosted e-commerce. Multi-cloud (AWS, Azure, E2E, Infomaniak). Deployed AI/ML models to Windows and Ubuntu fleets.', impact: 'Multi-cloud production stack' },
@@ -125,10 +125,10 @@ const FALLBACK_DATA = {
 
   case: {
     headline: 'OIP — an <em>Operational Intelligence</em><br>Platform, built from zero.',
-    lede: 'An AI-augmented operations platform for a payments on-call team. Designed, built and run by one engineer in six months — about two dozen repositories, a quarter-million lines, and a benchmark that beat the paid alternative.',
+    lede: 'An AI-augmented operations platform for a payments on-call team. Designed, built and run by one engineer in six months — about two dozen repositories, a quarter-million lines, and a self-hosted triage model tuned from 30% to 75% in one pilot.',
     summary: 'OIP takes alerts from Slack channels, Alertmanager webhooks and tracker sheets; links them to incidents, escalations and the on-call rota; runs governed AI triage through a cost-ordered ladder; and posts a structured decision card — verdict, confidence, evidence for and against — back into the channel where the alert fired. Around that core sit payment-impact analysis through a read-only warehouse MCP, coverage-gap detection with backtests, reproducible SQL scorecards, a supervisor for autonomous coding agents, deterministic evals, observability-as-code, and native macOS, iOS and Android clients.',
     ladder_note: 'Eligibility and health are tracked separately: a healthy model never gets promoted just because it is up. Models move through EXPERIMENTAL → SHADOW → HUMAN_REVIEW → QUALIFIED → APPROVED_PRIMARY, each step needing a named human and at least 30 adjudicated samples, with a regression gate of ±0.05 against the recorded baseline.',
-    bench_note: 'Held-out rows from a 7-day window. "Human label" is the team\'s manual triage category, used as a proxy — the honest caveat is that it is not blind adjudication. The qualification bench only ever runs on a copy of the database.'
+    bench_note: 'Agreement is measured against the team\'s manual triage category on held-out alerts, which is a proxy rather than blind adjudication. The hosted-agent band is the observed range during the pilot, not a controlled head-to-head. The qualification bench only ever runs on a copy of the database.'
   },
 
   case_meta: [
@@ -157,14 +157,16 @@ const FALLBACK_DATA = {
   ],
 
   bench: [
-    { label: 'Local model — Qwen3 30B (Ollama)', n: 'n = 342 held-out rows', value: 75.3, kind: 'local' },
-    { label: 'Paid remote triage agent', n: 'n = 224 identical rows', value: 33.0, kind: 'remote' }
+    { label: 'Hosted AI agent (paid, reference band)', n: 'typical 80-93%', value: 86, display: '80-93%', kind: 'remote' },
+    { label: 'Self-hosted model at pilot start (Qwen3, Ollama)', n: 'month 0', value: 30, display: '~30%', kind: 'local start' },
+    { label: 'Self-hosted model after tuning', n: 'month 3 · 342 alerts', value: 75.3, display: '75%', kind: 'local' }
   ],
 
   bench_facts: [
     { key: 'Abstention rate (local)', value: '6%' },
     { key: 'False-positive rate (local)', value: '17%' },
-    { key: 'Benchmark set', value: '534 rows · 7 days' },
+    { key: 'Pilot duration', value: '~3 months, weekly tuning' },
+    { key: 'Benchmark set', value: '534 alerts · 7-day window' },
     { key: 'Noise-class backtest', value: '100% suppressed · 2/2 incidents kept' },
     { key: '"171 alerts" incident claim, re-counted', value: '≈ 25–29 real' }
   ],
@@ -186,7 +188,7 @@ const FALLBACK_DATA = {
 
   /* ── Value ────────────────────────────────────────────────────────────── */
   value_props: [
-    { outcome: 'Lower AI spend, *same or better* answers.', body: 'Cheapest-capable routing means the bulk of alert volume never touches a paid model. A 30B local model handled triage better than the hosted agent it shadowed.', proof: 'Proof: <b>75% vs 33%</b> accuracy, local vs paid, same rows.' },
+    { outcome: 'Lower AI spend, *most of the* accuracy.', body: 'Cheapest-capable routing means the bulk of alert volume never touches a paid model. A self-hosted 30B model was tuned from ~30% to 75% agreement with human triage in three months, with the hosted agent reserved for the hard cases.', proof: 'Proof: self-hosted <b>30% → 75%</b> in one pilot; hosted agent reference band <b>80-93%</b>.' },
     { outcome: 'AI you can *audit*, not just admire.', body: 'Every verdict cites evidence. Every write is a proposal with an approver. Deterministic evals catch regressions before they reach on-call. This is what passes a risk review.', proof: 'Proof: <b>0 unapproved writes</b> by design · 34 regression evals · effects ledger.' },
     { outcome: 'Faster, *calmer* on-call.', body: 'Engineers open a decision card, not a wall of graphs. Payment impact arrives in currency, not percentiles. Noisy alert classes are backtested and retired before they page.', proof: 'Proof: one noisy class → <b>100% suppressed</b>, both real incidents retained.' },
     { outcome: 'No lock-in, *no data exodus*.', body: 'Runs on a laptop or in your VPC. Vendor-neutral: Slack, incident.io, Grafana, any MCP-compatible data source, any Ollama or hosted model. Nothing leaves the box unless you say so.', proof: 'Proof: zero runtime dependencies in core services · read-only MCP · local models first.' }
@@ -201,32 +203,62 @@ const FALLBACK_DATA = {
 
   /* ── Skills & certs ───────────────────────────────────────────────────── */
   skills: [
+    { domain: 'Site reliability', skill: 'Incident management & on-call leadership', years: 10, level: 'Expert' },
+    { domain: 'Site reliability', skill: 'SLI / SLO design & error budgets', years: 5, level: 'Expert' },
+    { domain: 'Site reliability', skill: 'Alert design, backtesting & noise reduction', years: 7, level: 'Expert' },
+    { domain: 'Site reliability', skill: 'Availability, latency & capacity planning', years: 6, level: 'Advanced' },
+    { domain: 'Site reliability', skill: 'Postmortems, scorecards (MTTD / MTTA / MTTR)', years: 6, level: 'Advanced' },
+    { domain: 'Site reliability', skill: 'ITIL 4 / IT service operations', years: 3, level: 'Intermediate' },
     { domain: 'Observability', skill: 'Datadog', years: 7, level: 'Expert' },
     { domain: 'Observability', skill: 'Grafana / Prometheus / Alertmanager', years: 5, level: 'Expert' },
     { domain: 'Observability', skill: 'Splunk / ELK', years: 6, level: 'Advanced' },
-    { domain: 'Observability', skill: 'SLI / SLO & scorecard design', years: 5, level: 'Expert' },
-    { domain: 'AI / LLM', skill: 'Local models (Ollama, Qwen, Gemma)', years: 1, level: 'Advanced' },
-    { domain: 'AI / LLM', skill: 'Hosted models (Claude, GPT, Gemini)', years: 2, level: 'Advanced' },
-    { domain: 'AI / LLM', skill: 'MCP servers & governed tool loops', years: 1, level: 'Advanced' },
-    { domain: 'AI / LLM', skill: 'Evals, shadow qualification, routing', years: 1, level: 'Advanced' },
-    { domain: 'Engineering', skill: 'Node.js (no-dependency services)', years: 4, level: 'Advanced' },
-    { domain: 'Engineering', skill: 'Python (FastAPI, data tooling)', years: 6, level: 'Advanced' },
-    { domain: 'Engineering', skill: 'SQL (SQLite, MySQL, Trino)', years: 8, level: 'Advanced' },
-    { domain: 'Engineering', skill: 'Swift / SwiftUI · Kotlin / Compose', years: 1, level: 'Intermediate' },
-    { domain: 'Automation', skill: 'Google Apps Script', years: 10, level: 'Expert' },
-    { domain: 'Automation', skill: 'Shell / Bash', years: 8, level: 'Advanced' },
-    { domain: 'Cloud & Delivery', skill: 'AWS', years: 6, level: 'Advanced' },
-    { domain: 'Cloud & Delivery', skill: 'GCP', years: 3, level: 'Intermediate' },
-    { domain: 'Cloud & Delivery', skill: 'Kubernetes / OpenShift', years: 4, level: 'Advanced' },
-    { domain: 'Cloud & Delivery', skill: 'Jenkins · Ansible · GitLab CI', years: 5, level: 'Advanced' }
+    { domain: 'Observability', skill: 'Loki / Tempo / OpenTelemetry tracing', years: 2, level: 'Intermediate' },
+    { domain: 'AI / LLM operations', skill: 'Local models (Ollama, Qwen, Gemma)', years: 1, level: 'Advanced' },
+    { domain: 'AI / LLM operations', skill: 'Hosted models (Claude, GPT, Gemini)', years: 2, level: 'Advanced' },
+    { domain: 'AI / LLM operations', skill: 'MCP servers & governed tool loops', years: 1, level: 'Advanced' },
+    { domain: 'AI / LLM operations', skill: 'Evals, shadow qualification, cost routing', years: 1, level: 'Advanced' },
+    { domain: 'AI / LLM operations', skill: 'Prompt & context engineering', years: 2, level: 'Advanced' },
+    { domain: 'Building with AI', skill: 'System design, contracts & specifications', years: 8, level: 'Expert' },
+    { domain: 'Building with AI', skill: 'Directing coding agents (Claude Code, Codex) under governance', years: 1, level: 'Advanced' },
+    { domain: 'Building with AI', skill: 'Reading & reviewing code: Python, JavaScript, Ruby, Swift, Kotlin', years: 4, level: 'Read & review' },
+    { domain: 'Building with AI', skill: 'Writing code by hand', years: 0, level: 'AI-assisted' },
+    { domain: 'Building with AI', skill: 'SQL for scorecards & analysis (SQLite, MySQL, Trino)', years: 8, level: 'Advanced' },
+    { domain: 'Automation & data', skill: 'Google Apps Script', years: 10, level: 'Expert' },
+    { domain: 'Automation & data', skill: 'Google Workspace APIs (Sheets, Gmail, Drive)', years: 8, level: 'Expert' },
+    { domain: 'Automation & data', skill: 'Slack & webhook integrations', years: 5, level: 'Advanced' },
+    { domain: 'Automation & data', skill: 'Shell / Bash', years: 8, level: 'Advanced' },
+    { domain: 'Automation & data', skill: 'Reporting pipelines & spreadsheets as systems', years: 12, level: 'Expert' },
+    { domain: 'Cloud & delivery', skill: 'AWS', years: 6, level: 'Advanced' },
+    { domain: 'Cloud & delivery', skill: 'GCP', years: 3, level: 'Intermediate' },
+    { domain: 'Cloud & delivery', skill: 'Kubernetes / OpenShift', years: 4, level: 'Advanced' },
+    { domain: 'Cloud & delivery', skill: 'Jenkins · Ansible · GitLab CI', years: 5, level: 'Advanced' }
   ],
 
   certifications: [
-    { name: 'GenAI Toolkit', issuer: 'Employer learning programme', year: '2025', link: '' },
-    { name: 'Leadership Academy — Foundational', issuer: 'Employer learning programme', year: '2024', link: '' },
-    { name: 'ISO 27001:2013 Information Security Awareness', issuer: 'Employer learning programme', year: '2023', link: '' },
-    { name: 'Mastering Bitbucket Pipelines for CI/CD', issuer: 'Online', year: '2023', link: '' },
-    { name: 'Introduction to MongoDB', issuer: 'MongoDB', year: '2022', link: '' }
+    { group: 'AI & generative AI', name: 'AI Agents and Agentic AI with Python & Generative AI', issuer: 'Vanderbilt University · Coursera', year: '2026', link: 'https://coursera.org/verify/81UV0Q3SZJLE' },
+    { group: 'AI & generative AI', name: 'Claude Code: Software Engineering with Generative AI Agents', issuer: 'Vanderbilt University · Coursera', year: '2026', link: 'https://coursera.org/verify/GYA291VQDO9Q' },
+    { group: 'AI & generative AI', name: 'Generative AI: Advancing Systems Analysis & Architecture', issuer: 'SkillUp · Coursera', year: '2026', link: 'https://coursera.org/verify/HX796GEM3QJ8' },
+    { group: 'AI & generative AI', name: 'Claude Code for Vibe Coding', issuer: 'Edureka · Coursera', year: '2026', link: 'https://coursera.org/verify/V3OZS1IDWRH4' },
+    { group: 'AI & generative AI', name: 'Foundations of Generative AI in SDLC', issuer: 'Simplilearn · Coursera', year: '2026', link: 'https://coursera.org/verify/6IRAECI1CA1Y' },
+    { group: 'AI & generative AI', name: 'Privacy and Responsible AI: Practical Guidelines for AI Practitioners', issuer: 'Airbnb learning programme', year: '2026', link: '' },
+    { group: 'AI & generative AI', name: 'Beginner Microsoft Copilot: AI Prompts & Workflows', issuer: 'Knowledge Accelerators · Coursera', year: '2026', link: 'https://coursera.org/verify/ZVEM7OGKDQGQ' },
+    { group: 'AI & generative AI', name: 'Generative AI for Everyone', issuer: 'DeepLearning.AI · Coursera', year: '2025', link: 'https://coursera.org/verify/7IF0GP5O4QQ3' },
+    { group: 'AI & generative AI', name: 'Prompt Engineering', issuer: 'Altimetrik L&D · Coursera', year: '2025', link: 'https://coursera.org/verify/2LEDDI3PXWS2' },
+    { group: 'Observability & operations', name: 'Datadog Monitoring: Basic to Advanced (11.5 h)', issuer: 'Udemy', year: '2024', link: 'https://ude.my/UC-0b0c486b-f241-4bca-a0c0-0ed50359eac4' },
+    { group: 'Observability & operations', name: 'Datadog: Performance Monitoring Tool (Zero to Hero)', issuer: 'Udemy', year: '2024', link: 'https://ude.my/UC-fc13d088-f6e9-45b7-aa5f-8ad2a2095bfc' },
+    { group: 'Observability & operations', name: 'Observability with Grafana, Prometheus, Loki, Alloy and Tempo', issuer: 'Udemy', year: '2024', link: 'https://ude.my/UC-686da2e7-1442-4b84-ad70-56e8c5c949c6' },
+    { group: 'Observability & operations', name: 'Introduction to Service Management with ITIL 4', issuer: 'Dion Training · Udemy', year: '2024', link: 'https://ude.my/UC-b1ff62ad-77a5-4652-a432-e3449d521e8a' },
+    { group: 'Observability & operations', name: 'IT Service Operations and Service Desk Management', issuer: 'Udemy', year: '2024', link: 'https://ude.my/UC-e9fb0eb9-6eff-4c5a-8305-8dd739162e46' },
+    { group: 'Automation & data', name: 'Automate the Boring Stuff with Python Programming', issuer: 'Al Sweigart · Udemy', year: '2024', link: 'https://ude.my/UC-36a3b0cf-8b69-4881-8756-c3bcb411b8a5' },
+    { group: 'Automation & data', name: 'Master Google Sheets', issuer: 'Udemy', year: '2024', link: 'https://ude.my/UC-f5262841-de70-4448-aaf6-de7ed026f83b' },
+    { group: 'Automation & data', name: 'Introduction to Python', issuer: 'Altimetrik L&D · Coursera', year: '2025', link: 'https://coursera.org/verify/63JCOY0TX3XY' },
+    { group: 'Automation & data', name: 'Mastering Bitbucket Pipelines for CI/CD', issuer: 'Online', year: '2023', link: '' },
+    { group: 'Automation & data', name: 'Introduction to MongoDB', issuer: 'MongoDB', year: '2022', link: '' },
+    { group: 'Security & compliance', name: 'ISMS Awareness', issuer: 'Altimetrik · Coursera', year: '2025', link: 'https://coursera.org/verify/BMEPITLVA7L8' },
+    { group: 'Security & compliance', name: 'Information Security Awareness and Data Privacy', issuer: 'Altimetrik', year: '2024', link: '' },
+    { group: 'Security & compliance', name: 'Data Security and Privacy', issuer: 'Airbnb learning programme', year: '2026', link: '' },
+    { group: 'Security & compliance', name: 'ISO 27001:2013 Information Security Awareness', issuer: 'Altimetrik', year: '2023', link: '' },
+    { group: 'Leadership', name: 'Leadership Academy: Foundational', issuer: 'Altimetrik', year: '2024', link: '' }
   ],
 
   /* ── Knowledge ────────────────────────────────────────────────────────── */
@@ -254,7 +286,7 @@ const FALLBACK_DATA = {
     linkedin: 'https://www.linkedin.com/in/tcgr/',
     github: 'https://github.com/tcgr-in',
     location: 'Bengaluru, IN · open to any location, relocation or remote',
-    role: 'Senior Staff Engineer — SRE · global travel & payments marketplace (via Altimetrik)',
+    role: 'Senior Staff Engineer — SRE @ Airbnb (via Altimetrik)',
     availability: '60 days notice (negotiable)',
     languages: 'English, Hindi, Tamil, Telugu, Kannada',
     timezone: 'IST (UTC+5:30) · overlaps GST, CET, US-East mornings',
@@ -271,7 +303,7 @@ const FALLBACK_DATA = {
       resume_format: 'INT-01' },
     { slug: 'ai-ops', title: 'AI Operations / AIOps Engineer', keywords: 'AIOps Engineer · AI Operations Lead · LLMOps · Applied AI Engineer (Operations) · Incident Intelligence',
       fit: 'I have put language models on-call in a payments environment and kept them honest: cost-ordered routing, shadow-mode qualification, evidence-grounded verdicts, deterministic evals and human-gated writes.',
-      evidence: ['Local 30B model benchmarked at 75% triage accuracy vs 33% for the paid remote agent on the same held-out rows.', 'Designed the routing ladder (reuse → rules → local → paid → human) and the qualification stages with a ±0.05 regression gate.', 'Built a governed MCP tool loop with a 13-tool allowlist, read-only annotations and prompt-injection defences.', 'Deterministic eval registry: 11 grader classes, 34 seed cases from real regressions.'],
+      evidence: ['Tuned a self-hosted 30B model from ~30% to 75% agreement with human triage in a 3-month pilot (342 alerts), approaching the hosted agent\'s 80-93% at near-zero marginal cost.', 'Designed the routing ladder (reuse → rules → local → paid → human) and the qualification stages with a ±0.05 regression gate.', 'Built a governed MCP tool loop with a 13-tool allowlist, read-only annotations and prompt-injection defences.', 'Deterministic eval registry: 11 grader classes, 34 seed cases from real regressions.'],
       skills: ['LLM routing & cost control', 'Model evaluation & shadow testing', 'Prompt & context engineering', 'MCP / tool governance', 'Local inference (Ollama)', 'Alert intelligence', 'Incident automation'],
       resume_format: 'INT-01' },
     { slug: 'sre', title: 'Senior Staff / Principal Site Reliability Engineer', keywords: 'Staff SRE · Principal SRE · Head of Reliability · Observability Lead · Production Engineering',
@@ -300,7 +332,7 @@ const FALLBACK_DATA = {
     'value.headline': 'What this looks like<br>on <em>your</em> balance sheet.',
     'value.lede': 'Reliability work is only worth funding when it changes cost, risk or speed. This is where mine does.',
     'skills.headline': 'The <em>toolbelt</em>, honestly rated.',
-    'skills.lede': 'Years are hands-on production years, not "familiar with". Levels are self-assessed and I\'m happy to be tested on any of them.',
+    'skills.lede': 'Years are hands-on production years, not "familiar with". Levels are self-assessed and honest: I design systems and direct AI agents to write the code, then read and review every line. Certificates link to their verification pages.',
     'knowledge.headline': 'Mistakes I made,<br>and the <em>architecture</em> that fixed them.',
     'resume.headline': 'One profile,<br><em>three</em> formats.',
     'resume.lede': 'Tailored to the market you\'re hiring in, generated fresh from the same source of truth that renders this page.',
@@ -442,8 +474,8 @@ const App = {
     this._renderList('principles', 'tpl-principle', d.principles, (n, p, i) => { this._txt(n, '[data-p="idx"]', String(i + 1).padStart(2, '0')); this._txt(n, '[data-p="title"]', p.title); this._txt(n, '[data-p="body"]', p.body); });
     this._renderList('ladder', 'tpl-rung', d.ladder, (n, r) => { this._txt(n, '[data-r="step"]', r.step); this._txt(n, '[data-r="name"]', r.name); this._txt(n, '[data-r="cost"]', r.cost); this._txt(n, '[data-r="body"]', r.body); });
     this._renderList('bench-bars', 'tpl-bar', d.bench, (n, b) => {
-      this._txt(n, '[data-b="label"]', b.label); this._txt(n, '[data-b="n"]', b.n); this._txt(n, '[data-b="value"]', `${Number(b.value).toFixed(b.value % 1 ? 1 : 0)}%`);
-      const fill = n.querySelector('[data-b="fill"]'); fill.dataset.w = String(b.value); if (b.kind === 'remote') fill.classList.add('remote');
+      this._txt(n, '[data-b="label"]', b.label); this._txt(n, '[data-b="n"]', b.n); this._txt(n, '[data-b="value"]', b.display || `${Math.round(Number(b.value))}%`);
+      const fill = n.querySelector('[data-b="fill"]'); fill.dataset.w = String(b.value); if (b.kind === 'remote') fill.classList.add('remote'); if (/start/.test(b.kind || '')) fill.classList.add('start');
     });
     this._renderList('bench-facts', 'tpl-kv', d.bench_facts, (n, k) => { this._txt(n, '[data-k="key"]', k.key); this._txt(n, '[data-k="value"]', k.value); });
     this._renderList('components', 'tpl-component', d.components, (n, c) => {
@@ -457,7 +489,7 @@ const App = {
 
     // Skills + certs
     this._renderSkills();
-    this._renderList('certs', 'tpl-cert', d.certifications, (n, c) => { this._txt(n, '[data-ce="name"]', c.name); this._txt(n, '[data-ce="issuer"]', c.issuer); this._txt(n, '[data-ce="year"]', c.year); });
+    this._renderCerts();
 
     // Knowledge
     this._renderList('lessons', 'tpl-lesson', d.lessons, (n, l) => {
@@ -534,7 +566,7 @@ const App = {
     grid.innerHTML = '';
     const groups = new Map();
     this._arr(this.data.skills).forEach(s => { const k = s.domain || 'Other'; if (!groups.has(k)) groups.set(k, []); groups.get(k).push(s); });
-    const lvl = { expert: 100, advanced: 75, intermediate: 50, beginner: 25 };
+    const lvl = { expert: 100, advanced: 75, intermediate: 50, beginner: 25, 'read & review': 60, 'ai-assisted': 45 };
     groups.forEach((list, domain) => {
       const g = tg.content.cloneNode(true); g.firstElementChild.setAttribute('data-injected', '1');
       this._txt(g, '[data-sg="domain"]', domain); this._txt(g, '[data-sg="count"]', `${list.length} skills`);
@@ -559,6 +591,28 @@ const App = {
       const a = n.querySelector('[data-pf="resume"]'); if (a) { a.href = 'index.html#resume'; a.textContent = `Resume format: ${p.resume_format || 'INT-01'} →`; }
     });
     const toc = document.getElementById('profiles-toc'); if (toc) { toc.innerHTML = ''; this._arr(this.data.profiles).forEach(p => { const a = document.createElement('a'); a.href = '#role-' + p.slug; a.className = 'chip'; a.textContent = p.title.split(' — ')[0].split(' / ')[0]; toc.appendChild(a); }); }
+  },
+
+  _renderCerts() {
+    const wrap = document.getElementById('certs'), tg = document.getElementById('tpl-cert-group'), tc = document.getElementById('tpl-cert');
+    if (!wrap || !tg || !tc) return;
+    wrap.innerHTML = '';
+    const groups = new Map();
+    this._arr(this.data.certifications).forEach(c => { const k = c.group || 'Other'; if (!groups.has(k)) groups.set(k, []); groups.get(k).push(c); });
+    groups.forEach((list, name) => {
+      const g = tg.content.cloneNode(true); g.firstElementChild.setAttribute('data-injected', '1');
+      this._txt(g, '[data-cg="name"]', name); this._txt(g, '[data-cg="count"]', `${list.length}`);
+      const holder = g.querySelector('[data-cg="list"]');
+      list.forEach(c => {
+        const n = tc.content.cloneNode(true);
+        const nameEl = n.querySelector('[data-ce="name"]');
+        if (c.link) { const a = document.createElement('a'); a.href = c.link; a.target = '_blank'; a.rel = 'noopener'; a.textContent = c.name; a.className = 'cert-link'; nameEl.appendChild(a); const v = document.createElement('span'); v.className = 'verify'; v.textContent = 'verify ↗'; nameEl.appendChild(v); }
+        else nameEl.textContent = c.name;
+        this._txt(n, '[data-ce="issuer"]', c.issuer); this._txt(n, '[data-ce="year"]', c.year);
+        holder.appendChild(n);
+      });
+      wrap.appendChild(g);
+    });
   },
 
   _renderBlogs() {

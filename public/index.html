@@ -242,7 +242,7 @@
           <div class="eyebrow"><span class="num">04.0</span> Case study</div>
           <h3 class="display h-section" data-bind-html="case.headline">OIP — an <em>Operational Intelligence</em><br>Platform, built from zero.</h3>
         </div>
-        <p class="lead" data-reveal data-bind="case.lede">An AI-augmented operations platform for a payments on-call team. Designed, built and run by one engineer in six months — about two dozen repositories, a quarter-million lines, and a benchmark that beat the paid alternative.</p>
+        <p class="lead" data-reveal data-bind="case.lede">An AI-augmented operations platform for a payments on-call team. Designed, built and run by one engineer in six months — about two dozen repositories, a quarter-million lines, and a self-hosted triage model tuned from 30% to 75% in one pilot.</p>
       </div>
 <div class="case-hero" data-reveal>
       <div>
@@ -328,7 +328,7 @@
     <!-- Benchmark -->
     <div style="margin-top:56px" data-reveal>
       <div class="eyebrow"><span class="num">04.3</span> Measured, not claimed</div>
-      <h3 class="display" style="font-size:clamp(1.5rem,2.4vw,2.2rem);margin:14px 0 22px">A local 30B model, grounded in evidence, <em>out-triaged</em> the paid remote agent.</h3>
+      <h3 class="display" style="font-size:clamp(1.5rem,2.4vw,2.2rem);margin:14px 0 22px">A self-hosted model went from <em>30% to 75%</em> agreement with human triage in a three-month pilot.</h3>
       <div class="bench">
         <div class="bars" id="bench-bars"></div>
         <div>
@@ -377,6 +377,7 @@
       <p class="lead" data-reveal data-bind="skills.lede">Years are hands-on production years, not "familiar with". Levels are self-assessed and I'm happy to be tested on any of them.</p>
     </div>
     <div class="skills" id="skills-grid"></div>
+    <div class="eyebrow" style="margin-top:48px" data-reveal>Certifications &amp; courses</div>
     <div class="certs" id="certs"></div>
   </div>
 </section>
@@ -433,7 +434,7 @@
       <div class="tbody">
         <div><span class="pr">$</span> <span class="k">whois</span> <span class="v">chandraguptha</span></div>
         <div class="indent"><span class="k">location:</span>      <span class="v" data-bind="contact.location">Bengaluru, IN · open to any location, relocation or remote</span></div>
-        <div class="indent"><span class="k">role:</span>          <span class="v" data-bind="contact.role">Senior Staff Engineer — SRE · global travel &amp; payments marketplace (via Altimetrik)</span></div>
+        <div class="indent"><span class="k">role:</span>          <span class="v" data-bind="contact.role">Senior Staff Engineer — SRE @ Airbnb (via Altimetrik)</span></div>
         <div class="indent"><span class="k">availability:</span>  <span class="v" data-bind="contact.availability">60 days notice (negotiable)</span></div>
         <div class="indent"><span class="k">languages:</span>     <span class="v" data-bind="contact.languages">English, Hindi, Tamil, Telugu, Kannada</span></div>
         <div class="indent"><span class="k">timezone:</span>      <span class="v" data-bind="contact.timezone">IST (UTC+5:30) · overlaps GST, CET, US-East mornings</span></div>
@@ -490,7 +491,7 @@
   <div class="bar">
     <div class="bar-head"><b data-b="label"></b><span class="mono" data-b="n"></span></div>
     <div class="bar-track"><div class="bar-fill" data-b="fill"></div></div>
-    <div class="bar-val"><span data-b="value"></span><small class="muted" style="font-size:.5em"> accuracy</small></div>
+    <div class="bar-val"><span data-b="value"></span><small class="muted" style="font-size:.5em"> agreement</small></div>
   </div>
 </template>
 
@@ -588,8 +589,15 @@
   <div class="skill"><span data-sk="name"></span><span class="lvl" data-sk="level"></span><div class="meter"><i data-sk="meter"></i></div></div>
 </template>
 
+<template id="tpl-cert-group">
+  <div class="cert-group" data-reveal>
+    <div class="eyebrow bare cert-group-head"><span data-cg="name"></span><span class="count" data-cg="count"></span></div>
+    <div class="cert-list" data-cg="list"></div>
+  </div>
+</template>
+
 <template id="tpl-cert">
-  <div class="cert"><div><div data-ce="name"></div><div class="iss" data-ce="issuer"></div></div><div class="yr" data-ce="year"></div></div>
+  <div class="cert"><div><div class="cert-name" data-ce="name"></div><div class="iss" data-ce="issuer"></div></div><div class="yr" data-ce="year"></div></div>
 </template>
 
 <template id="tpl-lesson">

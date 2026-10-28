@@ -1,7 +1,7 @@
 # One term per line (case-insensitive). The CI scan fails if any appears in
 # public/, apps-script/, docs/ or README.md. Keep this list private-ish: it
-# names what must never be public, so it is deliberately generic where it can be.
-airbnb
+# names what must never be public. The employer name itself is allowed; internal
+# tool names, hostnames, team names and project codenames are not.
 musta.ch
 airlab
 sandcastle

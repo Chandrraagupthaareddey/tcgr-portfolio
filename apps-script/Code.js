@@ -43,7 +43,7 @@ const SHEET_SPEC = {
   value_props:    { kind: 'rows' },
   engagements:    { kind: 'rows' },
   skills:         { kind: 'rows' },
-  certifications: { kind: 'rows' },
+  certifications: { kind: 'rows' },  // columns: group, name, issuer, year, link  // columns: group, name, issuer, year, link
   lessons:        { kind: 'rows' },
   blogs:          { kind: 'rows' },
   profiles:       { kind: 'rows', arrays: ['evidence', 'skills'] },

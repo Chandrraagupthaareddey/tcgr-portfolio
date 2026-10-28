@@ -67,14 +67,14 @@ function _SCHEMAS() {
       headers: ["key","value"],
       rows: [
         ["headline","From hospitality<br>to <em>SRE</em>, to operations<br>that <em>reason.</em>"],
-        ["body","My career didn't start in engineering. It started in hotel revenue analysis — staring at spreadsheets, spotting patterns in noise, and building automations to escape repetition. That instinct never left.\n\nOver fifteen years I went from automating night audits with Google Apps Script to running reliability for payment systems at a global travel marketplace, and most recently to designing an **operational intelligence platform** where language models sit inside the on-call loop — grounded in evidence, cheap by default, and never allowed to act without a human's approval.\n\nI'm fluent across Datadog, Grafana, Prometheus, Splunk and ELK, and equally at home routing work between local and hosted models through MCP servers and governed tool loops. The interesting problems today live at the intersection: **observability that reasons, and AI that fails closed.**\n\nI write code to remove work, not to make more of it. I optimise for systems that explain themselves. And I believe the best SREs spend more time deleting alerts than creating them."]
+        ["body","My career didn't start in engineering. It started in hotel revenue analysis — staring at spreadsheets, spotting patterns in noise, and building automations to escape repetition. That instinct never left.\n\nOver fifteen years I went from automating night audits with Google Apps Script to running reliability for payment systems at Airbnb, and most recently to designing an **operational intelligence platform** where language models sit inside the on-call loop — grounded in evidence, cheap by default, and never allowed to act without a human's approval.\n\nI'm fluent across Datadog, Grafana, Prometheus, Splunk and ELK, and equally at home routing work between local and hosted models through MCP servers and governed tool loops. The interesting problems today live at the intersection: **observability that reasons, and AI that fails closed.**\n\nI write code to remove work, not to make more of it. I optimise for systems that explain themselves. And I believe the best SREs spend more time deleting alerts than creating them."]
       ]
     },
     about_facts: {
       headers: ["key","value"],
       rows: [
         ["Based in","Bengaluru, India · open to relocation anywhere, or remote"],
-        ["Current","Senior Staff Engineer, SRE — global travel & payments marketplace (via Altimetrik)"],
+        ["Current","Senior Staff Engineer, SRE — Airbnb (via Altimetrik)"],
         ["Focus","AI-augmented operations, alert intelligence, governed agents"],
         ["Working style","Evidence over opinion. Proposals over surprises. Delete before you add."],
         ["How I build","I design the system and direct AI coding agents under governance (evals, approvals, one writer per repo). The platform below was built that way."]
@@ -132,7 +132,7 @@ function _SCHEMAS() {
     projects: {
       headers: ["number","category","title","subtitle","description","stack","impact"],
       rows: [
-        ["01","AI / Operations","OIP — Operational Intelligence Platform","Local-first AIOps for a payments on-call team · solo build, 6 months","Ingests alerts from Slack, Alertmanager and trackers; links them to incidents and the on-call rota; runs governed AI triage; posts an evidence-backed decision card back to Slack. ; Cost-ordered routing (reuse → rules → local model → paid model → human), shadow-mode model qualification, deterministic evals, supervisor-gated writes. ; About two dozen repositories, ~250K lines, 860+ test files. Full case study in the AI Lab below.","Node.js ; Python ; SQLite ; MySQL ; Ollama ; MCP ; Slack ; incident.io ; SwiftUI ; Kotlin","Local 30B model reached 75% triage accuracy vs 33% for the paid remote agent on the same held-out rows. One alert class backtested to 100% noise suppression with both real incidents retained."],
+        ["01","AI / Operations","OIP — Operational Intelligence Platform","Local-first AIOps for a payments on-call team · solo build, 6 months","Ingests alerts from Slack, Alertmanager and trackers; links them to incidents and the on-call rota; runs governed AI triage; posts an evidence-backed decision card back to Slack. ; Cost-ordered routing (reuse → rules → local model → paid model → human), shadow-mode model qualification, deterministic evals, supervisor-gated writes. ; About two dozen repositories, ~250K lines, 860+ test files. Full case study in the AI Lab below.","Node.js ; Python ; SQLite ; MySQL ; Ollama ; MCP ; Slack ; incident.io ; SwiftUI ; Kotlin","Self-hosted triage went from ~30% to 75% agreement with human triage (342 alerts) in a 3-month pilot, closing on the hosted AI agent's 80-93% at a fraction of the cost. One noisy alert class was backtested to zero false pages while both real incidents were still caught."],
         ["02","Alerting","Flow-level monitoring framework","Business-flow-aware alerting for payment journeys","Monitors aligned to actual payment flows (authorise, capture, refund) rather than service-level signals alone. ; Composite alerts correlating dimensions across services with dynamic anomaly thresholds. ; Config-as-code with peer-reviewed alert logic and parallel-run validation before cut-over.","Datadog ; PromQL ; Git ; Jenkins","Business-impacting anomalies detected at flow granularity; blind spots in payment workflows closed without adding noise."],
         ["03","Observability","Observability platform migration","Vendor stack → in-house platform, zero coverage regression","Mapped every alert, dashboard and flow monitor; validated accuracy via parallel-run shadowing before switching. ; Documented a signal-quality framework later adopted by neighbouring teams.","Datadog ; Grafana ; Prometheus ; Splunk","Improved alert accuracy and signal quality with no loss of coverage during transition."],
         ["04","Reliability","Grafana Enterprise at bank scale","Self-managed observability across NAM / APAC / EMEA","Ran Grafana Enterprise and Prometheus for a global bank; migrated proofs-of-concept to production with Jenkins + Ansible pipelines. ; Standardised dashboards and alert rules across regions.","Grafana ; Prometheus ; Jenkins ; Ansible ; Splunk","Manual rollout effort cut by roughly 60%; one pipeline for every region."],
@@ -143,8 +143,8 @@ function _SCHEMAS() {
     timeline: {
       headers: ["year","role","company","description","impact"],
       rows: [
-        ["2025 — Now","Senior Staff Engineer, SRE","Global travel & payments marketplace (via Altimetrik)","Designed and built an operational intelligence platform from zero: alert ingestion, incident correlation, governed AI triage with local and hosted models, reproducible scorecards, and a supervisor that gates every autonomous write.","Local-model triage benchmarked at 75% vs 33% for the paid agent"],
-        ["2024 — 2025","Technical Lead, SRE","Same marketplace · payments monitoring","Flow-level monitors aligned to payment journeys. Composite anomaly detection. Automated alert triage via monitoring APIs, Slack and Apps Script. Platform migration with parallel-run validation.","Flow-level coverage across critical payment paths"],
+        ["2025 — Now","Senior Staff Engineer, SRE","Airbnb (via Altimetrik)","Designed and built an operational intelligence platform from zero: alert ingestion, incident correlation, governed AI triage with local and hosted models, reproducible scorecards, and a supervisor that gates every autonomous write.","Self-hosted AI triage improved from ~30% to 75% agreement with human triage over a 3-month pilot, approaching the hosted agent (80-93%) at near-zero marginal cost"],
+        ["2024 — 2025","Technical Lead, SRE","Airbnb · Payments (via Altimetrik)","Flow-level monitors aligned to payment journeys. Composite anomaly detection. Automated alert triage via monitoring APIs, Slack and Apps Script. Platform migration with parallel-run validation.","Flow-level coverage across critical payment paths"],
         ["2021 — 2024","Senior SRE","Citi (via Altimetrik)","Self-managed Grafana Enterprise across NAM / APAC / EMEA. Migrated POCs to production with Jenkins + Ansible CI/CD.","−60% rollout effort"],
         ["2021","Senior SRE","PayPal","Application gap and tooling assessment across Splunk, Kibana and internal observability tools. Vulnerability management and security observability.",""],
         ["2020 — 2021","DevOps & Infrastructure","Happymonk.ai","Infrastructure for self-hosted e-commerce. Multi-cloud (AWS, Azure, E2E, Infomaniak). Deployed AI/ML models to Windows and Ubuntu fleets.","Multi-cloud production stack"],
@@ -172,10 +172,10 @@ function _SCHEMAS() {
       headers: ["key","value"],
       rows: [
         ["headline","OIP — an <em>Operational Intelligence</em><br>Platform, built from zero."],
-        ["lede","An AI-augmented operations platform for a payments on-call team. Designed, built and run by one engineer in six months — about two dozen repositories, a quarter-million lines, and a benchmark that beat the paid alternative."],
+        ["lede","An AI-augmented operations platform for a payments on-call team. Designed, built and run by one engineer in six months — about two dozen repositories, a quarter-million lines, and a self-hosted triage model tuned from 30% to 75% in one pilot."],
         ["summary","OIP takes alerts from Slack channels, Alertmanager webhooks and tracker sheets; links them to incidents, escalations and the on-call rota; runs governed AI triage through a cost-ordered ladder; and posts a structured decision card — verdict, confidence, evidence for and against — back into the channel where the alert fired. Around that core sit payment-impact analysis through a read-only warehouse MCP, coverage-gap detection with backtests, reproducible SQL scorecards, a supervisor for autonomous coding agents, deterministic evals, observability-as-code, and native macOS, iOS and Android clients."],
         ["ladder_note","Eligibility and health are tracked separately: a healthy model never gets promoted just because it is up. Models move through EXPERIMENTAL → SHADOW → HUMAN_REVIEW → QUALIFIED → APPROVED_PRIMARY, each step needing a named human and at least 30 adjudicated samples, with a regression gate of ±0.05 against the recorded baseline."],
-        ["bench_note","Held-out rows from a 7-day window. \"Human label\" is the team's manual triage category, used as a proxy — the honest caveat is that it is not blind adjudication. The qualification bench only ever runs on a copy of the database."]
+        ["bench_note","Agreement is measured against the team's manual triage category on held-out alerts, which is a proxy rather than blind adjudication. The hosted-agent band is the observed range during the pilot, not a controlled head-to-head. The qualification bench only ever runs on a copy of the database."]
       ]
     },
     case_meta: {
@@ -210,10 +210,11 @@ function _SCHEMAS() {
       ]
     },
     bench: {
-      headers: ["label","n","value","kind"],
+      headers: ["label","n","value","display","kind"],
       rows: [
-        ["Local model — Qwen3 30B (Ollama)","n = 342 held-out rows",75.3,"local"],
-        ["Paid remote triage agent","n = 224 identical rows",33,"remote"]
+        ["Hosted AI agent (paid, reference band)","typical 80-93%",86,"80-93%","remote"],
+        ["Self-hosted model at pilot start (Qwen3, Ollama)","month 0",30,"~30%","local start"],
+        ["Self-hosted model after tuning","month 3 · 342 alerts",75.3,"75%","local"]
       ]
     },
     bench_facts: {
@@ -221,7 +222,8 @@ function _SCHEMAS() {
       rows: [
         ["Abstention rate (local)","6%"],
         ["False-positive rate (local)","17%"],
-        ["Benchmark set","534 rows · 7 days"],
+        ["Pilot duration","~3 months, weekly tuning"],
+        ["Benchmark set","534 alerts · 7-day window"],
         ["Noise-class backtest","100% suppressed · 2/2 incidents kept"],
         ["\"171 alerts\" incident claim, re-counted","≈ 25–29 real"]
       ]
@@ -246,7 +248,7 @@ function _SCHEMAS() {
     value_props: {
       headers: ["outcome","body","proof"],
       rows: [
-        ["Lower AI spend, *same or better* answers.","Cheapest-capable routing means the bulk of alert volume never touches a paid model. A 30B local model handled triage better than the hosted agent it shadowed.","Proof: <b>75% vs 33%</b> accuracy, local vs paid, same rows."],
+        ["Lower AI spend, *most of the* accuracy.","Cheapest-capable routing means the bulk of alert volume never touches a paid model. A self-hosted 30B model was tuned from ~30% to 75% agreement with human triage in three months, with the hosted agent reserved for the hard cases.","Proof: self-hosted <b>30% → 75%</b> in one pilot; hosted agent reference band <b>80-93%</b>."],
         ["AI you can *audit*, not just admire.","Every verdict cites evidence. Every write is a proposal with an approver. Deterministic evals catch regressions before they reach on-call. This is what passes a risk review.","Proof: <b>0 unapproved writes</b> by design · 34 regression evals · effects ledger."],
         ["Faster, *calmer* on-call.","Engineers open a decision card, not a wall of graphs. Payment impact arrives in currency, not percentiles. Noisy alert classes are backtested and retired before they page.","Proof: one noisy class → <b>100% suppressed</b>, both real incidents retained."],
         ["No lock-in, *no data exodus*.","Runs on a laptop or in your VPC. Vendor-neutral: Slack, incident.io, Grafana, any MCP-compatible data source, any Ollama or hosted model. Nothing leaves the box unless you say so.","Proof: zero runtime dependencies in core services · read-only MCP · local models first."]
@@ -264,34 +266,64 @@ function _SCHEMAS() {
     skills: {
       headers: ["domain","skill","years","level"],
       rows: [
+        ["Site reliability","Incident management & on-call leadership",10,"Expert"],
+        ["Site reliability","SLI / SLO design & error budgets",5,"Expert"],
+        ["Site reliability","Alert design, backtesting & noise reduction",7,"Expert"],
+        ["Site reliability","Availability, latency & capacity planning",6,"Advanced"],
+        ["Site reliability","Postmortems, scorecards (MTTD / MTTA / MTTR)",6,"Advanced"],
+        ["Site reliability","ITIL 4 / IT service operations",3,"Intermediate"],
         ["Observability","Datadog",7,"Expert"],
         ["Observability","Grafana / Prometheus / Alertmanager",5,"Expert"],
         ["Observability","Splunk / ELK",6,"Advanced"],
-        ["Observability","SLI / SLO & scorecard design",5,"Expert"],
-        ["AI / LLM","Local models (Ollama, Qwen, Gemma)",1,"Advanced"],
-        ["AI / LLM","Hosted models (Claude, GPT, Gemini)",2,"Advanced"],
-        ["AI / LLM","MCP servers & governed tool loops",1,"Advanced"],
-        ["AI / LLM","Evals, shadow qualification, routing",1,"Advanced"],
-        ["Engineering","Node.js (no-dependency services)",4,"Advanced"],
-        ["Engineering","Python (FastAPI, data tooling)",6,"Advanced"],
-        ["Engineering","SQL (SQLite, MySQL, Trino)",8,"Advanced"],
-        ["Engineering","Swift / SwiftUI · Kotlin / Compose",1,"Intermediate"],
-        ["Automation","Google Apps Script",10,"Expert"],
-        ["Automation","Shell / Bash",8,"Advanced"],
-        ["Cloud & Delivery","AWS",6,"Advanced"],
-        ["Cloud & Delivery","GCP",3,"Intermediate"],
-        ["Cloud & Delivery","Kubernetes / OpenShift",4,"Advanced"],
-        ["Cloud & Delivery","Jenkins · Ansible · GitLab CI",5,"Advanced"]
+        ["Observability","Loki / Tempo / OpenTelemetry tracing",2,"Intermediate"],
+        ["AI / LLM operations","Local models (Ollama, Qwen, Gemma)",1,"Advanced"],
+        ["AI / LLM operations","Hosted models (Claude, GPT, Gemini)",2,"Advanced"],
+        ["AI / LLM operations","MCP servers & governed tool loops",1,"Advanced"],
+        ["AI / LLM operations","Evals, shadow qualification, cost routing",1,"Advanced"],
+        ["AI / LLM operations","Prompt & context engineering",2,"Advanced"],
+        ["Building with AI","System design, contracts & specifications",8,"Expert"],
+        ["Building with AI","Directing coding agents (Claude Code, Codex) under governance",1,"Advanced"],
+        ["Building with AI","Reading & reviewing code: Python, JavaScript, Ruby, Swift, Kotlin",4,"Read & review"],
+        ["Building with AI","Writing code by hand",0,"AI-assisted"],
+        ["Building with AI","SQL for scorecards & analysis (SQLite, MySQL, Trino)",8,"Advanced"],
+        ["Automation & data","Google Apps Script",10,"Expert"],
+        ["Automation & data","Google Workspace APIs (Sheets, Gmail, Drive)",8,"Expert"],
+        ["Automation & data","Slack & webhook integrations",5,"Advanced"],
+        ["Automation & data","Shell / Bash",8,"Advanced"],
+        ["Automation & data","Reporting pipelines & spreadsheets as systems",12,"Expert"],
+        ["Cloud & delivery","AWS",6,"Advanced"],
+        ["Cloud & delivery","GCP",3,"Intermediate"],
+        ["Cloud & delivery","Kubernetes / OpenShift",4,"Advanced"],
+        ["Cloud & delivery","Jenkins · Ansible · GitLab CI",5,"Advanced"]
       ]
     },
     certifications: {
-      headers: ["name","issuer","year","link"],
+      headers: ["group","name","issuer","year","link"],
       rows: [
-        ["GenAI Toolkit","Employer learning programme","2025",""],
-        ["Leadership Academy — Foundational","Employer learning programme","2024",""],
-        ["ISO 27001:2013 Information Security Awareness","Employer learning programme","2023",""],
-        ["Mastering Bitbucket Pipelines for CI/CD","Online","2023",""],
-        ["Introduction to MongoDB","MongoDB","2022",""]
+        ["AI & generative AI","AI Agents and Agentic AI with Python & Generative AI","Vanderbilt University · Coursera","2026","https://coursera.org/verify/81UV0Q3SZJLE"],
+        ["AI & generative AI","Claude Code: Software Engineering with Generative AI Agents","Vanderbilt University · Coursera","2026","https://coursera.org/verify/GYA291VQDO9Q"],
+        ["AI & generative AI","Generative AI: Advancing Systems Analysis & Architecture","SkillUp · Coursera","2026","https://coursera.org/verify/HX796GEM3QJ8"],
+        ["AI & generative AI","Claude Code for Vibe Coding","Edureka · Coursera","2026","https://coursera.org/verify/V3OZS1IDWRH4"],
+        ["AI & generative AI","Foundations of Generative AI in SDLC","Simplilearn · Coursera","2026","https://coursera.org/verify/6IRAECI1CA1Y"],
+        ["AI & generative AI","Privacy and Responsible AI: Practical Guidelines for AI Practitioners","Airbnb learning programme","2026",""],
+        ["AI & generative AI","Beginner Microsoft Copilot: AI Prompts & Workflows","Knowledge Accelerators · Coursera","2026","https://coursera.org/verify/ZVEM7OGKDQGQ"],
+        ["AI & generative AI","Generative AI for Everyone","DeepLearning.AI · Coursera","2025","https://coursera.org/verify/7IF0GP5O4QQ3"],
+        ["AI & generative AI","Prompt Engineering","Altimetrik L&D · Coursera","2025","https://coursera.org/verify/2LEDDI3PXWS2"],
+        ["Observability & operations","Datadog Monitoring: Basic to Advanced (11.5 h)","Udemy","2024","https://ude.my/UC-0b0c486b-f241-4bca-a0c0-0ed50359eac4"],
+        ["Observability & operations","Datadog: Performance Monitoring Tool (Zero to Hero)","Udemy","2024","https://ude.my/UC-fc13d088-f6e9-45b7-aa5f-8ad2a2095bfc"],
+        ["Observability & operations","Observability with Grafana, Prometheus, Loki, Alloy and Tempo","Udemy","2024","https://ude.my/UC-686da2e7-1442-4b84-ad70-56e8c5c949c6"],
+        ["Observability & operations","Introduction to Service Management with ITIL 4","Dion Training · Udemy","2024","https://ude.my/UC-b1ff62ad-77a5-4652-a432-e3449d521e8a"],
+        ["Observability & operations","IT Service Operations and Service Desk Management","Udemy","2024","https://ude.my/UC-e9fb0eb9-6eff-4c5a-8305-8dd739162e46"],
+        ["Automation & data","Automate the Boring Stuff with Python Programming","Al Sweigart · Udemy","2024","https://ude.my/UC-36a3b0cf-8b69-4881-8756-c3bcb411b8a5"],
+        ["Automation & data","Master Google Sheets","Udemy","2024","https://ude.my/UC-f5262841-de70-4448-aaf6-de7ed026f83b"],
+        ["Automation & data","Introduction to Python","Altimetrik L&D · Coursera","2025","https://coursera.org/verify/63JCOY0TX3XY"],
+        ["Automation & data","Mastering Bitbucket Pipelines for CI/CD","Online","2023",""],
+        ["Automation & data","Introduction to MongoDB","MongoDB","2022",""],
+        ["Security & compliance","ISMS Awareness","Altimetrik · Coursera","2025","https://coursera.org/verify/BMEPITLVA7L8"],
+        ["Security & compliance","Information Security Awareness and Data Privacy","Altimetrik","2024",""],
+        ["Security & compliance","Data Security and Privacy","Airbnb learning programme","2026",""],
+        ["Security & compliance","ISO 27001:2013 Information Security Awareness","Altimetrik","2023",""],
+        ["Leadership","Leadership Academy: Foundational","Altimetrik","2024",""]
       ]
     },
     lessons: {
@@ -328,7 +360,7 @@ function _SCHEMAS() {
         ["linkedin","https://www.linkedin.com/in/tcgr/"],
         ["github","https://github.com/tcgr-in"],
         ["location","Bengaluru, IN · open to any location, relocation or remote"],
-        ["role","Senior Staff Engineer — SRE · global travel & payments marketplace (via Altimetrik)"],
+        ["role","Senior Staff Engineer — SRE @ Airbnb (via Altimetrik)"],
         ["availability","60 days notice (negotiable)"],
         ["languages","English, Hindi, Tamil, Telugu, Kannada"],
         ["timezone","IST (UTC+5:30) · overlaps GST, CET, US-East mornings"],
@@ -340,7 +372,7 @@ function _SCHEMAS() {
       headers: ["slug","title","keywords","fit","evidence","skills","resume_format"],
       rows: [
         ["fde","Forward Deployed Engineer — AI / Operations","Forward Deployed Engineer · FDE · Deployment Strategist · Solutions Engineer · Customer Engineer · Implementation Engineer","FDE work is discovery, integration and fast iteration inside a customer's real environment. That is exactly how OIP was built: embedded with an on-call team, wired into their Slack channels, alert sources, incident tool and data warehouse, shipping weekly, with every change proposed and approved in-channel.","Shipped a 24-repo platform solo in six months by directing AI coding agents under a supervisor, evals and human approval gates — not by hand-typing code. ; Integrated Slack, Alertmanager, incident.io, Google Sheets/BigQuery, a Trino warehouse (via MCP) and Ollama into one working loop. ; Ran discovery with the team that owned the pain: 14 alert channels mapped, 1,890 alerts analysed, noisy classes backtested and retired. ; Operated what I built: launchd services, Prometheus metrics, Grafana dashboards, backup-before-restart rules.","Discovery & requirements ; Systems integration (APIs, webhooks, MCP) ; AI agent orchestration ; Rapid prototyping → pilot ; Stakeholder comms ; Slack-native delivery ; SQL & data modelling ; Observability","INT-01"],
-        ["ai-ops","AI Operations / AIOps Engineer","AIOps Engineer · AI Operations Lead · LLMOps · Applied AI Engineer (Operations) · Incident Intelligence","I have put language models on-call in a payments environment and kept them honest: cost-ordered routing, shadow-mode qualification, evidence-grounded verdicts, deterministic evals and human-gated writes.","Local 30B model benchmarked at 75% triage accuracy vs 33% for the paid remote agent on the same held-out rows. ; Designed the routing ladder (reuse → rules → local → paid → human) and the qualification stages with a ±0.05 regression gate. ; Built a governed MCP tool loop with a 13-tool allowlist, read-only annotations and prompt-injection defences. ; Deterministic eval registry: 11 grader classes, 34 seed cases from real regressions.","LLM routing & cost control ; Model evaluation & shadow testing ; Prompt & context engineering ; MCP / tool governance ; Local inference (Ollama) ; Alert intelligence ; Incident automation","INT-01"],
+        ["ai-ops","AI Operations / AIOps Engineer","AIOps Engineer · AI Operations Lead · LLMOps · Applied AI Engineer (Operations) · Incident Intelligence","I have put language models on-call in a payments environment and kept them honest: cost-ordered routing, shadow-mode qualification, evidence-grounded verdicts, deterministic evals and human-gated writes.","Tuned a self-hosted 30B model from ~30% to 75% agreement with human triage in a 3-month pilot (342 alerts), approaching the hosted agent's 80-93% at near-zero marginal cost. ; Designed the routing ladder (reuse → rules → local → paid → human) and the qualification stages with a ±0.05 regression gate. ; Built a governed MCP tool loop with a 13-tool allowlist, read-only annotations and prompt-injection defences. ; Deterministic eval registry: 11 grader classes, 34 seed cases from real regressions.","LLM routing & cost control ; Model evaluation & shadow testing ; Prompt & context engineering ; MCP / tool governance ; Local inference (Ollama) ; Alert intelligence ; Incident automation","INT-01"],
         ["sre","Senior Staff / Principal Site Reliability Engineer","Staff SRE · Principal SRE · Head of Reliability · Observability Lead · Production Engineering","Fifteen years of making production quieter: SLI/SLO design, flow-level monitoring, alert quality over quantity, monitoring-as-code, and scorecards that survive an audit.","Flow-level monitors aligned to payment journeys; composite anomaly detection; platform migration with parallel-run validation and zero coverage regression. ; Grafana Enterprise + Prometheus across NAM / APAC / EMEA for a global bank; rollout effort cut ~60% with Jenkins + Ansible. ; Reproducible MTTD / MTTA / MTTR scorecards with SQL lineage and a parity harness against legacy formulas. ; Built the SRE function from scratch at a mobility start-up; on-call, capacity, latency, availability.","SLI / SLO & error budgets ; Datadog · Grafana · Prometheus · Splunk · ELK ; Alert design & backtesting ; Kubernetes / cloud ; CI/CD for monitoring ; Incident command ; Mentorship","INT-01"],
         ["platform","AI Platform / Solutions Architect","Solutions Architect · AI Platform Engineer · Technical Architect · Internal Tools Lead","I design systems end to end — contracts, data models, governance, observability, clients — and keep them boring where it matters: no runtime dependencies, SQLite by default, fail closed, every claim with evidence.","Architecture portal where every status claim must cite evidence or the build fails; 12 versioned diagrams generated from YAML. ; Supervisor control plane: work-unit graphs, one writer per repo, prompt-hash grants, effects ledger, AI reviewer before human gate. ; Native macOS, iOS and Android clients over the same core API; offline-first with demo mode. ; Observability-as-code: telemetry contract, cardinality firewalls, Prometheus exposition, Grafana provisioning.","System & API design ; Data modelling (SQLite, MySQL, BigQuery) ; Governance & approval flows ; Observability-as-code ; Cross-platform clients ; Documentation that is tested","INT-01"],
         ["automation","Automation / Workflow Engineer (Google Workspace)","Automation Engineer · Google Apps Script Developer · Workflow Automation · RevOps / BizOps Engineer","Ten years of Google Apps Script in production: 20+ automations, a single-trigger scheduler pattern, secrets in PropertiesService, LockService for concurrency, batch I/O and quota-aware retries. This site runs on it.","Automation hub: one trigger fanning out to versioned modules; hundreds of engineer-hours returned per month. ; This portfolio: Sheets as CMS, Apps Script as API, Cloudflare at the edge, three-tier fallback. ; Clinic booking workflow and hotel night-audit automation — the roots of the systems thinking.","Google Apps Script ; Sheets / Gmail / Drive APIs ; Trigger & quota design ; Slack integrations ; Reporting pipelines ; Python & shell","IN-01"]
@@ -357,7 +389,7 @@ function _SCHEMAS() {
         ["value.headline","What this looks like<br>on <em>your</em> balance sheet."],
         ["value.lede","Reliability work is only worth funding when it changes cost, risk or speed. This is where mine does."],
         ["skills.headline","The <em>toolbelt</em>, honestly rated."],
-        ["skills.lede","Years are hands-on production years, not \"familiar with\". Levels are self-assessed and I'm happy to be tested on any of them."],
+        ["skills.lede","Years are hands-on production years, not \"familiar with\". Levels are self-assessed and honest: I design systems and direct AI agents to write the code, then read and review every line. Certificates link to their verification pages."],
         ["knowledge.headline","Mistakes I made,<br>and the <em>architecture</em> that fixed them."],
         ["resume.headline","One profile,<br><em>three</em> formats."],
         ["resume.lede","Tailored to the market you're hiring in, generated fresh from the same source of truth that renders this page."],
