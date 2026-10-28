@@ -547,6 +547,25 @@ const App = {
       m.appendChild(track);
     }
     m.style.setProperty('--marquee-dur', `${Math.max(30, items.length * 1.8)}s`);
+    this._ensureMarqueeMoves(m);
+  },
+
+  // If the CSS animation is not running (blocked by a browser/OS setting), drive it with rAF instead.
+  _ensureMarqueeMoves(m) {
+    clearTimeout(this._mqCheck);
+    this._mqCheck = setTimeout(() => {
+      const running = (m.getAnimations ? m.getAnimations() : []).some(a => a.playState === 'running');
+      if (running || m.dataset.js) return;
+      m.dataset.js = '1'; m.classList.add('js-driven');
+      const pxPerSec = 40; let x = 0, last = performance.now(), paused = false;
+      m.addEventListener('mouseenter', () => paused = true); m.addEventListener('mouseleave', () => paused = false);
+      const step = now => {
+        const half = m.scrollWidth / 2; const dt = Math.min(64, now - last); last = now;
+        if (!paused && half > 0) { x -= pxPerSec * dt / 1000; if (-x >= half) x += half; m.style.transform = `translate3d(${x}px,0,0)`; }
+        requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }, 600);
   },
 
   _renderAbout() {
